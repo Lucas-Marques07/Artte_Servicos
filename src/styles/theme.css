@@ -44,12 +44,19 @@
   }
   
   /* Inputs e selects */
-  input, select {
+  input {
     padding: 0.8rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 0.9rem;
     width: 90%;
+  }
+  select {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    width: 95%;
   }
   
   input:focus, select:focus {

@@ -146,11 +146,11 @@ export default function NovoColaborador() {
     ];
   
     // Definir a fonte e a cor
-doc.setFontSize(12);
+doc.setFontSize(10);
 doc.setTextColor(33, 33, 33);
 
 // Espaçamento inicial
-const leftColumnX = pageWidth / 3.5; // Posição para a coluna da esquerda
+const leftColumnX = pageWidth / 3.8; // Posição para a coluna da esquerda
 const rightColumnX = pageWidth / 2 + 10; // Posição para a coluna da direita
 
 // Adiciona as informações em colunas
