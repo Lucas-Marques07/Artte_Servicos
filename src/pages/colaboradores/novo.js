@@ -52,28 +52,27 @@ export default function NovoColaborador() {
   };
 
   // Função para enviar as informações para o WhatsApp
-  const enviarParaWhatsApp = (colaborador) => {
-    const { nome, cpf, funcao, diaria } = colaborador;
+  const enviarParaWhatsApp = () => {
+    let mensagem = 'Novo Cadastro de Colaboradores:\n\n';
 
-    // Montando a mensagem que será enviada
-    const mensagem = encodeURIComponent(
-      `Novo Cadastro de Colaborador:\n\nNome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}`
-    );
+    // Montando a mensagem com todos os colaboradores
+    colaboradores.forEach((colaborador, index) => {
+      const { nome, cpf, funcao, diaria } = colaborador;
+      mensagem += `Colaborador ${index + 1}:\n`;
+      mensagem += `Nome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}\n\n`;
+    });
 
-    // Número de telefone do WhatsApp (exemplo: +55 11 91234-5678)
-    const numeroWhatsApp = '5511949324422'; // Substitua pelo número real
+    // Codificando a mensagem para o WhatsApp
+    const mensagemCodificada = encodeURIComponent(mensagem);
 
-    // Gerar o link para o WhatsApp
-    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+    // Link de convite para o grupo (substitua pelo link real)
+    const linkGrupoWhatsApp = 'https://chat.whatsapp.com/CXl0xz4CX0k5UNxV23Y9tB'; // Substitua pelo link do grupo
 
-    // Abrir o link no navegador (pode abrir o WhatsApp diretamente no celular ou em uma página web)
+    // Gerar o link para o WhatsApp com o convite do grupo
+    const linkWhatsApp = `${linkGrupoWhatsApp}&text=${mensagemCodificada}`;
+
+    // Abrir o link no navegador para que o usuário entre no grupo
     window.open(linkWhatsApp, '_blank');
-  };
-
-  // Função chamada quando o formulário for enviado
-  const handleSubmit = () => {
-    const colaborador = colaboradores[0]; // Pega o primeiro colaborador (pode ser ajustado)
-    enviarParaWhatsApp(colaborador); // Envia os dados para o WhatsApp
   };
 
   return (
@@ -164,8 +163,8 @@ export default function NovoColaborador() {
 
       {/* Botão de envio para WhatsApp */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <button onClick={handleSubmit} className="send-whatsapp-button">
-          Enviar para WhatsApp
+        <button onClick={enviarParaWhatsApp} className="send-whatsapp-button">
+          Enviar para o Grupo no WhatsApp
         </button>
       </div>
     </div>
