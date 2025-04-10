@@ -1,6 +1,7 @@
 // src/pages/colaboradores/novo.js
 import { useState, useEffect } from 'react';
-import { Trash2 } from 'lucide-react'; // ícone da lixeira
+import { Trash2 } from 'lucide-react';
+import jsPDF from 'jspdf';
 
 export default function NovoColaborador() {
   const [colaboradores, setColaboradores] = useState([
@@ -100,36 +101,32 @@ export default function NovoColaborador() {
   };
 
   const handleSubmit = () => {
-    const nomeArquivo = `cadastro_${cabecalho.cliente}_${cabecalho.operacao}_${cabecalho.data}.txt`;
+    const doc = new jsPDF();
+    const nomeArquivo = `cadastro_${cabecalho.cliente}_${cabecalho.operacao}_${cabecalho.data}.pdf`;
 
-    let texto = `Cadastro de Colaboradores\n\n`;
-    texto += `Cliente: ${cabecalho.cliente}\n`;
-    texto += `Operação: ${cabecalho.operacao}\n`;
-    texto += `Data: ${cabecalho.data}\n`;
-    texto += `Turno: ${cabecalho.turno}\n`;
-    texto += `Entrada: ${cabecalho.entrada}\n`;
-    texto += `Saída: ${cabecalho.saida}\n\n`;
+    let y = 10;
+
+    doc.setFontSize(16);
+    doc.text('Cadastro de Colaboradores', 105, y, { align: 'center' });
+    y += 10;
+
+    doc.setFontSize(12);
+    doc.text(`Cliente: ${cabecalho.cliente}   Operação: ${cabecalho.operacao}`, 105, y, { align: 'center' }); y += 6;
+    doc.text(`Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`, 105, y, { align: 'center' }); y += 6;
+    doc.text(`Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`, 105, y, { align: 'center' }); y += 10;
 
     colaboradores.forEach((colab, index) => {
-      texto += `#${index + 1}\n`;
-      texto += `Nome: ${colab.nome}\n`;
-      texto += `CPF: ${colab.cpf}\n`;
-      texto += `Empresa: ${colab.empresa}\n`;
-      texto += `Operação: ${colab.operacao}\n`;
-      texto += `Turno: ${colab.turno}\n`;
-      texto += `Função: ${colab.funcao}\n`;
-      texto += `Diária: R$${colab.diaria}\n\n`;
+      if (y > 270) {
+        doc.addPage();
+        y = 10;
+      }
+
+      doc.setFontSize(11);
+      doc.text(`${index + 1}. ${colab.nome} | CPF: ${colab.cpf} | Função: ${colab.funcao} | R$${colab.diaria}`, 10, y);
+      y += 6;
     });
 
-    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = nomeArquivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    doc.save(nomeArquivo);
 
     colaboradores.forEach(colab => {
       if (colab.nome && colab.cpf && colab.funcao && colab.diaria) {
@@ -140,7 +137,7 @@ export default function NovoColaborador() {
 
   return (
     <div className="container">
-      <h1>Listas RH+</h1>
+      <h1>Novo Colaborador</h1>
 
       {/* Cabeçalho da operação */}
       <div className="cabecalho-operacao">
@@ -231,9 +228,7 @@ export default function NovoColaborador() {
             <Trash2 size={20} />
           </button>
 
-          <div className="num-colaborador">
-            {index + 1}
-          </div>
+          <div className="num-colaborador">{index + 1}</div>
 
           <div className="item">
             <label>Nome:</label>
