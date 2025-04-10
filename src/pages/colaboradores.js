@@ -1,51 +1,80 @@
+// src/pages/colaboradores.js
 import { useState } from 'react';
 
 export default function Colaboradores() {
-  const [form, setForm] = useState({
-    nome: '',
-    email: '',
-    telefone: ''
+  const [formData, setFormData] = useState({
+    CPF: '',
+    Nome: '',
   });
-  const [mensagem, setMensagem] = useState('');
+
+  // Função para formatar o CPF
+  const formatCPF = (value) => {
+    const cleaned = value.replace(/\D/g, '').slice(0, 11); // Apenas números, máx 11
+    return cleaned
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    const updatedValue = name === 'CPF' ? formatCPF(value) : value;
+
+    setFormData({
+      ...formData,
+      [name]: updatedValue
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMensagem('Enviando...');
+
+    const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+    if (!cpfRegex.test(formData.CPF)) {
+      alert('Por favor, insira um CPF válido no formato 000.000.000-00');
+      return;
+    }
 
     try {
-      const response = await fetch('https://sheetdb.io/api/v1/wg86ifdzv6w7h', {
+      const res = await fetch('https://sheetdb.io/api/v1/kbce3mayhsmmg', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ data: form }),
+        body: JSON.stringify({ data: formData })
       });
 
-      if (response.ok) {
-        setMensagem('Dados enviados com sucesso!');
-        setForm({ nome: '', email: '', telefone: '' });
+      if (res.ok) {
+        alert('Colaborador cadastrado com sucesso!');
+        setFormData({ CPF: '', Nome: '' });
       } else {
-        setMensagem('Erro ao enviar.');
+        alert('Erro ao cadastrar colaborador.');
       }
     } catch (error) {
-      setMensagem('Erro ao conectar com o servidor.');
+      console.error('Erro ao conectar com o servidor:', error);
+      alert('Erro ao conectar com o servidor.');
     }
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Cadastro de Colaboradores</h1>
-      <form onSubmit={handleSubmit}>
-        <input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} required />
-        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} required />
-        <input name="telefone" placeholder="Telefone" value={form.telefone} onChange={handleChange} required />
-        <button type="submit">Enviar</button>
+    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+      <h1>Cadastro de Colaborador</h1>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px' }}>
+        <label>Nome:</label>
+        <input name="Nome" value={formData.Nome} onChange={handleChange} required />
+
+        <label>CPF:</label>
+        <input
+          name="CPF"
+          value={formData.CPF}
+          onChange={handleChange}
+          placeholder="000.000.000-00"
+          maxLength={14} // 11 dígitos + 3 símbolos
+          required
+        />
+
+        <button type="submit" style={{ marginTop: '1rem' }}>Salvar</button>
       </form>
-      <p>{mensagem}</p>
     </div>
   );
 }

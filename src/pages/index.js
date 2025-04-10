@@ -1,11 +1,22 @@
 // src/pages/index.js
-import Link from 'next/link'
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const usuario = localStorage.getItem('usuarioLogado');
+    if (!usuario) {
+      router.push('/login');
+    }
+  }, []);
+
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-        Sistema de Terceirização
+        Gestão RH+
       </h1>
 
       <p style={{ marginBottom: '2rem' }}>
@@ -43,5 +54,5 @@ export default function Home() {
         </li>
       </ul>
     </div>
-  )
+  );
 }
