@@ -1,5 +1,5 @@
 // src/pages/colaboradores/novo.js
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import BackButton from '../../components/BackButton';
 
 export default function NovoColaborador() {
@@ -26,7 +26,7 @@ export default function NovoColaborador() {
     const novosColaboradores = [...colaboradores];
 
     if (campo === 'cpf') {
-      valor = valor.replace(/\D/g, '').slice(0, 11); // só números, 11 dígitos
+      valor = valor.replace(/\D/g, '').slice(0, 11); // só números
       valor = valor.replace(/(\d{3})(\d)/, '$1.$2')
                    .replace(/(\d{3})(\d)/, '$1.$2')
                    .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -44,31 +44,36 @@ export default function NovoColaborador() {
   };
 
   return (
-    <div style={{ padding: '1rem', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ padding: '1rem', maxWidth: '1000px', margin: '0 auto' }}>
       <BackButton />
-      <h1>Novo Colaborador</h1>
+      <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Novo Colaborador</h1>
 
       {colaboradores.map((colab, index) => (
         <div key={index} style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+          display: 'flex',
+          flexWrap: 'wrap',
           gap: '1rem',
-          marginBottom: '1rem',
-          alignItems: 'center'
+          marginBottom: '1.5rem',
+          borderBottom: '1px solid #e5e7eb',
+          paddingBottom: '1rem'
         }}>
-          {/* Nome (à esquerda, travado) */}
-          <div>
+          <div style={{ flex: '1 1 100%' }}>
             <label>Nome:</label>
             <input
               type="text"
               value={colab.nome}
               readOnly
-              style={{ width: '100%', padding: '8px', backgroundColor: '#f0f0f0', userSelect: 'none' }}
+              style={{
+                width: '100%',
+                padding: '8px',
+                backgroundColor: '#f0f0f0',
+                userSelect: 'none',
+                fontWeight: 'bold'
+              }}
             />
           </div>
 
-          {/* CPF (ao lado do nome) */}
-          <div>
+          <div style={{ flex: '1 1 100%' }}>
             <label>CPF:</label>
             <input
               list={`cpfs-${index}`}
@@ -85,8 +90,7 @@ export default function NovoColaborador() {
             </datalist>
           </div>
 
-          {/* Função */}
-          <div>
+          <div style={{ flex: '1 1 50%' }}>
             <label>Função:</label>
             <select
               value={colab.funcao}
@@ -99,8 +103,7 @@ export default function NovoColaborador() {
             </select>
           </div>
 
-          {/* Diária */}
-          <div>
+          <div style={{ flex: '1 1 50%' }}>
             <label>Valor Diária:</label>
             <input
               type="number"
@@ -113,14 +116,13 @@ export default function NovoColaborador() {
         </div>
       ))}
 
-      {/* Botão + */}
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         <button
           onClick={adicionarLinha}
           style={{
-            fontSize: '1.5rem',
+            fontSize: '2rem',
             padding: '0.5rem 1rem',
-            borderRadius: '8px',
+            borderRadius: '10px',
             backgroundColor: '#10b981',
             color: 'white',
             border: 'none',
