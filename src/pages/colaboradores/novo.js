@@ -51,6 +51,31 @@ export default function NovoColaborador() {
     setColaboradores([...colaboradores, novaLinha]);
   };
 
+  // Função para enviar as informações para o WhatsApp
+  const enviarParaWhatsApp = (colaborador) => {
+    const { nome, cpf, funcao, diaria } = colaborador;
+
+    // Montando a mensagem que será enviada
+    const mensagem = encodeURIComponent(
+      `Novo Cadastro de Colaborador:\n\nNome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}`
+    );
+
+    // Número de telefone do WhatsApp (exemplo: +55 11 91234-5678)
+    const numeroWhatsApp = '5511949324422'; // Substitua pelo número real
+
+    // Gerar o link para o WhatsApp
+    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+
+    // Abrir o link no navegador (pode abrir o WhatsApp diretamente no celular ou em uma página web)
+    window.open(linkWhatsApp, '_blank');
+  };
+
+  // Função chamada quando o formulário for enviado
+  const handleSubmit = () => {
+    const colaborador = colaboradores[0]; // Pega o primeiro colaborador (pode ser ajustado)
+    enviarParaWhatsApp(colaborador); // Envia os dados para o WhatsApp
+  };
+
   return (
     <div className="container">
       <h1>Novo Colaborador</h1>
@@ -134,6 +159,13 @@ export default function NovoColaborador() {
           className="add-button"
         >
           ➕
+        </button>
+      </div>
+
+      {/* Botão de envio para WhatsApp */}
+      <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+        <button onClick={handleSubmit} className="send-whatsapp-button">
+          Enviar para WhatsApp
         </button>
       </div>
     </div>
