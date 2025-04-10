@@ -2,8 +2,11 @@
 import { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { useRouter } from 'next/router';
+
 
 export default function NovoColaborador() {
+  const router = useRouter(); // ⬅ Adicionado
   const [colaboradores, setColaboradores] = useState([
     { cpf: '', nome: '', funcao: '', diaria: '', empresa: '', operacao: '', turno: '' }
   ]);
@@ -130,7 +133,7 @@ export default function NovoColaborador() {
     // 3. Título centralizado
     doc.setFontSize(20);
     doc.setTextColor(12, 106, 55); // equivalente a #022c15 em RGB 
-    doc.text('Cadastro de Colaboradores', pageWidth / 2, 25, { align: 'center' });
+    doc.text('Lista de Presença', pageWidth / 2, 25, { align: 'center' });
   
     y = 45;
   
@@ -209,7 +212,48 @@ y += 10;
 
   return (
     <div className="container">
-      <h1>Novo Colaborador</h1>
+  {/* Botão Voltar */}
+  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+    <button
+      onClick={() => router.push('/')}
+      style={{
+        background: '#0c6a37', // Verde
+        color: '#fff',          // Texto branco
+        border: 'none',
+        padding: '8px 12px',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+      }}
+    >
+      ⬅ Voltar
+    </button>
+  </div>
+
+  
+
+  {/* Cabeçalho */}
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      marginBottom: '1rem'
+    }}
+  >
+  
+    <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+      Lançamento de Diárias
+    </h1>
+
+    <img
+      src="/logo.jpeg"
+      alt="Logo"
+      style={{ width: '150px', height: 'auto' }}
+    />
+  </div>
+
+
 
       {/* Cabeçalho da operação */}
       <div className="cabecalho-operacao">
@@ -280,37 +324,56 @@ y += 10;
         </div>
       </div>
 
-      <label style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-        <input
-          type="checkbox"
-          checked={usarMesmoValor}
-          onChange={() => setUsarMesmoValor(!usarMesmoValor)}
-          style={{ marginRight: '0.5rem' }}
-        />
-        Usar mesma função e diária para todos os colaboradores
-      </label>
+      <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: '1rem',
+    whiteSpace: 'nowrap',
+  }}
+>
+  <span style={{ marginRight: '8px' }}>Padrão</span>
+  <input
+    type="checkbox"
+    checked={usarMesmoValor}
+    onChange={() => setUsarMesmoValor(!usarMesmoValor)}
+    style={{
+      width: '16px',
+      height: '16px',
+      cursor: 'pointer',
+      margin: 0,
+    }}
+  />
+</div>
+
 
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
-          <button
-            onClick={() => removerColaborador(index)}
-            className="botao-lixeira"
-            title="Remover colaborador"
-          >
-            <Trash2 size={20} />
-          </button>
+     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+  <button
+    onClick={() => removerColaborador(index)}
+    className="botao-lixeira"
+    title="Remover colaborador"
+    style={{
+      width: '20px',
+      height: '20px',
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+    }}
+  >
+    <Trash2 size={20} />
+  </button>
+</div>
+
+
 
           <div className="num-colaborador">{index + 1}</div>
-
-          <div className="item">
-            <label>Nome:</label>
-            <input
-              type="text"
-              value={colab.nome}
-              readOnly
-              className="input-readonly"
-            />
-          </div>
 
           <div className="item">
             <label>CPF:</label>
@@ -327,6 +390,18 @@ y += 10;
               ))}
             </datalist>
           </div>
+
+          <div className="item">
+            <label>Nome:</label>
+            <input
+              type="text"
+              value={colab.nome}
+              readOnly
+              className="input-readonly"
+            />
+          </div>
+
+          
 
           <div className="item">
             <label>Função:</label>

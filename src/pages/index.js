@@ -34,7 +34,7 @@ export default function Home() {
               textDecoration: 'none',
               cursor: 'pointer'
             }}>
-              📋 Ver Colaboradores
+              📋 Cadastrar Colaboradores
             </span>
           </Link>
         </li>
@@ -48,7 +48,7 @@ export default function Home() {
               textDecoration: 'none',
               cursor: 'pointer'
             }}>
-              ➕ Adicionar Novo Colaborador
+              ➕ Lançar lista
             </span>
           </Link>
         </li>

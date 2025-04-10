@@ -1,7 +1,9 @@
 // src/pages/colaboradores.js
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Colaboradores() {
+  const router = useRouter(); // ⬅ Adicionado
   const [formData, setFormData] = useState({
     CPF: '',
     Nome: '',
@@ -57,8 +59,28 @@ export default function Colaboradores() {
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+    <div className="container">
+  {/* Botão Voltar */}
+  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+    <button
+      onClick={() => router.push('/')}
+      style={{
+        background: '#0c6a37', // Verde
+        color: '#fff',          // Texto branco
+        border: 'none',
+        padding: '8px 12px',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+      }}
+    >
+      ⬅ Voltar
+    </button>
+  </div>
+
+
       <h1>Cadastro de Colaborador</h1>
+
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', maxWidth: '400px' }}>
         <label>Nome:</label>
         <input name="Nome" value={formData.Nome} onChange={handleChange} required />
@@ -69,7 +91,7 @@ export default function Colaboradores() {
           value={formData.CPF}
           onChange={handleChange}
           placeholder="000.000.000-00"
-          maxLength={14} // 11 dígitos + 3 símbolos
+          maxLength={14}
           required
         />
 
