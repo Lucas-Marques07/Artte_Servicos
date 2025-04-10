@@ -1,76 +1,71 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
+import jsPDF from 'jspdf';
 
 export default function NovoColaborador() {
-  const [formData, setFormData] = useState({
-    nome: '',
-    cargo: '',
-    status: 'Ativo',
-  });
+  const [nome, setNome] = useState('');
+  const [cargo, setCargo] = useState('');
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('');
+  const [mensagem, setMensagem] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = { nome, cargo, email, status };
+
+    try {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbyXuRkzGXN6r8jDXnEc7wGjrsSF4kYgwI052k0S8LI/dev', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        setMensagem('Enviado com sucesso!');
+      } else {
+        setMensagem('Erro ao enviar');
+      }
+    } catch (error) {
+      setMensagem('Erro ao conectar com o servidor.');
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Novo colaborador:', formData);
-    alert('Colaborador salvo (simulado)');
-    setFormData({ nome: '', cargo: '', status: 'Ativo' });
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Dados do Colaborador', 10, 10);
+    doc.text(`Nome: ${nome}`, 10, 20);
+    doc.text(`Cargo: ${cargo}`, 10, 30);
+    doc.text(`Email: ${email}`, 10, 40);
+    doc.text(`Status: ${status}`, 10, 50);
+    doc.save(`colaborador_${nome}.pdf`);
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: 20 }}>
       <h1>Novo Colaborador</h1>
-
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Nome: </label>
-          <input
-            type="text"
-            name="nome"
-            value={formData.nome}
-            onChange={handleChange}
-            required
-          />
+          <input placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
         </div>
         <div>
-          <label>Cargo: </label>
-          <input
-            type="text"
-            name="cargo"
-            value={formData.cargo}
-            onChange={handleChange}
-            required
-          />
+          <input placeholder="Cargo" value={cargo} onChange={(e) => setCargo(e.target.value)} />
         </div>
         <div>
-          <label>Status: </label>
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="Ativo">Ativo</option>
-            <option value="Inativo">Inativo</option>
-          </select>
+          <input placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <button type="submit" style={{ marginTop: '1rem' }}>
-          Salvar
-        </button>
+        <div>
+          <input placeholder="Status" value={status} onChange={(e) => setStatus(e.target.value)} />
+        </div>
+        <button type="submit">Salvar</button>
       </form>
 
-      <p style={{ marginTop: '2rem' }}>
-        <Link href="/colaboradores">← Voltar para lista</Link>
-      </p>
+      {mensagem && <p>{mensagem}</p>}
+
+      <button onClick={handleDownloadPDF} style={{ marginTop: 10 }}>📄 Baixar PDF</button>
+
+      <Link href="/colaboradores">
+        <button style={{ marginTop: 20 }}>← Voltar</button>
+      </Link>
     </div>
   );
-}
-import BackButton from '../components/BackButton'
-
-export default function Colaboradores() {
-  return (
-    <div>
-      <h1>Colaboradores</h1>
-      {/* ...conteúdo da página... */}
-      <BackButton />
-    </div>
-  )
 }
