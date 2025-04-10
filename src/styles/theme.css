@@ -1,0 +1,153 @@
+/* src/styles/theme.css */
+
+/* Cores principais */
+:root {
+    --verde-claro: #0c6a37;
+    --verde-escuro: #022c15;
+    --laranja-amarelado: #febf58;
+    --branco: #f1f1f1;
+    --cinza-fundo: #d4d4d4;
+  }
+  
+  /* Estilos globais */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--cinza-fundo);
+    color: var(--verde-escuro);
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1, h2, h3, h4 {
+    color: var(--verde-escuro);
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Botões */
+  button {
+    padding: 0.8rem 1.5rem;
+    background-color: var(--laranja-amarelado);
+    color: var(--branco);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+  }
+  
+  button:hover {
+    background-color: var(--verde-claro);
+  }
+  
+  /* Inputs e selects */
+  input, select {
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--verde-claro);
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  /* Caixa de seleção (checkbox) */
+  input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  
+  /* Div principal */
+  .container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--branco);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 1.5rem;
+      max-width: 100%;
+    }
+  
+    h1 {
+      font-size: 1.8rem;
+    }
+  
+    button {
+      width: 100%;
+      font-size: 1rem;
+      padding: 1rem;
+    }
+  
+    input, select {
+      font-size: 0.9rem;
+    }
+  
+    .colaborador-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .colaborador-container .item {
+      flex: 1 1 100%;
+    }
+  
+    .colaborador-container .num-colaborador {
+      font-size: 1.3rem;
+    }
+  }
+  
+  /* Flexbox layout para colaboradores */
+  .colaborador-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .colaborador-container .item {
+    flex: 1 1 48%;
+  }
+  
+  .colaborador-container .num-colaborador {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: var(--verde-claro);
+  }
+  
+  .colaborador-container input, .colaborador-container select {
+    width: 100%;
+  }
+  
+  /* Linha divisória */
+  .divider {
+    margin: 1.5rem 0;
+    border-bottom: 1px solid var(--cinza-fundo);
+  }
+  
+  /* Texto e links */
+  a {
+    color: var(--laranja-amarelado);
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: var(--verde-claro);
+  }
+  

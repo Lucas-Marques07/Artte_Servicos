@@ -1,12 +1,12 @@
 // src/pages/colaboradores/novo.js
 import { useState, useEffect } from 'react';
-import BackButton from '../../components/BackButton';
 
 export default function NovoColaborador() {
   const [colaboradores, setColaboradores] = useState([
     { cpf: '', nome: '', funcao: '', diaria: '' }
   ]);
   const [cpfsDisponiveis, setCpfsDisponiveis] = useState([]);
+  const [usarMesmoValor, setUsarMesmoValor] = useState(false);
 
   useEffect(() => {
     async function fetchCPFs() {
@@ -40,40 +40,51 @@ export default function NovoColaborador() {
   };
 
   const adicionarLinha = () => {
-    setColaboradores([...colaboradores, { cpf: '', nome: '', funcao: '', diaria: '' }]);
+    const novaLinha = { cpf: '', nome: '', funcao: '', diaria: '' };
+
+    if (usarMesmoValor && colaboradores.length > 0) {
+      const primeiro = colaboradores[0];
+      novaLinha.funcao = primeiro.funcao;
+      novaLinha.diaria = primeiro.diaria;
+    }
+
+    setColaboradores([...colaboradores, novaLinha]);
   };
 
   return (
-    <div style={{ padding: '1rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <BackButton />
-      <h1 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Novo Colaborador</h1>
+    <div className="container">
+      <h1>Novo Colaborador</h1>
+
+      <label style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <input
+          type="checkbox"
+          checked={usarMesmoValor}
+          onChange={() => setUsarMesmoValor(!usarMesmoValor)}
+          style={{ marginRight: '0.5rem' }}
+        />
+        Usar mesma função e diária para todos os colaboradores
+      </label>
 
       {colaboradores.map((colab, index) => (
-        <div key={index} style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '1rem',
-          marginBottom: '1.5rem',
-          borderBottom: '1px solid #e5e7eb',
-          paddingBottom: '1rem'
-        }}>
-          <div style={{ flex: '1 1 100%' }}>
+        <div key={index} className="colaborador-container">
+          {/* Numeração da linha */}
+          <div className="num-colaborador">
+            {index + 1}
+          </div>
+
+          {/* Nome */}
+          <div className="item">
             <label>Nome:</label>
             <input
               type="text"
               value={colab.nome}
               readOnly
-              style={{
-                width: '100%',
-                padding: '8px',
-                backgroundColor: '#f0f0f0',
-                userSelect: 'none',
-                fontWeight: 'bold'
-              }}
+              className="input-readonly"
             />
           </div>
 
-          <div style={{ flex: '1 1 100%' }}>
+          {/* CPF */}
+          <div className="item">
             <label>CPF:</label>
             <input
               list={`cpfs-${index}`}
@@ -81,7 +92,6 @@ export default function NovoColaborador() {
               value={colab.cpf}
               onChange={(e) => handleChange(index, 'cpf', e.target.value)}
               placeholder="Digite ou selecione"
-              style={{ width: '100%', padding: '8px' }}
             />
             <datalist id={`cpfs-${index}`}>
               {cpfsDisponiveis.map((item, i) => (
@@ -90,12 +100,12 @@ export default function NovoColaborador() {
             </datalist>
           </div>
 
-          <div style={{ flex: '1 1 50%' }}>
+          {/* Função */}
+          <div className="item">
             <label>Função:</label>
             <select
               value={colab.funcao}
               onChange={(e) => handleChange(index, 'funcao', e.target.value)}
-              style={{ width: '100%', padding: '8px' }}
             >
               <option value="">Selecione</option>
               <option value="AUX. LOGISTICA">AUX. LOGISTICA</option>
@@ -103,31 +113,25 @@ export default function NovoColaborador() {
             </select>
           </div>
 
-          <div style={{ flex: '1 1 50%' }}>
+          {/* Diária */}
+          <div className="item">
             <label>Valor Diária:</label>
             <input
               type="number"
               value={colab.diaria}
               onChange={(e) => handleChange(index, 'diaria', e.target.value)}
-              style={{ width: '100%', padding: '8px' }}
               placeholder="R$"
             />
           </div>
         </div>
       ))}
 
+      {/* Botão de adicionar novo colaborador */}
+      <div className="divider" />
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         <button
           onClick={adicionarLinha}
-          style={{
-            fontSize: '2rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '10px',
-            backgroundColor: '#10b981',
-            color: 'white',
-            border: 'none',
-            cursor: 'pointer'
-          }}
+          className="add-button"
         >
           ➕
         </button>
