@@ -100,40 +100,112 @@ export default function NovoColaborador() {
     window.open(linkWhatsApp, '_blank');
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const doc = new jsPDF();
-    const nomeArquivo = `cadastro_${cabecalho.cliente}_${cabecalho.operacao}_${cabecalho.data}.pdf`;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let y = 20;
+  
+    // Carrega a imagem da logo
+    const loadImageAsBase64 = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    };
+  
+    const logoBase64 = await loadImageAsBase64('/logo.jpeg');
+  
+    // 1. Adiciona a borda externa
+    doc.setDrawColor(12, 106, 55); // verde escuro para linhas
+    doc.setLineWidth(0.8);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+  
+    // 2. Adiciona a logo
+    doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
+  
+    // 3. Título centralizado
+    doc.setFontSize(20);
+    doc.setTextColor(12, 106, 55); // equivalente a #022c15 em RGB 
+    doc.text('Cadastro de Colaboradores', pageWidth / 2, 25, { align: 'center' });
+  
+    y = 45;
+  
+    // 4. Cabeçalho centralizado
+    doc.setFontSize(11);
+    doc.setTextColor(33, 33, 33);
+  
+    const headerLines = [
+      `Cliente: ${cabecalho.cliente}`,
+      `Operação: ${cabecalho.operacao}`,
+      `Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`,
+      `Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`
+    ];
+  
+    // Definir a fonte e a cor
+doc.setFontSize(12);
+doc.setTextColor(33, 33, 33);
 
-    let y = 10;
+// Espaçamento inicial
+const leftColumnX = pageWidth / 3.5; // Posição para a coluna da esquerda
+const rightColumnX = pageWidth / 2 + 10; // Posição para a coluna da direita
 
-    doc.setFontSize(16);
-    doc.text('Cadastro de Colaboradores', 105, y, { align: 'center' });
+// Adiciona as informações em colunas
+doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y); 
+doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
+y += 7;
+
+doc.text(`Data: ${cabecalho.data}`, leftColumnX, y); 
+doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
+y += 7;
+
+doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, y); 
+doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, y);
+y += 10;
+
+  
+    y += 0;
+  
+    // 5. Linha separadora
+    doc.setDrawColor(12, 106, 55);
+    doc.setLineWidth(0.5);
+    doc.line(20, y, pageWidth - 20, y);
     y += 10;
-
-    doc.setFontSize(12);
-    doc.text(`Cliente: ${cabecalho.cliente}   Operação: ${cabecalho.operacao}`, 105, y, { align: 'center' }); y += 6;
-    doc.text(`Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`, 105, y, { align: 'center' }); y += 6;
-    doc.text(`Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`, 105, y, { align: 'center' }); y += 10;
-
+  
+    // 6. Lista de colaboradores
     colaboradores.forEach((colab, index) => {
       if (y > 270) {
         doc.addPage();
-        y = 10;
+        // Reaplica a borda em nova página
+        doc.setDrawColor(12, 106, 55);
+        doc.setLineWidth(0.8);
+        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+        y = 20;
       }
-
-      doc.setFontSize(11);
-      doc.text(`${index + 1}. ${colab.nome} | CPF: ${colab.cpf} | Função: ${colab.funcao} | R$${colab.diaria}`, 10, y);
+  
+      // Nome em negrito
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+      doc.text(`${index + 1}. ${colab.nome}`, 20, y);
       y += 6;
+  
+      // Dados adicionais em cinza
+      doc.setFontSize(10);
+      doc.setTextColor(100);
+      doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | Diária: R$${colab.diaria}`, 25, y);
+      y += 10;
     });
-
-    doc.save(nomeArquivo);
-
-    colaboradores.forEach(colab => {
-      if (colab.nome && colab.cpf && colab.funcao && colab.diaria) {
-        enviarParaWhatsApp(colab);
-      }
-    });
+  
+    // 7. Abre visualização do PDF em nova aba
+    const pdfUrl = doc.output('bloburl');
+    window.open(pdfUrl, '_blank');
   };
+  
+  
+  
 
   return (
     <div className="container">
