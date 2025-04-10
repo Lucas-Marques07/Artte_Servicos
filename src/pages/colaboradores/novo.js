@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import { useRouter } from 'next/router';
 
 
+
 export default function NovoColaborador() {
   const router = useRouter(); // ⬅ Adicionado
   const [colaboradores, setColaboradores] = useState([
@@ -29,7 +30,7 @@ export default function NovoColaborador() {
   useEffect(() => {
     async function fetchCPFs() {
       try {
-        const response = await fetch('https://sheetdb.io/api/v1/kbce3mayhsmmg');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzL6NoS3730uOtG1T3SsqpgXVp4r_s9rRDd-c9B85cip9mByzaYEzFwepWxawH1VHni/exec');
         const data = await response.json();
         setCpfsDisponiveis(data);
 
