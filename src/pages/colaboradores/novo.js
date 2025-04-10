@@ -52,27 +52,35 @@ export default function NovoColaborador() {
   };
 
   // Função para enviar as informações para o WhatsApp
-  const enviarParaWhatsApp = () => {
-    let mensagem = 'Novo Cadastro de Colaboradores:\n\n';
+  const enviarParaWhatsApp = (colaborador) => {
+    const { nome, cpf, funcao, diaria } = colaborador;
 
-    // Montando a mensagem com todos os colaboradores
-    colaboradores.forEach((colaborador, index) => {
-      const { nome, cpf, funcao, diaria } = colaborador;
-      mensagem += `Colaborador ${index + 1}:\n`;
-      mensagem += `Nome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}\n\n`;
+    // Montando a mensagem que será enviada
+    const mensagem = encodeURIComponent(
+      `Novo Cadastro de Colaborador:\n\nNome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}`
+    );
+
+    // Números de telefone do WhatsApp
+    const numeroWhatsApp1 = '5511949324422'; // Substitua pelo número real
+    const numeroWhatsApp2 = '5511959104611'; // Substitua pelo número real
+    const numeroWhatsApp3 = '5511985935141'; // Substitua pelo número real
+
+    // Gerar os links para os números
+    const linkWhatsApp1 = `https://wa.me/${numeroWhatsApp1}?text=${mensagem}`;
+    const linkWhatsApp2 = `https://wa.me/${numeroWhatsApp2}?text=${mensagem}`;
+    const linkWhatsApp3 = `https://wa.me/${numeroWhatsApp3}?text=${mensagem}`;
+
+    // Abrir os links no navegador (abrirá o WhatsApp para cada número)
+    window.open(linkWhatsApp1, '_blank');
+    window.open(linkWhatsApp2, '_blank');
+    window.open(linkWhatsApp3, '_blank');
+  };
+
+  // Função chamada quando o formulário for enviado
+  const handleSubmit = () => {
+    colaboradores.forEach((colaborador) => {
+      enviarParaWhatsApp(colaborador); // Envia os dados para o WhatsApp para cada colaborador
     });
-
-    // Codificando a mensagem para o WhatsApp
-    const mensagemCodificada = encodeURIComponent(mensagem);
-
-    // Link de convite para o grupo (substitua pelo link real)
-    const linkGrupoWhatsApp = 'https://chat.whatsapp.com/CXl0xz4CX0k5UNxV23Y9tB'; // Substitua pelo link do grupo
-
-    // Gerar o link para o WhatsApp com o convite do grupo
-    const linkWhatsApp = `${linkGrupoWhatsApp}&text=${mensagemCodificada}`;
-
-    // Abrir o link no navegador para que o usuário entre no grupo
-    window.open(linkWhatsApp, '_blank');
   };
 
   return (
@@ -163,8 +171,8 @@ export default function NovoColaborador() {
 
       {/* Botão de envio para WhatsApp */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <button onClick={enviarParaWhatsApp} className="send-whatsapp-button">
-          Enviar para o Grupo no WhatsApp
+        <button onClick={handleSubmit} className="send-whatsapp-button">
+          Enviar para WhatsApp
         </button>
       </div>
     </div>
