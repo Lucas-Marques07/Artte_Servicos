@@ -63,3 +63,14 @@ export default function NovoColaborador() {
     </div>
   );
 }
+import BackButton from '../components/BackButton'
+
+export default function Colaboradores() {
+  return (
+    <div>
+      <h1>Colaboradores</h1>
+      {/* ...conteúdo da página... */}
+      <BackButton />
+    </div>
+  )
+}
