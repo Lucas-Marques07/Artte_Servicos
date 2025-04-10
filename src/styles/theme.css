@@ -114,10 +114,15 @@
   
   /* Flexbox layout para colaboradores */
   .colaborador-container {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
     margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid var(--cinza-fundo);
+    border-radius: 8px;
+    background-color: #fff;
   }
   
   .colaborador-container .item {
@@ -129,9 +134,6 @@
     font-weight: bold;
     text-align: center;
     color: var(--verde-claro);
-  }
-  
-  .colaborador-container input, .colaborador-container select {
     width: 100%;
   }
   
@@ -149,5 +151,63 @@
   
   a:hover {
     color: var(--verde-claro);
+  }
+  
+  /* 🔥 NOVO: Botão de lixeira no canto superior direito */
+  .botao-lixeira {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: transparent;
+    border: none;
+    color: #d11a2a;
+    cursor: pointer;
+    padding: 0.3rem;
+  }
+  
+  .botao-lixeira:hover {
+    color: #a10000;
+  }
+  
+  /* 🔥 NOVO: Estilo para o cabeçalho da operação */
+  .cabecalho-operacao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .cabecalho-operacao .item {
+    flex: 1 1 30%;
+    min-width: 200px;
+  }
+  
+  .input-readonly {
+    background-color: #eee;
+    cursor: not-allowed;
+  }
+  
+  /* 🔥 NOVO: Botões especiais */
+  .add-button {
+    font-size: 2rem;
+    background-color: var(--verde-claro);
+    color: white;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    line-height: 2.5rem;
+    text-align: center;
+    padding: 0;
+    border: none;
+  }
+  
+  .send-whatsapp-button {
+    background-color: #25d366;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .send-whatsapp-button:hover {
+    background-color: #128c7e;
   }
   
