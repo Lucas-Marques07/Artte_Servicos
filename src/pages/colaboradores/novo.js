@@ -51,36 +51,33 @@ export default function NovoColaborador() {
     setColaboradores([...colaboradores, novaLinha]);
   };
 
-  // Função para enviar as informações para o WhatsApp
-  const enviarParaWhatsApp = (colaborador) => {
-    const { nome, cpf, funcao, diaria } = colaborador;
-
-    // Montando a mensagem que será enviada
+  // Enviar mensagem com todos os colaboradores para vários números (com delay)
+  const enviarParaWhatsApp = (colaboradores, numerosWhatsApp) => {
     const mensagem = encodeURIComponent(
-      `Novo Cadastro de Colaborador:\n\nNome: ${nome}\nCPF: ${cpf}\nFunção: ${funcao}\nValor da Diária: R$${diaria}`
+      `Novo Cadastro de Colaboradores:\n\n` +
+      colaboradores
+        .map((colab, index) =>
+          `#${index + 1}\nNome: ${colab.nome}\nCPF: ${colab.cpf}\nFunção: ${colab.funcao}\nValor da Diária: R$${colab.diaria}`
+        )
+        .join('\n\n')
     );
 
-    // Números de telefone do WhatsApp
-    const numeroWhatsApp1 = '5511949324422'; // Substitua pelo número real
-    const numeroWhatsApp2 = '5511959104611'; // Substitua pelo número real
-    const numeroWhatsApp3 = '5511985935141'; // Substitua pelo número real
-
-    // Gerar os links para os números
-    const linkWhatsApp1 = `https://wa.me/${numeroWhatsApp1}?text=${mensagem}`;
-    const linkWhatsApp2 = `https://wa.me/${numeroWhatsApp2}?text=${mensagem}`;
-    const linkWhatsApp3 = `https://wa.me/${numeroWhatsApp3}?text=${mensagem}`;
-
-    // Abrir os links no navegador (abrirá o WhatsApp para cada número)
-    window.open(linkWhatsApp1, '_blank');
-    window.open(linkWhatsApp2, '_blank');
-    window.open(linkWhatsApp3, '_blank');
+    numerosWhatsApp.forEach((numero, i) => {
+      setTimeout(() => {
+        const linkWhatsApp = `https://wa.me/${numero}?text=${mensagem}`;
+        window.open(linkWhatsApp, '_blank');
+      }, i * 1200); // 1.2 segundo de intervalo entre os envios
+    });
   };
 
-  // Função chamada quando o formulário for enviado
   const handleSubmit = () => {
-    colaboradores.forEach((colaborador) => {
-      enviarParaWhatsApp(colaborador); // Envia os dados para o WhatsApp para cada colaborador
-    });
+    const numerosWhatsApp = [
+      '5511949324422',
+      '5511985935141',
+      '5511959104611'
+    ];
+
+    enviarParaWhatsApp(colaboradores, numerosWhatsApp);
   };
 
   return (
@@ -99,10 +96,7 @@ export default function NovoColaborador() {
 
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
-          {/* Numeração da linha */}
-          <div className="num-colaborador">
-            {index + 1}
-          </div>
+          <div className="num-colaborador">{index + 1}</div>
 
           {/* Nome */}
           <div className="item">
@@ -158,7 +152,6 @@ export default function NovoColaborador() {
         </div>
       ))}
 
-      {/* Botão de adicionar novo colaborador */}
       <div className="divider" />
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         <button
@@ -169,7 +162,6 @@ export default function NovoColaborador() {
         </button>
       </div>
 
-      {/* Botão de envio para WhatsApp */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={handleSubmit} className="send-whatsapp-button">
           Enviar para WhatsApp
