@@ -443,20 +443,28 @@ y += 10;
       </div>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
   <button
-    onClick={() => {
-      const mensagem = `Novo Cadastro de Colaboradores:\n\n${colaboradores.map((c, i) => (
-        `${i + 1}. Nome: ${c.nome}\nCPF: ${c.cpf}\nFunção: ${c.funcao}\nDiária: R$${c.diaria}\n`
-      )).join('\n')}`;
+   onClick={() => {
+    const { cliente, operacao, data, turno, entrada, saida } = cabecalho;
+    const dataFormatada = new Date(data).toLocaleDateString('pt-BR');
+  
+    const cabecalhoStr = `*Cliente:* ${cliente} | *Operação:* ${operacao} | *Data:* ${dataFormatada} \n*Turno:* ${turno} | *Entrada:* ${entrada} | *Saída:* ${saida}`;
+    
+    const colaboradoresStr = colaboradores.map((c, i) => (
+      `${i + 1}. ${c.nome} | CPF: ${c.cpf} | ${c.funcao} | ${c.diaria}`
+    )).join('\n');
+  
+    const mensagem = `${cabecalhoStr}\n\n${colaboradoresStr}`;
+  
+    if (navigator.share) {
+      navigator.share({
+        title: 'Cadastro de Colaboradores',
+        text: mensagem,
+      }).catch((error) => console.error('Erro ao compartilhar:', error));
+    } else {
+      alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
+    }
+  }}
 
-      if (navigator.share) {
-        navigator.share({
-          title: 'Cadastro de Colaboradores',
-          text: mensagem,
-        }).catch((error) => console.error('Erro ao compartilhar:', error));
-      } else {
-        alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
-      }
-    }}
     className="send-whatsapp-button"
   >
     📤 Compartilhar Mensagem
