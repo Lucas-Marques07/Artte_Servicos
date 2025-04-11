@@ -110,7 +110,7 @@ export default function Colaboradores() {
         {/* Botão Voltar */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/login')}
             style={{
               background: '#0c6a37',
               color: '#fff',

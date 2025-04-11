@@ -216,7 +216,7 @@ y += 10;
   {/* Botão Voltar */}
   <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
     <button
-      onClick={() => router.push('/')}
+      onClick={() => router.push('/login')}
       style={{
         background: '#0c6a37', // Verde
         color: '#fff',          // Texto branco
@@ -441,6 +441,28 @@ y += 10;
           Enviar para WhatsApp
         </button>
       </div>
+      <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+  <button
+    onClick={() => {
+      const mensagem = `Novo Cadastro de Colaboradores:\n\n${colaboradores.map((c, i) => (
+        `${i + 1}. Nome: ${c.nome}\nCPF: ${c.cpf}\nFunção: ${c.funcao}\nDiária: R$${c.diaria}\n`
+      )).join('\n')}`;
+
+      if (navigator.share) {
+        navigator.share({
+          title: 'Cadastro de Colaboradores',
+          text: mensagem,
+        }).catch((error) => console.error('Erro ao compartilhar:', error));
+      } else {
+        alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
+      }
+    }}
+    className="send-whatsapp-button"
+  >
+    📤 Compartilhar Mensagem
+  </button>
+</div>
+
     </div>
   );
 }
