@@ -68,6 +68,24 @@ export default function Home() {
             </Link>
           </li>
           <li>
+          <Link href="transporte/novo">
+              <span
+                style={{
+                  backgroundColor: '#0070f3',
+                  color: 'white',
+                  padding: '0.5rem 1.2rem',
+                  borderRadius: '6px',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  display: 'inline-block',
+                }}
+              >
+                📋 lançar transporte
+              </span>
+            </Link>
+            </li>
+
+          <li>
             <Link href="/colaboradores/novo">
               <span
                 style={{
