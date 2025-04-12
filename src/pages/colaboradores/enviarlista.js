@@ -215,16 +215,13 @@ for (let i = 1; i <= totalPages; i++) {
 
   
     // Visualização e download
-    const pdfUrl = doc.output("bloburl");
-    window.open(pdfUrl, "_blank");
     const blob = doc.output("blob");
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${cabecalho.cliente}_${cabecalho.turno}_${formatarDataBR(
-      cabecalho.data
-    )}.pdf`;
-    a.click();
+const url = URL.createObjectURL(blob);
+const a = document.createElement("a");
+a.href = url;
+a.download = `${cabecalho.cliente}_${cabecalho.turno}_${formatarDataBR(cabecalho.data)}.pdf`;
+a.click();
+
   };
   
   
