@@ -5,6 +5,18 @@ import Link from 'next/link';
 export default function Home() {
   const router = useRouter();
   const [usuario, setUsuario] = useState(null);
+  const botaoEstilo = {
+    backgroundColor: '#0c6a37',
+    color: 'white',
+    padding: '0.5rem 1.2rem',
+    borderRadius: '6px',
+    textDecoration: 'none',
+    cursor: 'pointer',
+    display: 'inline-block',
+    minWidth: '220px',
+    textAlign: 'center',
+  };
+  
 
   useEffect(() => {
     const usuarioSalvo = localStorage.getItem('usuarioLogado');
@@ -52,53 +64,40 @@ export default function Home() {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li style={{ marginBottom: '1rem' }}>
             <Link href="/colaboradores">
-              <span
-                style={{
-                  backgroundColor: '#0070f3',
-                  color: 'white',
-                  padding: '0.5rem 1.2rem',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  display: 'inline-block',
-                }}
-              >
-                📋 Cadastrar Colaboradores
+            <span style={botaoEstilo}>
+                👷 Cadastrar Colaboradores
               </span>
             </Link>
           </li>
-          <li>
+          <li style={{ marginBottom: '1rem' }}>
+            <Link href="marmita/novo">
+            <span style={botaoEstilo}>
+                 🍽️ Solicitar Marmitas
+            </span>
+
+            </Link>
+          </li>
+          
+        <li style={{ marginBottom: '1rem' }}>
           <Link href="transporte/novo">
-              <span
-                style={{
-                  backgroundColor: '#0070f3',
-                  color: 'white',
-                  padding: '0.5rem 1.2rem',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  display: 'inline-block',
-                }}
-              >
-                📋 lançar transporte
+          <span style={botaoEstilo}>
+                🚐 Lançar Transporte
               </span>
             </Link>
             </li>
 
+            <li style={{ marginBottom: '1rem' }}>
+          <Link href="/rota">
+          <span style={botaoEstilo}>
+          🗺️ Itinerário
+              </span>
+            </Link>
+            </li>
+       
           <li>
             <Link href="/colaboradores/novo">
-              <span
-                style={{
-                  backgroundColor: '#10b981',
-                  color: 'white',
-                  padding: '0.5rem 1.2rem',
-                  borderRadius: '6px',
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  display: 'inline-block',
-                }}
-              >
-                ➕ Lançar lista
+            <span style={botaoEstilo}>
+                📋 Lançar lista
               </span>
             </Link>
           </li>

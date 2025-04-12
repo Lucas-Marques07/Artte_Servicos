@@ -218,9 +218,8 @@
     background-color: #128c7e;
   }
   @media (min-width: 768px) {
-    .logo-container {
-      justify-content: flex-end !important;
-      padding-right: 1rem;
-    }
+  .logo-container {
+    justify-content: flex-end !important;
+    padding-right: 1rem;
   }
-  
+}

@@ -53,7 +53,7 @@ export default function NovoTransporte() {
 
   const validarCampos = () => {
     for (let t of transportes) {
-      if (!t.fornecedor || !t.motorista || !t.empresa || !t.operacao || !t.data || !t.motivo || !t.horario || !t.quantidade || !t.valor) {
+      if (!t.fornecedor || !t.motorista || !t.empresa || !t.data || !t.motivo || !t.horario || !t.quantidade || !t.valor) {
         alert('Por favor, preencha todos os campos antes de enviar.');
         return false;
       }
