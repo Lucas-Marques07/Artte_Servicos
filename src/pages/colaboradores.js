@@ -75,7 +75,7 @@ export default function Colaboradores() {
     }
 
     try {
-      const res = await fetch('https://script.google.com/macros/s/AKfycbzL6NoS3730uOtG1T3SsqpgXVp4r_s9rRDd-c9B85cip9mByzaYEzFwepWxawH1VHni/exec', {
+      const res = await fetch('https://sheetdb.io/api/v1/npkk4mpcq5tlz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -104,26 +104,32 @@ export default function Colaboradores() {
         minHeight: '100vh',
         background: '#f8f8f8',
         fontFamily: 'sans-serif',
+        
       }}
     >
       <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
-        {/* Botão Voltar */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-          <button
-            onClick={() => router.push('/login')}
-            style={{
-              background: '#0c6a37',
-              color: '#fff',
-              border: 'none',
-              padding: '8px 12px',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '14px',
-            }}
-          >
-            ⬅ Voltar
-          </button>
-        </div>
+      
+      {/* Cabeçalho com logo e botão voltar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+        <button
+          onClick={() => router.push('/login')}
+          style={{
+            background: '#0c6a37',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 10px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            width: '80px',
+            textAlign: 'center',
+          }}
+        >
+          ⬅ Voltar
+        </button>
+      </div>
+
 
         <h1 style={{ marginBottom: '1rem' }}>Cadastro de Colaborador</h1>
 

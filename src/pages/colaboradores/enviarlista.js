@@ -219,7 +219,7 @@ for (let i = 1; i <= totalPages; i++) {
 const url = URL.createObjectURL(blob);
 const a = document.createElement("a");
 a.href = url;
-a.download = `${cabecalho.cliente}_${cabecalho.turno}_${formatarDataBR(cabecalho.data)}.pdf`;
+a.download = `${cabecalho.cliente} ${cabecalho.turno} ${formatarDataBR(cabecalho.data)}.pdf`;
 a.click();
 
   };

@@ -1,4 +1,3 @@
-
 // src/pages/transporte/novo.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -74,8 +73,7 @@ Data: ${t.data}
 Motivo: ${t.motivo}
 Horário: ${t.horario}
 Quantidade: ${t.quantidade}
-Valor: R$${t.valor}
-`
+Valor: R$${t.valor}`
     )).join('\n------------------\n');
 
     if (navigator.share) {
@@ -93,15 +91,35 @@ Valor: R$${t.valor}
   const motivos = [...new Set(dadosPlanilha.map(d => d.VIAGEM))];
 
   return (
-    <div className="container" style={{ padding: '10px' }}>
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+      
+      {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <h2 style={{ margin: 0 }}>Lançamento de Transporte</h2>
+        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
         <button
           onClick={() => router.push('/login')}
-          style={{ background: '#0c6a37', color: '#fff', padding: '6px 10px', borderRadius: '4px', fontSize: '14px' }}
-        >⬅ Voltar</button>
+          style={{
+            background: '#0c6a37',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 10px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            width: '80px',
+            textAlign: 'center',
+          }}
+        >
+          ⬅ Voltar
+        </button>
       </div>
 
+      {/* Título */}
+      <center>
+        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de transporte</h2>
+      </center>
+
+      {/* Checkbox usar mesmo valor */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.5rem', fontSize: '14px' }}>
         <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
         <input
@@ -112,6 +130,7 @@ Valor: R$${t.valor}
         />
       </div>
 
+      {/* Lista de transportes */}
       {transportes.map((t, index) => (
         <div key={index} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '6px', marginBottom: '10px', background: '#f9f9f9' }}>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '6px' }}>
@@ -182,10 +201,14 @@ Valor: R$${t.valor}
         </div>
       ))}
 
+      {/* Botão adicionar */}
       <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
-        <button onClick={adicionarLinha} style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>➕ Adicionar</button>
+        <button onClick={adicionarLinha} style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>
+          ➕ Adicionar
+        </button>
       </div>
 
+      {/* Botão compartilhar */}
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         <button onClick={handleEnviar} style={{ background: '#0c6a37', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '14px' }}>
           📤 Compartilhar Transporte

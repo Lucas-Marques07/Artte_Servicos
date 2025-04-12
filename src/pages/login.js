@@ -105,7 +105,7 @@ export default function Home() {
             <Link href="/colaboradores/enviarlista">
             
             <span style={botaoEstilo}>
-                 Enviar lista
+            📨 Enviar lista
               </span>
             </Link>
           </li>
