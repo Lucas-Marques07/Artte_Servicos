@@ -94,10 +94,18 @@ export default function Home() {
             </Link>
             </li>
        
-          <li>
+            <li style={{ marginBottom: '1rem' }}>
             <Link href="/colaboradores/novo">
             <span style={botaoEstilo}>
                 📋 Lançar lista
+              </span>
+            </Link>
+          </li>
+          <li style={{ marginBottom: '1rem' }}>
+            <Link href="/colaboradores/enviarlista">
+            
+            <span style={botaoEstilo}>
+                 Enviar lista
               </span>
             </Link>
           </li>
