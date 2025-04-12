@@ -145,7 +145,18 @@ Valor: R$${t.valor}`
 
       {/* Lista de transportes */}
       {transportes.map((t, index) => (
-        <div key={index} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '6px', marginBottom: '10px', background: '#f9f9f9' }}>
+      <div
+      key={index}
+      style={{
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '6px',
+        marginBottom: '10px',
+        background: '#f9f9f9',
+        width: '350px'  // Largura fixa de 500px
+      }}
+    >
+    
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '6px' }}>
             <button onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</button>
           </div>
