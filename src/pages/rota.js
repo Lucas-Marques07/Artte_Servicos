@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-
 
 const Mapa = dynamic(() => import('@/components/MapaRota'), { ssr: false });
 
@@ -10,8 +9,9 @@ export default function RotaVan() {
   const [horaInicio, setHoraInicio] = useState('');
   const [paradas, setParadas] = useState([]);
   const [erro, setErro] = useState('');
-  const [minutosPadrao, setMinutosPadrao] = useState(5); // Novo estado para definir os minutos
+  const [minutosPadrao, setMinutosPadrao] = useState(5);
   const router = useRouter();
+  const novoInputRef = useRef(null);
 
   const calcularHoraComOffset = (horaBase, minutosParaAdicionar) => {
     if (!horaBase) return '';
@@ -37,19 +37,13 @@ export default function RotaVan() {
 
   const atualizarParada = (index, campo, valor) => {
     const novaLista = [...paradas];
-  
-    // Atualiza o campo específico da parada
     novaLista[index][campo] = valor;
-  
-    // Se o campo atualizado for "hora", recalcula as horas dos pontos abaixo
     if (campo === 'hora') {
-      // Atualiza os horários dos pontos abaixo
       for (let i = index + 1; i < novaLista.length; i++) {
-        const minutosExtras = (i - index) * minutosPadrao; // Usando minutosPadrao
+        const minutosExtras = (i - index) * minutosPadrao;
         novaLista[i].hora = calcularHoraComOffset(valor, minutosExtras);
       }
     }
-  
     setParadas(novaLista);
   };
 
@@ -57,6 +51,9 @@ export default function RotaVan() {
     const novaLista = [...paradas];
     novaLista[index].colaboradores.push('');
     setParadas(novaLista);
+    setTimeout(() => {
+      if (novoInputRef.current) novoInputRef.current.focus();
+    }, 100);
   };
 
   const removerColaborador = (indexParada, indexColaborador) => {
@@ -73,64 +70,49 @@ export default function RotaVan() {
 
   const trocarOrdem = (fromIndex, toIndex) => {
     const novaLista = [...paradas];
-  
-    // Remover o ponto de origem e colocá-lo na nova posição
     const [removido] = novaLista.splice(fromIndex, 1);
     novaLista.splice(toIndex, 0, removido);
-  
-    // Agora, ajustamos os horários. Vamos manter o horário do ponto trocado.
+
     let minutosExtras = 0;
-  
-    // Atualiza os horários a partir do primeiro ponto
     novaLista.forEach((ponto, i) => {
       if (i === 0) {
-        // O primeiro ponto mantém o horário inicial
         ponto.hora = calcularHoraComOffset(inicio, minutosExtras);
       } else {
-        // Para os pontos abaixo, soma os minutos definidos no minutosPadrao
         minutosExtras += minutosPadrao;
         ponto.hora = calcularHoraComOffset(novaLista[i - 1].hora, minutosExtras);
       }
     });
-  
-    // Atualizar o estado da lista de paradas
+
     setParadas(novaLista);
   };
 
-  // Função para recalcular os horários e adicionar a quantidade de minutos personalizada
   const recalcularHorarios = () => {
     if (!horaInicio || paradas.length === 0 || !minutosPadrao) {
       alert('Certifique-se de preencher o horário de início, definir os minutos e ter pelo menos um ponto.');
       return;
     }
-  
+
     const novaLista = [...paradas];
-    let minutosExtras = minutosPadrao; // Começa com minutosPadrao para o primeiro ponto
-  
+    let minutosExtras = minutosPadrao;
     novaLista.forEach((ponto, i) => {
       ponto.hora = calcularHoraComOffset(horaInicio, minutosExtras);
       minutosExtras += minutosPadrao;
     });
-  
+
     setParadas(novaLista);
   };
-  
+
   const compartilharRota = () => {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     const cabecalho = `🚌 *Rota da Van* \n*Empresa:* ACME | *Data:* ${dataAtual} \n*Saída:* ${inicio} às ${horaInicio}`;
-
     const colaboradoresStr = paradas.map((ponto, idx) => {
       const nomes = ponto.colaboradores.map(c => `  - ${c}`).join('\n');
       return `*${idx + 1}. ${ponto.nome}* (${ponto.hora})\n${nomes}`;
     }).join('\n\n');
-
     const mensagem = `${cabecalho}\n\n${colaboradoresStr}`;
 
     if (navigator.share) {
-      navigator.share({
-        title: 'Rota da Van',
-        text: mensagem,
-      }).catch((error) => console.error('Erro ao compartilhar:', error));
+      navigator.share({ title: 'Rota da Van', text: mensagem }).catch(err => console.error(err));
     } else {
       alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
     }
@@ -139,28 +121,23 @@ export default function RotaVan() {
   const formatarData = () => new Date().toLocaleDateString('pt-BR');
 
   return (
-    
-    
-      <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-      {/* Botão Voltar */}
-    <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-      <button
-        onClick={() => router.push('/login')}
-        style={{
-          background: '#0c6a37',
-          color: '#fff',
-          border: 'none',
-          padding: '8px 12px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '14px',
-        }}
-      >
-        ⬅ Voltar
-      </button>
-    </div>
-
-    {/* Aqui continua o restante da sua interface */}
+    <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+        <button
+          onClick={() => router.push('/login')}
+          style={{
+            background: '#0c6a37',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+          }}
+        >
+          ⬅ Voltar
+        </button>
+      </div>
 
       <header style={{ marginBottom: '2rem' }}>
         <h1 style={{ margin: 0 }}>🚌 Transporte ACME</h1>
@@ -180,53 +157,47 @@ export default function RotaVan() {
       </div>
 
       <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0px' }}>
-  <div style={{ marginRight: '1px', width: '100%' }}>
-    <label>Horário de Início:</label>
-    <input
-      type="time"
-      value={horaInicio}
-      onChange={e => setHoraInicio(e.target.value)}
-    />
-  </div>
+        <div style={{ marginRight: '1px', width: '100%' }}>
+          <label>Horário de Início:</label>
+          <input
+            type="time"
+            value={horaInicio}
+            onChange={e => setHoraInicio(e.target.value)}
+          />
+        </div>
+        <div style={{ marginleft: '1px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div>
+            <label>Minutos:</label>
+            <input
+              type="number"
+              value={minutosPadrao}
+              onChange={e => setMinutosPadrao(Number(e.target.value))}
+              min="1"
+              style={{ width: '100px' }}
+            />
+          </div>
+          <button
+            onClick={recalcularHorarios}
+            style={{
+              width: '32px',
+              height: '32px',
+              fontSize: '40px',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              marginTop: '18px'
+            }}
+            title="Recalcular horários"
+          >
+            🔄
+          </button>
+        </div>
+      </div>
 
-  {/* Container para select de minutos + botão de recálculo */}
-  <div style={{ marginleft: '1px', display: 'flex', alignItems: 'center', gap: '16px' }}>
-    <div>
-      <label>Minutos:</label>
-      <input
-        type="number"
-        value={minutosPadrao}
-        onChange={e => setMinutosPadrao(Number(e.target.value))}
-        min="1"
-        style={{ width: '100px' }}
-      />
-    </div>
-
-    {/* Botão para recalcular horários */}
-    <button
-      onClick={recalcularHorarios}
-      style={{
-        width: '32px',
-        height: '32px',
-        fontSize: '40px',
-        padding: 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        marginTop: '18px' // alinhamento vertical com o input
-      }}
-      title="Recalcular horários"
-    >
-      🔄
-    </button>
-  </div>
-</div>
-
-
-          {/* Exibe a mensagem de erro, se houver */}
       {erro && (
         <div style={{ color: 'red', marginBottom: '1rem' }}>
           <strong>{erro}</strong>
@@ -235,7 +206,6 @@ export default function RotaVan() {
 
       <div>
         <label>Pontos de Parada:</label>
-
         {paradas.map((parada, i) => (
           <div key={i} style={{
             padding: '1rem', marginBottom: '1rem',
@@ -245,19 +215,10 @@ export default function RotaVan() {
               <strong>Ponto {i + 1}</strong>
               <button
                 onClick={() => removerParada(i)}
-                className="botao-lixeira"
-                title="Remover colaborador"
+                title="Remover ponto"
                 style={{
-                  width: '20px',
-                  height: '20px',
-                  padding: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  marginBottom: '10px',  // Adiciona um espaço abaixo do botão
+                  width: '20px', height: '20px', background: 'none', border: 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
                 }}
               >
                 🗑️
@@ -268,12 +229,7 @@ export default function RotaVan() {
               <select
                 onChange={(e) => trocarOrdem(i, parseInt(e.target.value))}
                 value={i}
-                style={{
-                  fontSize: '0.8rem',
-                  width: 'auto',
-                  maxWidth: '120px',
-                  display: 'inline-block',
-                }}
+                style={{ fontSize: '0.8rem', width: 'auto', maxWidth: '120px' }}
               >
                 {paradas.map((_, idx) => (
                   <option key={idx} value={idx}>{idx + 1}</option>
@@ -300,32 +256,20 @@ export default function RotaVan() {
             <div>
               <label>Colaboradores:</label>
               {parada.colaboradores.map((colaborador, j) => (
-                <div key={j} style={{
-                  display: 'flex',
-                  gap: '8px',
-                  marginTop: '4px',
-                  alignItems: 'center'
-                }}>
+                <div key={j} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
                   <input
                     type="text"
                     value={colaborador}
                     onChange={e => atualizarColaborador(i, j, e.target.value)}
                     placeholder={`Colaborador ${j + 1}`}
                     style={{ flex: 1 }}
+                    ref={j === parada.colaboradores.length - 1 ? novoInputRef : null}
                   />
                   <button
                     onClick={() => removerColaborador(i, j)}
                     style={{
-                      width: '20px',
-                      height: '20px',
-                      padding: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      marginBottom: '10px',
+                      width: '20px', height: '20px', background: 'none', border: 'none',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
                     }}
                   >
                     🗑️
@@ -357,14 +301,11 @@ export default function RotaVan() {
         >
           ➕ Adicionar Ponto
         </button>
-
-       
       </div>
 
       <div style={{ marginTop: '2rem' }}>
         <button
           onClick={compartilharRota}
-          className="send-whatsapp-button"
           style={{
             padding: '10px 20px',
             background: '#25D366',
@@ -377,9 +318,57 @@ export default function RotaVan() {
         >
           📤 Compartilhar Mensagem
         </button>
-        
       </div>
+      <style jsx>{`
+  @media (max-width: 768px) {
+    div {
+      padding: 1rem !important;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+    }
+
+    header p {
+      font-size: 0.9rem;
+    }
+
+    input[type="text"],
+    input[type="time"],
+    input[type="number"],
+    select {
+      width: 100% !important;
+      font-size: 1rem;
+    }
+
+    button {
+      font-size: 0.9rem !important;
+    }
+
+    .ponto-container {
+      flex-direction: column !important;
+    }
+
+    .ponto-container input {
+      width: 100% !important;
+    }
+
+    .parada-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .parada-header strong {
+      margin-bottom: 8px;
+    }
+
+    .botao-recalcular {
+      font-size: 32px !important;
+      margin-top: 10px !important;
+    }
+  }
+`}</style>
+
     </div>
-    
   );
 }
