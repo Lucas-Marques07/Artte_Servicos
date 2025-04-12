@@ -112,6 +112,12 @@ export default function NovoColaborador() {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     let y = 20;
+    const pages = [];
+  
+    const formatarDataBR = (dataISO) => {
+      const [ano, mes, dia] = dataISO.split("-");
+      return `${dia}/${mes}/${ano}`;
+    };
   
     // Carrega a imagem da logo
     const loadImageAsBase64 = async (url) => {
@@ -124,100 +130,103 @@ export default function NovoColaborador() {
       });
     };
   
-    const logoBase64 = await loadImageAsBase64('/artte.png');
+    const logoBase64 = await loadImageAsBase64("/artte.png");
   
-    // 1. Adiciona a borda externa
-    doc.setDrawColor(20, 30, 125) ; // verde escuro para linhas
-    doc.setLineWidth(0.8);
-    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+    // Função para cabeçalho da página (reutilizável)
+    const desenharCabecalho = () => {
+      doc.setDrawColor(20, 30, 125);
+      doc.setLineWidth(0.8);
+      doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+      doc.addImage(logoBase64, "PNG", 22, 17, 35, 35);
+      doc.setFontSize(20);
+      doc.setTextColor(20, 30, 125);
+      doc.text("Lista de Presença", pageWidth / 2, 25, { align: "center" });
   
-    // 2. Adiciona a logo
-    doc.addImage(logoBase64, 'PNG', 15, 15, 35, 35);
+      let yCab = 38;
+      doc.setFontSize(10);
+      doc.setTextColor(33, 33, 33);
+      const leftColumnX = pageWidth / 3;
+      const rightColumnX = pageWidth / 1.9 + 10;
   
-    // 3. Título centralizado
-    doc.setFontSize(20);
-    doc.setTextColor(20, 30, 125); // equivalente a #022c15 em RGB 
-    doc.text('Lista de Presença', pageWidth / 2, 25, { align: 'center' });
+      doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, yCab);
+      doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, yCab);
+      yCab += 7;
+      doc.text(`Data: ${formatarDataBR(cabecalho.data)}`, leftColumnX, yCab);
+      doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, yCab);
+      yCab += 7;
+      doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, yCab);
+      doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, yCab);
+      yCab += 10;
   
-    y = 45;
+      doc.setDrawColor(20, 30, 125);
+      doc.setLineWidth(0.5);
+      doc.line(20, yCab, pageWidth - 20, yCab);
+      return yCab + 10;
+    };
   
-    // 4. Cabeçalho centralizado
-    doc.setFontSize(11);
-    doc.setTextColor(33, 33, 33);
+    y = desenharCabecalho();
   
-    const headerLines = [
-      `Cliente: ${cabecalho.cliente}`,
-      `Operação: ${cabecalho.operacao}`,
-      `Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`,
-      `Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`
-    ];
-  
-    // Definir a fonte e a cor
-doc.setFontSize(10);
-doc.setTextColor(33, 33, 33);
-
-// Espaçamento inicial
-const leftColumnX = pageWidth / 3; // Posição para a coluna da esquerda
-const rightColumnX = pageWidth / 2 + 10; // Posição para a coluna da direita
-
-// Adiciona as informações em colunas
-doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y); 
-doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
-y += 7;
-
-doc.text(`Data: ${cabecalho.data}`, leftColumnX, y); 
-doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
-y += 7;
-
-doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, y); 
-doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, y);
-y += 10;
-
-  
-    y += 0;
-  
-    // 5. Linha separadora
-    doc.setDrawColor(20, 30, 125);
-    doc.setLineWidth(0.5);
-    doc.line(20, y, pageWidth - 20, y);
-    y += 10;
-  
-    // 6. Lista de colaboradores
+    // Lista de colaboradores
     colaboradores.forEach((colab, index) => {
-      if (y > 270) {
+      if (y > 250) {
+        pages.push(doc.internal.getNumberOfPages());
         doc.addPage();
-        // Reaplica a borda em nova página
-        doc.setDrawColor(20, 30, 125);
-        doc.setLineWidth(0.8);
-        doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
-        y = 20;
+        y = desenharCabecalho();
       }
   
-      // Nome em negrito
       doc.setFontSize(12);
       doc.setTextColor(0);
       doc.text(`${index + 1}. ${colab.nome}`, 20, y);
       y += 6;
   
-      // Dados adicionais em cinza
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | OBS: ${colab.diaria}`, 25, y);
+      doc.text(
+        `CPF: ${colab.cpf} | Função: ${colab.funcao} | OBS: ${colab.diaria}`,
+        25,
+        y
+      );
       y += 10;
     });
   
-    // 7. Abre visualização do PDF em nova aba
-    const pdfUrl = doc.output('bloburl');
-    window.open(pdfUrl, '_blank');
-    const blob = doc.output('blob');
-const url = URL.createObjectURL(blob);
-const dataFormatada = new Date(cabecalho.data).toLocaleDateString('pt-BR')
-const a = document.createElement('a');
-a.href = url;
-a.download = `${cabecalho.cliente} ${cabecalho.turno} ${dataFormatada}.pdf`;
-a.click();
+    // Espaço e linha de assinatura na última página
+    if (y > 250) {
+      doc.addPage();
+      y = desenharCabecalho();
+    }
+  
+    y += 10;
+    doc.setFontSize(11);
+    doc.setTextColor(33, 33, 33);
+    doc.text(`
+      Assinatura do responsável (${cabecalho.cliente}): _________________________________`,
+      20,
+      y
+    );
+  
+    // Total de páginas e numeração no rodapé
+    const totalPages = doc.internal.getNumberOfPages();
+for (let i = 1; i <= totalPages; i++) {
+  doc.setPage(i);
+  doc.setFontSize(9);
+  doc.setTextColor(100);
+  doc.text(`${i} / ${totalPages}`, pageWidth - 20, pageHeight - 15, { align: 'right' });
+}
 
+  
+    // Visualização e download
+    const pdfUrl = doc.output("bloburl");
+    window.open(pdfUrl, "_blank");
+    const blob = doc.output("blob");
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${cabecalho.cliente}_${cabecalho.turno}_${formatarDataBR(
+      cabecalho.data
+    )}.pdf`;
+    a.click();
   };
+  
   
   
   
@@ -449,7 +458,7 @@ a.click();
 
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={handleSubmit} className="send-whatsapp-button">
-          Enviar para WhatsApp
+        📄 Visualizar
         </button>
       </div>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
@@ -478,7 +487,7 @@ a.click();
 
     className="send-whatsapp-button"
   >
-    📤 Compartilhar Mensagem
+    ✉️ Enviar Mensagem
   </button>
 </div>
 
