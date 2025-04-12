@@ -91,7 +91,19 @@ Valor: R$${t.valor}`
   const motivos = [...new Set(dadosPlanilha.map(d => d.VIAGEM))];
 
   return (
-    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+    <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
+    }}
+  >
+    
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -129,6 +141,7 @@ Valor: R$${t.valor}`
           style={{ width: '14px', height: '14px' }}
         />
       </div>
+      
 
       {/* Lista de transportes */}
       {transportes.map((t, index) => (
@@ -214,6 +227,7 @@ Valor: R$${t.valor}`
           📤 Compartilhar Transporte
         </button>
       </div>
+    </div>
     </div>
   );
 }
