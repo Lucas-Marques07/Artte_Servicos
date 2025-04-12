@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
+
 const Mapa = dynamic(() => import('@/components/MapaRota'), { ssr: false });
 
 export default function RotaVan() {
