@@ -5,8 +5,6 @@ import Link from 'next/link';
 export default function Home() {
   const router = useRouter();
   const [usuario, setUsuario] = useState(null);
-  const [carregando, setCarregando] = useState(true);
-
   const botaoEstilo = {
     backgroundColor: '#0c6a37',
     color: 'white',
@@ -18,41 +16,18 @@ export default function Home() {
     minWidth: '220px',
     textAlign: 'center',
   };
+  
 
   useEffect(() => {
     const usuarioSalvo = localStorage.getItem('usuarioLogado');
-
-    // Simula splash screen por 3 segundos
-    const timer = setTimeout(() => {
-      if (!usuarioSalvo) {
-        router.push('/login');
-      } else {
-        setUsuario(JSON.parse(usuarioSalvo));
-        setCarregando(false);
-      }
-    }, 3000); // 3 segundos
-
-    return () => clearTimeout(timer);
+    if (!usuarioSalvo) {
+      router.push('/login');
+    } else {
+      setUsuario(JSON.parse(usuarioSalvo)); // transforma string em objeto
+    }
   }, []);
 
-  if (carregando) {
-    return (
-      <div style={{
-        height: '100vh',
-        backgroundColor: '#fff',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column'
-      }}>
-        <img src="/logo-rhplus-sem-borda.png" alt="Logo" style={{ width: 150, height: 150 }} />
-        <p style={{ marginTop: '1rem', fontSize: '1rem', color: '#444' }}>Carregando...</p>
-      </div>
-    );
-  }
-
   return (
-    // 🔽 o resto do seu código permanece igual aqui
     <div
       style={{
         display: 'flex',
@@ -89,35 +64,39 @@ export default function Home() {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           <li style={{ marginBottom: '1rem' }}>
             <Link href="/colaboradores">
-              <span style={botaoEstilo}>
+            <span style={botaoEstilo}>
                 👷 Cadastrar Colaboradores
               </span>
             </Link>
           </li>
           <li style={{ marginBottom: '1rem' }}>
             <Link href="marmita/novo">
-              <span style={botaoEstilo}>
-                🍽️ Solicitar Marmitas
-              </span>
+            <span style={botaoEstilo}>
+                 🍽️ Solicitar Marmitas
+            </span>
+
             </Link>
           </li>
-          <li style={{ marginBottom: '1rem' }}>
-            <Link href="transporte/novo">
-              <span style={botaoEstilo}>
+          
+        <li style={{ marginBottom: '1rem' }}>
+          <Link href="transporte/novo">
+          <span style={botaoEstilo}>
                 🚐 Lançar Transporte
               </span>
             </Link>
-          </li>
-          <li style={{ marginBottom: '1rem' }}>
-            <Link href="/rota">
-              <span style={botaoEstilo}>
-                🗺️ Itinerário
+            </li>
+
+            <li style={{ marginBottom: '1rem' }}>
+          <Link href="/rota">
+          <span style={botaoEstilo}>
+          🗺️ Itinerário
               </span>
             </Link>
-          </li>
+            </li>
+       
           <li>
             <Link href="/colaboradores/novo">
-              <span style={botaoEstilo}>
+            <span style={botaoEstilo}>
                 📋 Lançar lista
               </span>
             </Link>
