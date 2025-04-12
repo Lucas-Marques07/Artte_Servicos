@@ -122,32 +122,36 @@ export default function RotaVan() {
   const formatarData = () => new Date().toLocaleDateString('pt-BR');
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+      
+      {/* Cabeçalho com logo e botão voltar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
         <button
           onClick={() => router.push('/login')}
           style={{
             background: '#0c6a37',
             color: '#fff',
             border: 'none',
-            padding: '8px 12px',
+            padding: '8px 10px',
             borderRadius: '6px',
             cursor: 'pointer',
             fontSize: '14px',
+            width: '80px',
+            textAlign: 'center',
           }}
         >
           ⬅ Voltar
         </button>
       </div>
 
-      <header style={{ marginBottom: '2rem' }}>
-        <h1 style={{ margin: 0 }}>🚌 Transporte ACME</h1>
-        <p style={{ color: '#555' }}>{formatarData()}</p>
-      </header>
+      {/* Título */}
+      <center>
+        <h2 style={{ marginBottom: '1rem' }}>ITINERÁRIO DAS EMPRESAS</h2>
+      </center>
 
-      <h2>Rota da Van</h2>
 
-      <div style={{ marginBottom: '1rem' }}>
+       <div style={{ marginBottom: '1rem' }}>
         <label>Ponto de Partida:</label>
         <input
           type="text"

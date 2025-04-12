@@ -106,34 +106,33 @@ Valor: R$${m.valor}`
       }}
     >
   <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
-        {/* Botão Voltar */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '1rem' }}>
-  <img
-    src="/icon.png"
-    alt="Logo"
-    style={{ height: '80px', marginRight: '270px' }} // ajusta aqui a distância da logo para o botão
-  />
-  {/* Botão Voltar */}
-  <button
-  onClick={() => router.push('/login')}
-  style={{
-    background: '#0c6a37',
-    color: '#fff',
-    border: 'none',
-    padding: '8px 10px',
-    borderRadius: '6px',
-    cursor: 'pointer',
-    fontSize: '14px',
-    width: '80px', // controla o comprimento horizontal
-    textAlign: 'center',
-  }}
->
-  ⬅ Voltar
-</button>
+      
+      {/* Cabeçalho com logo e botão voltar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+        <button
+          onClick={() => router.push('/login')}
+          style={{
+            background: '#0c6a37',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 10px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            width: '80px',
+            textAlign: 'center',
+          }}
+        >
+          ⬅ Voltar
+        </button>
+      </div>
 
-</div>
+      {/* Título */}
+      <center>
+        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de transporte</h2>
+      </center>
 
-       <center> <h2 style={{ marginBottom: '1rem' }}>Solicitação de Marmita</h2></center>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '1rem', fontSize: '14px' }}>
           <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>

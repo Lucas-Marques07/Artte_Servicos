@@ -212,47 +212,33 @@ y += 10;
   
 
   return (
-    <div className="container">
-  {/* Botão Voltar */}
-  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-    <button
-      onClick={() => router.push('/login')}
-      style={{
-        background: '#0c6a37', // Verde
-        color: '#fff',          // Texto branco
-        border: 'none',
-        padding: '8px 12px',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        fontSize: '14px',
-      }}
-    >
-      ⬅ Voltar
-    </button>
-  </div>
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+      
+    {/* Cabeçalho com logo e botão voltar */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+      <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+      <button
+        onClick={() => router.push('/login')}
+        style={{
+          background: '#0c6a37',
+          color: '#fff',
+          border: 'none',
+          padding: '8px 10px',
+          borderRadius: '6px',
+          cursor: 'pointer',
+          fontSize: '14px',
+          width: '80px',
+          textAlign: 'center',
+        }}
+      >
+        ⬅ Voltar
+      </button>
+    </div>
 
-  
-
-  {/* Cabeçalho */}
-  <div
-    style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginBottom: '1rem'
-    }}
-  >
-  
-    <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-      Lançamento de Diárias
-    </h1>
-
-    <img
-      src="/logo.jpeg"
-      alt="Logo"
-      style={{ width: '150px', height: 'auto' }}
-    />
-  </div>
+    {/* Título */}
+    <center>
+      <h2 style={{ marginBottom: '1rem' }}>Lançamento de Listas</h2>
+    </center>
 
 
 
