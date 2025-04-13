@@ -37,7 +37,7 @@ export default function NovoColaborador() {
         const funcoes = [...new Set(data.map(item => item['FUNÇÃO']).filter(Boolean))];
         setFuncoesUnicas(funcoes);
 
-        const clientes = [...new Set(data.map(item => item['EMPRESA']).filter(Boolean))];
+        const clientes = [...new Set(data.map(item => item['pontofretamento']).filter(Boolean))];
         setClientesUnicos(clientes);
 
         const operacoes = [...new Set(data.map(item => item['OPERAÇÃO']).filter(Boolean))];
@@ -212,7 +212,18 @@ y += 10;
   
 
   return (
-    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        background: '#f8f8f8',
+        fontFamily: 'sans-serif',
+        padding: '2rem'
+      }}
+    >
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', width: '450px' }}>
       
     {/* Cabeçalho com logo e botão voltar */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -455,6 +466,7 @@ y += 10;
   >
     📤 Compartilhar Mensagem
   </button>
+</div>
 </div>
 
     </div>
