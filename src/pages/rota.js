@@ -225,7 +225,7 @@ export default function RotaVan() {
         {paradas.map((parada, i) => (
     <div key={i} style={{
       padding: '1rem', marginBottom: '1rem',
-      border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8', width: '450px'  // Largura fixa de 500px
+      border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8', width: '500px'  // Largura fixa de 500px
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <strong>Ponto {i + 1}</strong>
@@ -260,7 +260,7 @@ export default function RotaVan() {
                 type="text"
                 value={parada.nome}
                 onChange={e => atualizarParada(i, 'nome', e.target.value)}
-                placeholder={`Ponto ${i + 1}`}
+                placeholder={`ponto ${i + 1}`}
                 style={{ flex: 2 }}
               />
               <input
@@ -272,62 +272,34 @@ export default function RotaVan() {
             </div>
 
             <div>
-  <label>Colaboradores:</label>
-  {parada.colaboradores.map((colaborador, j) => (
-    <div
-      key={j}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'nowrap', // impede quebra de linha
-        gap: '4px',          // espaço horizontal entre input e botão
-        marginBottom: '2px', // espaço vertical entre inputs
-        width: '100%',
-      }}
-    >
-      <input
-        type="text"
-        value={colaborador}
-        onChange={e => atualizarColaborador(i, j, e.target.value)}
-        placeholder={`Colaborador ${j + 1}`}
-        style={{
-          flex: 1,
-          minWidth: 0, // previne overflow em telas pequenas
-        }}
-        ref={j === parada.colaboradores.length - 1 ? novoInputRef : null}
-      />
-      <button
-        onClick={() => removerColaborador(i, j)}
-        style={{
-          width: '20px',
-          height: '20px',
-          background: 'none',
-          border: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          flexShrink: 0, // impede o botão de encolher
-        }}
-      >
-        🗑️
-      </button>
-    </div>
-  ))}
-
-  <button
-    onClick={() => adicionarColaborador(i)}
-    style={{
-      marginTop: '8px',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      fontSize: '1.2rem'
-    }}
-  >
-    ➕
-      </button>  
-
+              <label>Colaboradores:</label>
+              {parada.colaboradores.map((colaborador, j) => (
+                <div key={j} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+                  <input
+                    type="text"
+                    value={colaborador}
+                    onChange={e => atualizarColaborador(i, j, e.target.value)}
+                    placeholder={`Colaborador ${j + 1}`}
+                    style={{ flex: 1 }}
+                    ref={j === parada.colaboradores.length - 1 ? novoInputRef : null}
+                  />
+                  <button
+                    onClick={() => removerColaborador(i, j)}
+                    style={{
+                      width: '20px', height: '20px', background: 'none', border: 'none',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+                    }}
+                  >
+                    🗑️
+                  </button>
+                </div>
+              ))}
+              <button
+                onClick={() => adicionarColaborador(i)}
+                style={{ marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                ➕
+              </button>
             </div>
           </div>
         ))}
