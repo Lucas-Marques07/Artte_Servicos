@@ -122,6 +122,17 @@ export default function RotaVan() {
   const formatarData = () => new Date().toLocaleDateString('pt-BR');
 
   return (
+    <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
+    }}
+  >
     <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)' }}>
       
       {/* Cabeçalho com logo e botão voltar */}
@@ -212,42 +223,44 @@ export default function RotaVan() {
       <div>
         <label>Pontos de Parada:</label>
         {paradas.map((parada, i) => (
-          <div key={i} style={{
-            padding: '1rem', marginBottom: '1rem',
-            border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <strong>Ponto {i + 1}</strong>
-              <button
-                onClick={() => removerParada(i)}
-                title="Remover ponto"
-                style={{
-                  width: '20px', height: '20px', background: 'none', border: 'none',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-                }}
-              >
-                🗑️
-              </button>
-            </div>
-
-            <div style={{ textAlign: 'right', marginBottom: '8px' }}>
-              <select
-                onChange={(e) => trocarOrdem(i, parseInt(e.target.value))}
-                value={i}
-                style={{ fontSize: '0.8rem', width: 'auto', maxWidth: '120px' }}
-              >
-                {paradas.map((_, idx) => (
-                  <option key={idx} value={idx}>{idx + 1}</option>
-                ))}
-              </select>
-            </div>
+    <div key={i} style={{
+      padding: '1rem', marginBottom: '1rem',
+      border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8', width: '700px'  // Largura fixa de 500px
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <strong>Ponto {i + 1}</strong>
+    
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <select
+            onChange={(e) => trocarOrdem(i, parseInt(e.target.value))}
+            value={i}
+            style={{ fontSize: '0.8rem', width: 'auto', maxWidth: '120px', marginRight: '10px' }} // Ajuste para garantir o espaçamento
+          >
+            {paradas.map((_, idx) => (
+              <option key={idx} value={idx}>{idx + 1}</option>
+            ))}
+          </select>
+          
+          <button
+            onClick={() => removerParada(i)}
+            title="Remover ponto"
+            style={{
+              width: '20px', height: '20px', background: 'none', border: 'none',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+            }}
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+      
 
             <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
               <input
                 type="text"
                 value={parada.nome}
                 onChange={e => atualizarParada(i, 'nome', e.target.value)}
-                placeholder={`Nome do ponto ${i + 1}`}
+                placeholder={`Ponto ${i + 1}`}
                 style={{ flex: 2 }}
               />
               <input
@@ -259,34 +272,62 @@ export default function RotaVan() {
             </div>
 
             <div>
-              <label>Colaboradores:</label>
-              {parada.colaboradores.map((colaborador, j) => (
-                <div key={j} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-                  <input
-                    type="text"
-                    value={colaborador}
-                    onChange={e => atualizarColaborador(i, j, e.target.value)}
-                    placeholder={`Colaborador ${j + 1}`}
-                    style={{ flex: 1 }}
-                    ref={j === parada.colaboradores.length - 1 ? novoInputRef : null}
-                  />
-                  <button
-                    onClick={() => removerColaborador(i, j)}
-                    style={{
-                      width: '20px', height: '20px', background: 'none', border: 'none',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-                    }}
-                  >
-                    🗑️
-                  </button>
-                </div>
-              ))}
-              <button
-                onClick={() => adicionarColaborador(i)}
-                style={{ marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
-              >
-                ➕
-              </button>
+  <label>Colaboradores:</label>
+  {parada.colaboradores.map((colaborador, j) => (
+    <div
+      key={j}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'nowrap', // impede quebra de linha
+        gap: '4px',          // espaço horizontal entre input e botão
+        marginBottom: '2px', // espaço vertical entre inputs
+        width: '100%',
+      }}
+    >
+      <input
+        type="text"
+        value={colaborador}
+        onChange={e => atualizarColaborador(i, j, e.target.value)}
+        placeholder={`Colaborador ${j + 1}`}
+        style={{
+          flex: 1,
+          minWidth: 0, // previne overflow em telas pequenas
+        }}
+        ref={j === parada.colaboradores.length - 1 ? novoInputRef : null}
+      />
+      <button
+        onClick={() => removerColaborador(i, j)}
+        style={{
+          width: '20px',
+          height: '20px',
+          background: 'none',
+          border: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          flexShrink: 0, // impede o botão de encolher
+        }}
+      >
+        🗑️
+      </button>
+    </div>
+  ))}
+
+  <button
+    onClick={() => adicionarColaborador(i)}
+    style={{
+      marginTop: '8px',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      fontSize: '1.2rem'
+    }}
+  >
+    ➕
+      </button>  
+
             </div>
           </div>
         ))}
@@ -374,6 +415,7 @@ export default function RotaVan() {
   }
 `}</style>
 
+    </div>
     </div>
   );
 }
