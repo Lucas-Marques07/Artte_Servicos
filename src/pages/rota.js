@@ -225,7 +225,7 @@ export default function RotaVan() {
         {paradas.map((parada, i) => (
     <div key={i} style={{
       padding: '1rem', marginBottom: '1rem',
-      border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8'  // Largura fixa de 500px
+      border: '1px solid #ddd', borderRadius: '8px', background: '#f8f8f8', width: '380px'
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <strong>Ponto {i + 1}</strong>
