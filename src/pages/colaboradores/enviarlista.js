@@ -241,7 +241,7 @@ a.click();
   >
     
     
-    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', width: '450px' }}>
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -249,7 +249,7 @@ a.click();
         <button
           onClick={() => router.push('/login')}
           style={{
-            background: '#0c6a37',
+            background: '#141e7d',
             color: '#fff',
             border: 'none',
             padding: '8px 10px',
@@ -266,7 +266,7 @@ a.click();
 
       {/* Título */}
       <center>
-        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de Lista cliente</h2>
+        <h2 style={{ marginBottom: '3rem' }}>Lançamentos de Lista cliente</h2>
       </center>
 
 

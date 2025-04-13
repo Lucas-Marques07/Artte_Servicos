@@ -46,7 +46,28 @@ export default function Home() {
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
           textAlign: 'center',
         }}
+        
       >
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+  <button
+    onClick={() => router.push('/')}
+    className="botao-lixeira"
+    title="Sair"
+    style={{
+      width: '15px',
+      height: '15px',
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+    }}
+  >
+    sair
+  </button>
+</div>
         <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#0c6a37' }}>
           Gestão RH+
         </h1>

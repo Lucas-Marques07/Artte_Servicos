@@ -1,4 +1,4 @@
-// src/pages/colaboradores/novo.js
+// src/pages/colaboradores/recrutamento.js
 import { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
 import jsPDF from 'jspdf';
@@ -248,7 +248,7 @@ y += 10;
 
     {/* Título */}
     <center>
-      <h2 style={{ marginBottom: '3rem' }}>Lançamento de Listas</h2>
+      <h2 style={{ marginBottom: '3rem' }}>Lançamento de recrutamento</h2>
     </center>
 
 
