@@ -175,7 +175,7 @@ export default function RotaVan() {
             type="text"
             value={inicio}
             onChange={e => setInicio(e.target.value)}
-            style={{ width: '80%' }}
+            style={{ width: '90%' }}
           />
         </div>
 
@@ -188,7 +188,7 @@ export default function RotaVan() {
               onChange={e => setHoraInicio(e.target.value)}
             />
           </div>
-          <div style={{ marginLeft: '1px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ marginLeft: '30px', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div>
               <label>Minutos:</label>
               <input
@@ -202,7 +202,7 @@ export default function RotaVan() {
             <button
               onClick={recalcularHorarios}
               style={{
-                width: '32px', height: '32px', fontSize: '40px', padding: 0, display: 'flex',
+                width: '32px', height: '32px', fontSize: '30px', padding: 0, display: 'flex',
                 alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none',
                 cursor: 'pointer', marginTop: '18px'
               }}
@@ -231,7 +231,7 @@ export default function RotaVan() {
           <select
             onChange={(e) => trocarOrdem(i, parseInt(e.target.value))}
             value={i}
-            style={{ fontSize: '0.8rem', width: 'auto', maxWidth: '120px', marginLeft: '170px' }} // Ajuste para garantir o espaçamento
+            style={{ fontSize: '0.8rem', width: '60px', maxWidth: '120px', marginLeft: '170px' }} // Ajuste para garantir o espaçamento
           >
             {paradas.map((_, idx) => (
               <option key={idx} value={idx}>{idx + 1}</option>
