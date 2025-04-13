@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import jsPDF from 'jspdf';
 
 const Mapa = dynamic(() => import('@/components/MapaRota'), { ssr: false });
 
@@ -67,6 +68,106 @@ export default function RotaVan() {
     }
     setParadas(novaLista);
   };
+   const handleSubmit = async () => {
+      const doc = new jsPDF();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let y = 20;
+    
+      // Carrega a imagem da logo
+      const loadImageAsBase64 = async (url) => {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+      };
+    
+      const logoBase64 = await loadImageAsBase64('/logo.jpeg');
+    
+      // 1. Adiciona a borda externa
+      doc.setDrawColor(12, 106, 55); // verde escuro para linhas
+      doc.setLineWidth(0.8);
+      doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+    
+      // 2. Adiciona a logo
+      doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
+    
+      // 3. Título centralizado
+      doc.setFontSize(20);
+      doc.setTextColor(12, 106, 55); // equivalente a #022c15 em RGB 
+      doc.text('Itinerário', pageWidth / 2, 25, { align: 'center' });
+    
+      y = 45;
+    
+      // 4. Cabeçalho centralizado
+      doc.setFontSize(11);
+      doc.setTextColor(33, 33, 33);
+    
+      const headerLines = [
+     
+      ];
+    
+      // Definir a fonte e a cor
+  doc.setFontSize(10);
+  doc.setTextColor(33, 33, 33);
+  
+  // Espaçamento inicial
+  const leftColumnX = pageWidth / 3.8; // Posição para a coluna da esquerda
+  const rightColumnX = pageWidth / 2 + 10; // Posição para a coluna da direita
+  
+  // Adiciona as informações em colunas
+  doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y); 
+  doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
+  y += 7;
+  
+  doc.text(`Data: ${cabecalho.data}`, leftColumnX, y); 
+  doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
+  y += 7;
+  
+  doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, y); 
+  doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, y);
+  y += 10;
+  
+    
+      y += 0;
+    
+      // 5. Linha separadora
+      doc.setDrawColor(12, 106, 55);
+      doc.setLineWidth(0.5);
+      doc.line(20, y, pageWidth - 20, y);
+      y += 10;
+    
+      // 6. Lista de colaboradores
+      colaboradores.forEach((colab, index) => {
+        if (y > 270) {
+          doc.addPage();
+          // Reaplica a borda em nova página
+          doc.setDrawColor(12, 106, 55);
+          doc.setLineWidth(0.8);
+          doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+          y = 20;
+        }
+    
+        // Nome em negrito
+        doc.setFontSize(12);
+        doc.setTextColor(0);
+        doc.text(`${index + 1}. ${colab.nome}`, 20, y);
+        y += 6;
+    
+        // Dados adicionais em cinza
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | Diária: R$${colab.diaria}`, 25, y);
+        y += 10;
+      });
+    
+      // 7. Abre visualização do PDF em nova aba
+      const pdfUrl = doc.output('bloburl');
+      window.open(pdfUrl, '_blank');
+    };
 
   const adicionarColaborador = (index) => {
     const novaLista = [...paradas];
@@ -127,7 +228,7 @@ export default function RotaVan() {
 
   const compartilharRota = () => {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
-    const cabecalho = `🚌 *Rota da Van* \n*Empresa:* ACME | *Data:* ${dataAtual} \n*Saída:* ${inicio} às ${horaInicio}`;
+    const cabecalho = `🗺️ *Rota da Van* \n*Empresa:* ACME | *Data:* ${dataAtual} \n*Saída:* ${inicio} às ${horaInicio}`;
     const colaboradoresStr = paradas.map((ponto, idx) => {
       const nomes = ponto.colaboradores.map(c => `  - ${c}`).join('\n');
       return `*${idx + 1}. ${ponto.nome}* (${ponto.hora})\n${nomes}`;
@@ -325,7 +426,12 @@ export default function RotaVan() {
           >
             📤 Compartilhar Mensagem
           </button>
+          
         </div>
+      
+        <button onClick={handleSubmit} className="send-whatsapp-button">
+          Enviar para WhatsApp
+        </button>
       </div>
     </div>
   );

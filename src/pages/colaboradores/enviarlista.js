@@ -228,48 +228,46 @@ a.click();
   
   
 
-  return (
-    <div className="container">
-  {/* Botão Voltar */}
-  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem' }}>
-    <button
-      onClick={() => router.push('/login')}
-      style={{
-        background: '#6770ff', // Verde
-        color: '#fff',          // Texto branco
-        border: 'none',
-        padding: '8px 12px',
-        borderRadius: '6px',
-        cursor: 'pointer',
-        fontSize: '14px',
-      }}
-    >
-      ⬅ Voltar
-    </button>
-  </div>
-
-  
-
-  {/* Cabeçalho */}
-  <div
+  return (<div
     style={{
       display: 'flex',
-      flexDirection: 'column',
+      justifyContent: 'center',
       alignItems: 'center',
-      marginBottom: '1rem'
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
     }}
   >
-  
-    <h1 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
-      Lista de Presença
-    </h1>
+    
+    
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
+      
+      {/* Cabeçalho com logo e botão voltar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+        <img src="/artte.png" alt="Logo" style={{ height: '80px' }} />
+        <button
+          onClick={() => router.push('/login')}
+          style={{
+            background: '#0c6a37',
+            color: '#fff',
+            border: 'none',
+            padding: '8px 10px',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            fontSize: '14px',
+            width: '80px',
+            textAlign: 'center',
+          }}
+        >
+          ⬅ Voltar
+        </button>
+      </div>
 
-    <img
-      src="/artte.png"
-      alt="Logo"
-      style={{ width: '150px', height: 'auto' }}
-    />
-  </div>
+      {/* Título */}
+      <center>
+        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de Lista cliente</h2>
+      </center>
 
 
 
@@ -487,7 +485,7 @@ a.click();
     ✉️ Enviar Mensagem
   </button>
 </div>
-
+</div>
     </div>
   );
 }
