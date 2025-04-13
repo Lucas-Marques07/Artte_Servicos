@@ -22,8 +22,7 @@ export default function RotaVan() {
     
       const pontos = [...new Set(data.map(item => item['pontofretamento']).filter(Boolean))];
       setPontosUnicos(pontos);
-      
-    setPontofretamento(pontos); // Atualizando o estado com os pontos de fretamento
+   
   } catch (err) {
     console.error('Erro ao buscar pontos de fretamento:', err);
   }
@@ -89,6 +88,26 @@ export default function RotaVan() {
     novaLista[indexParada].colaboradores[indexColaborador] = nome;
     setParadas(novaLista);
   };
+
+  
+  const trocarOrdem = (fromIndex, toIndex) => {
+    const novaLista = [...paradas];
+    const [removido] = novaLista.splice(fromIndex, 1);
+    novaLista.splice(toIndex, 0, removido);
+
+    let minutosExtras = 0;
+    novaLista.forEach((ponto, i) => {
+      if (i === 0) {
+        ponto.hora = calcularHoraComOffset(inicio, minutosExtras);
+      } else {
+        minutosExtras += minutosPadrao;
+        ponto.hora = calcularHoraComOffset(novaLista[i - 1].hora, minutosExtras);
+      }
+    });
+
+    setParadas(novaLista);
+  };
+
 
   const recalcularHorarios = () => {
     if (!horaInicio || paradas.length === 0 || !minutosPadrao) {
@@ -208,6 +227,17 @@ export default function RotaVan() {
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <strong>Ponto {i + 1}</strong>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+          <select
+            onChange={(e) => trocarOrdem(i, parseInt(e.target.value))}
+            value={i}
+            style={{ fontSize: '0.8rem', width: 'auto', maxWidth: '120px', marginLeft: '170px' }} // Ajuste para garantir o espaçamento
+          >
+            {paradas.map((_, idx) => (
+              <option key={idx} value={idx}>{idx + 1}</option>
+            ))}
+          </select>
+</div>
                 <button
                   onClick={() => removerParada(i)}
                   title="Remover ponto"
@@ -219,9 +249,9 @@ export default function RotaVan() {
                   🗑️
                 </button>
               </div>
-
-              <div style={{ marginTop: '10px' }}>
-  <label>Ponto de Fretamento:</label>
+              
+              <div style={{ marginTop: '10px',  display: 'flex', gap: '10px' }}>
+ 
   <select
     value={parada.nome}
     onChange={(e) => atualizarParada(i, 'nome', e.target.value)}
@@ -232,9 +262,6 @@ export default function RotaVan() {
       <option key={index} value={ponto}>{ponto}</option>
     ))}
   </select>
-
-
-
                 <input
                   type="time"
                   value={parada.hora}
