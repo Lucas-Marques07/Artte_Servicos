@@ -181,7 +181,7 @@ export default function RotaVan() {
 
         <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0px' }}>
           <div style={{ marginRight: '1px', width: '100%' }}>
-            <label>Horário de Início:</label>
+            <label>Início:</label>
             <input
               type="time"
               value={horaInicio}
@@ -196,13 +196,13 @@ export default function RotaVan() {
                 value={minutosPadrao}
                 onChange={e => setMinutosPadrao(Number(e.target.value))}
                 min="1"
-                style={{ width: '100px' }}
+                style={{ width: '30px' }}
               />
             </div>
             <button
               onClick={recalcularHorarios}
               style={{
-                width: '32px', height: '32px', fontSize: '30px', padding: 0, display: 'flex',
+                width: '32px', height: '32px', fontSize: '25px', padding: 0, display: 'flex',
                 alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none',
                 cursor: 'pointer', marginTop: '18px'
               }}
