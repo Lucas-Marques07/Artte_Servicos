@@ -107,7 +107,10 @@ export default function RotaVan() {
       doc.setTextColor(33, 33, 33);
     
       const headerLines = [
-     
+        `Cliente: ${cabecalho.cliente}`,
+        `Operação: ${cabecalho.operacao}`,
+        `Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`,
+        `Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`
       ];
     
       // Definir a fonte e a cor

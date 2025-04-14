@@ -130,15 +130,9 @@ Valor: R$${m.valor}`
 
       {/* Título */}
       <center>
-        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de transporte</h2>
+        <h2 style={{ marginBottom: '3rem' }}>Solicitação de Marmita</h2>
       </center>
-
-
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '1rem', fontSize: '14px' }}>
-          <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
-          <input type="checkbox" checked={usarMesmoValor} onChange={() => setUsarMesmoValor(!usarMesmoValor)} style={{ width: '16px', height: '16px' }} />
-        </div>
-
+        
         {marmitas.map((m, index) => (
           <div key={index} style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '6px', marginBottom: '1rem', background: '#f9f9f9' }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -183,11 +177,7 @@ Valor: R$${m.valor}`
                 <input type="number" value={m.quantidade} onChange={(e) => handleChange(index, 'quantidade', e.target.value)} />
               </div>
 
-              <div>
-                <label>Valor:</label>
-                <input type="number" value={m.valor} onChange={(e) => handleChange(index, 'valor', e.target.value)} />
               </div>
-            </div>
           </div>
         ))}
 

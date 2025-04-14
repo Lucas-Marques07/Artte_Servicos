@@ -2,15 +2,48 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
+
+
+
 export default function NovoTransporte() {
   const router = useRouter();
   const [transportes, setTransportes] = useState([
-    { fornecedor: '', motorista: '', empresa: '', operacao: '', data: '', motivo: '', horario: '', quantidade: '', valor: '' }
+    { fornecedor: '', motorista: '', empresa: '', operacao: '', data: '', motivo: '', horario: '', quantidade: '', valor: '', cidade: '', veiculo: '', colaboradores: [''], falta: [''] }
   ]);
+  
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
+  
   const [dadosPlanilha, setDadosPlanilha] = useState([]);
   const [operacoesFiltradas, setOperacoesFiltradas] = useState([]);
   const [motoristasFiltrados, setMotoristasFiltrados] = useState([]);
+  const formatarData = (dataString) => {
+    const data = new Date(dataString);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+
+   
+    
+      const atualizarColaborador = (index, novoValor) => {
+        const novosColaboradores = [...colaboradores];
+        novosColaboradores[index] = novoValor;
+        setColaboradores(novosColaboradores);
+      };
+    
+      const adicionarColaborador = () => {
+        setColaboradores([...colaboradores, '']);
+        // Após adicionar, foca no novo input
+        setTimeout(() => {
+          if (novoInputRef.current) {
+            novoInputRef.current.focus();
+          }
+        }, 100);
+      };
+    
+        return `${dia}/${mes}/${ano}`;
+  };
+  
+  
 
   useEffect(() => {
     fetch('https://script.google.com/macros/s/AKfycbzL6NoS3730uOtG1T3SsqpgXVp4r_s9rRDd-c9B85cip9mByzaYEzFwepWxawH1VHni/exec')
@@ -37,12 +70,25 @@ export default function NovoTransporte() {
   };
 
   const adicionarLinha = () => {
-    const novaLinha = { fornecedor: '', motorista: '', empresa: '', operacao: '', data: '', motivo: '', horario: '', quantidade: '', valor: '' };
-    if (usarMesmoValor && transportes.length > 0) {
-      novaLinha.valor = transportes[0].valor;
-    }
+    const novaLinha = {
+      fornecedor: '',
+      motorista: '',
+      empresa: '',
+      operacao: '',
+      data: '',
+      motivo: '',
+      horario: '',
+      quantidade: '',
+      valor: usarMesmoValor && transportes.length > 0 ? transportes[0].valor : '',
+      cidade: '',
+      veiculo: '',
+      colaboradores: [''], // 👈 aqui estava faltando
+      falta: [''] // 👈 aqui
+    };
+  
     setTransportes([...transportes, novaLinha]);
   };
+  
 
   const removerLinha = (index) => {
     const novaLista = [...transportes];
@@ -52,7 +98,7 @@ export default function NovoTransporte() {
 
   const validarCampos = () => {
     for (let t of transportes) {
-      if (!t.fornecedor || !t.motorista || !t.empresa || !t.data || !t.motivo || !t.horario || !t.quantidade || !t.valor) {
+      if (!t.fornecedor || !t.motorista || !t.empresa || !t.data || !t.motivo || !t.horario || !t.quantidade || !t.veiculo || !t.cidade) {
         alert('Por favor, preencha todos os campos antes de enviar.');
         return false;
       }
@@ -63,18 +109,25 @@ export default function NovoTransporte() {
   const handleEnviar = () => {
     if (!validarCampos()) return;
 
-    const mensagem = transportes.map((t, i) => (
-      `${i + 1}.
-Fornecedor: ${t.fornecedor}
-Motorista: ${t.motorista}
-Empresa: ${t.empresa}
-Operação: ${t.operacao}
-Data: ${t.data}
-Motivo: ${t.motivo}
-Horário: ${t.horario}
-Quantidade: ${t.quantidade}
-Valor: R$${t.valor}`
-    )).join('\n------------------\n');
+    const mensagem = transportes.map((t, i) => {
+          
+      const faltasTexto = t.falta && t.falta.length > 0
+        ? `\n   *FALTAS:*\n${t.falta.map((f, idx) => `  ${idx + 1}) ${f}`).join('\n')}`
+        : '';
+        const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
+        ? `\n   *COLABORADORES:*\n${t.colaboradores.map((f, idx) => `  ${idx + 1}) ${f}`).join('\n')}`
+        : '';
+    
+      return `${i + 1}.
+    *FORNECEDOR:* ${t.fornecedor}
+    *DATA:* ${formatarData(t.data)} | *HORÁRIO:* ${t.horario}
+    *EMPRESA:* ${t.empresa} | *OPERAÇÃO:* ${t.operacao}
+    *VIAGEM:* ${t.motivo} | *CIDADE:* ${t.cidade}
+    *VEÍCULO:* ${t.veiculo} | *MOTORISTA:* ${t.motorista}
+    *COLABS:* ${t.quantidade}   
+    ${colaboradoresTexto}${faltasTexto}`;
+    }).join('\n------------------\n');
+    
 
     if (navigator.share) {
       navigator.share({
@@ -85,10 +138,12 @@ Valor: R$${t.valor}`
       alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
     }
   };
+  
 
   const fornecedores = [...new Set(dadosPlanilha.map(d => d.FORNECEDOR))];
   const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
   const motivos = [...new Set(dadosPlanilha.map(d => d.VIAGEM))];
+  
 
   return (
     <div
@@ -177,7 +232,24 @@ Valor: R$${t.valor}`
                 {empresas.map((e, i) => <option key={i} value={e}>{e}</option>)}
               </select>
             </div>
-
+    
+            <div>
+            <label>Veiculo:</label>
+            <select  value={t.veiculo}  onChange={(e) => handleChange(index, 'veiculo', e.target.value)}>
+                <option value="">Selecione</option>
+                <option value="CARRO">CARRO</option>
+                <option value="VAN">VAN</option>
+        </select>
+              </div>
+              <div>
+            <label>Cidade:</label>
+            <select  value={t.cidade}  onChange={(e) => handleChange(index, 'cidade', e.target.value)}>
+                <option value="">Selecione</option>
+                <option value="EXTREMA">EXTREMA</option>
+                <option value="ESTIVA">ESTIVA</option>
+                <option value="ITAPEVA">ITAPEVA</option>
+        </select>
+              </div>
             <div>
               <label>Operação:</label>
               <select value={t.operacao} onChange={(e) => handleChange(index, 'operacao', e.target.value)}>
@@ -196,7 +268,8 @@ Valor: R$${t.valor}`
 
             <div>
               <label>Data:</label>
-              <input type="date" value={t.data} onChange={(e) => handleChange(index, 'data', e.target.value)} />
+              <input type="date" value={t.data} onChange={(e) => handleChange(index, 'data', e.target.value)}
+               style={{width: '140px', }} />
             </div>
 
             <div>
@@ -209,18 +282,112 @@ Valor: R$${t.valor}`
 
             <div>
               <label>Horário:</label>
-              <input type="time" value={t.horario} onChange={(e) => handleChange(index, 'horario', e.target.value)} />
+              <input type="time" value={t.horario} onChange={(e) => handleChange(index, 'horario', e.target.value)}
+               style={{width: '140px', }} />
             </div>
 
             <div>
-              <label>Qtd:</label>
-              <input type="number" value={t.quantidade} onChange={(e) => handleChange(index, 'quantidade', e.target.value)} />
-            </div>
+              <label>Qtd Colabs:</label>
+            <input type="number"  value={t.quantidade}  onChange={(e) => handleChange(index, 'quantidade', e.target.value)} 
+  style={{
+    width: '140px',         // largura do input
+    padding: '6px 8px',    // espaçamento interno
+    border: '1px solid #ccc',  // borda cinza clara
+    borderRadius: '6px',   // cantos arredondados
+    fontSize: '14px',      // tamanho da fonte
+    outline: 'none',       // remove contorno azul ao focar
+    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)', // leve sombra
+    height: '32px',
+    textAlign: 'center' 
+  }} min="1"
+  
+  
+  />
+  
+  </div>
+  <div style={{ marginTop: '1rem', width: '360px' }}>
+  <label>Colaboradores:</label>
+  {t.colaboradores.map((colaborador, indexColab) => (
+    <div key={indexColab} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+      <input
+        type="text"
+        value={colaborador}
+        onChange={e => {
+          const novaLista = [...transportes];
+          novaLista[index].colaboradores[indexColab] = e.target.value;
+          setTransportes(novaLista);
+        }}
+        placeholder="Nome do colaborador"
+        style={{ flex: 1 }}
+      />
+      <button
+        onClick={() => {
+          const novaLista = [...transportes];
+          novaLista[index].colaboradores.splice(indexColab, 1);
+          setTransportes(novaLista);
+        }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+      >
+        🗑️
+      </button>
+    </div>
+  ))}
+  <button
+    onClick={() => {
+      const novaLista = [...transportes];
+      novaLista[index].colaboradores.push('');
+      setTransportes(novaLista);
+    }}
+    style={{ marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
+  >
+    ➕
+  </button>
 
-            <div>
-              <label>Valor:</label>
-              <input type="number" value={t.valor} onChange={(e) => handleChange(index, 'valor', e.target.value)} />
-            </div>
+  {/* FALTAS */}
+  <div style={{ marginTop: '1rem' }}>
+    <label>Faltas:</label>
+    {t.falta.map((nomeFalta, indexFalta) => (
+      <div key={indexFalta} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
+        <input
+          type="text"
+          value={nomeFalta}
+          placeholder="Nome do faltante"
+          onChange={(e) => {
+            const novosTransportes = [...transportes];
+            novosTransportes[index].falta[indexFalta] = e.target.value;
+            setTransportes(novosTransportes);
+          }}
+          style={{ flex: 1 }}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            const novosTransportes = [...transportes];
+            novosTransportes[index].falta.splice(indexFalta, 1);
+            setTransportes(novosTransportes);
+          }}
+          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+        >
+        🗑️
+        </button>
+      </div>
+    ))}
+    <button
+      type="button"
+      onClick={() => {
+        const novosTransportes = [...transportes];
+        novosTransportes[index].falta.push('');
+        setTransportes(novosTransportes);
+      }}
+      style={{ marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
+    >
+      ➕
+    </button>
+  </div>
+</div>
+
+
+            
           </div>
         </div>
       ))}
