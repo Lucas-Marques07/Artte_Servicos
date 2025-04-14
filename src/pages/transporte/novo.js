@@ -58,13 +58,18 @@ export default function NovoTransporte() {
     novaLista[index][campo] = valor;
 
     if (campo === 'empresa') {
-      const operacoes = [...new Set(dadosPlanilha.filter(d => d.EMPRESA === valor).map(d => d.OPERAÇÃO))];
-      const motoristas = [...new Set(dadosPlanilha.filter(d => d.EMPRESA === valor).map(d => d.MOTORISTA))];
+      // Agora pega todos os dados únicos sem filtrar por empresa
+      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
+      const motoristas = [...new Set(dadosPlanilha.map(d => d.MOTORISTA))];
+      
       setOperacoesFiltradas(operacoes);
       setMotoristasFiltrados(motoristas);
+      
+      // Opcional: você pode remover essa parte se quiser manter a operação e motorista já preenchidos
       novaLista[index]['operacao'] = '';
       novaLista[index]['motorista'] = '';
     }
+    
 
     setTransportes(novaLista);
   };
@@ -143,6 +148,8 @@ export default function NovoTransporte() {
   const fornecedores = [...new Set(dadosPlanilha.map(d => d.FORNECEDOR))];
   const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
   const motivos = [...new Set(dadosPlanilha.map(d => d.VIAGEM))];
+  const Operação = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
+  const Motorista = [...new Set(dadosPlanilha.map(d => d.MOTORISTA))];
   
 
   return (
