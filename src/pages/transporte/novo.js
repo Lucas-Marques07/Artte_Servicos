@@ -12,6 +12,9 @@ export default function NovoTransporte() {
   ]);
   
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
+  const handleCheckboxChange = () => {
+    setUsarMesmoValor(!usarMesmoValor);
+  };
   
   const [dadosPlanilha, setDadosPlanilha] = useState([]);
   const [operacoesFiltradas, setOperacoesFiltradas] = useState([]);
@@ -56,43 +59,43 @@ export default function NovoTransporte() {
   const handleChange = (index, campo, valor) => {
     const novaLista = [...transportes];
     novaLista[index][campo] = valor;
-
+  
     if (campo === 'empresa') {
-      // Agora pega todos os dados únicos sem filtrar por empresa
+      // Aqui você pode atualizar as opções de operações e motoristas
       const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
       const motoristas = [...new Set(dadosPlanilha.map(d => d.MOTORISTA))];
-      
+  
       setOperacoesFiltradas(operacoes);
       setMotoristasFiltrados(motoristas);
-      
-      // Opcional: você pode remover essa parte se quiser manter a operação e motorista já preenchidos
+  
       novaLista[index]['operacao'] = '';
       novaLista[index]['motorista'] = '';
     }
-    
-
+  
     setTransportes(novaLista);
   };
+  
 
   const adicionarLinha = () => {
     const novaLinha = {
-      fornecedor: '',
-      motorista: '',
+      fornecedor: usarMesmoValor && transportes.length > 0 ? transportes[0].fornecedor : '',
+      motorista: usarMesmoValor && transportes.length > 0 ? transportes[0].motorista : '',
       empresa: '',
       operacao: '',
-      data: '',
+      data: usarMesmoValor && transportes.length > 0 ? transportes[0].data : '',
       motivo: '',
       horario: '',
       quantidade: '',
       valor: usarMesmoValor && transportes.length > 0 ? transportes[0].valor : '',
       cidade: '',
-      veiculo: '',
-      colaboradores: [''], // 👈 aqui estava faltando
-      falta: [''] // 👈 aqui
+      veiculo: usarMesmoValor && transportes.length > 0 ? transportes[0].veiculo : '',
+      colaboradores: [''],
+      falta: [''],
     };
   
     setTransportes([...transportes, novaLinha]);
   };
+  
   
 
   const removerLinha = (index) => {
@@ -113,27 +116,28 @@ export default function NovoTransporte() {
 
   const handleEnviar = () => {
     if (!validarCampos()) return;
-
+  
     const mensagem = transportes.map((t, i) => {
-          
       const faltasTexto = t.falta && t.falta.length > 0
-        ? `\n   *FALTAS:*\n${t.falta.map((f, idx) => `  ${idx + 1}) ${f}`).join('\n')}`
+        ? `\n\n   *FALTAS:*\n${t.falta.map((f, idx) => `  ${idx + 1} - ${f}`).join('\n')}`
         : '';
-        const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
-        ? `\n   *COLABORADORES:*\n${t.colaboradores.map((f, idx) => `  ${idx + 1}) ${f}`).join('\n')}`
+      
+      const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
+        ? `\n   *COLABORADORES:*\n${t.colaboradores.map((f, idx) => `  ${idx + 1} - ${f}`).join('\n')}`
         : '';
     
-      return `${i + 1}.
-    *FORNECEDOR:* ${t.fornecedor}
-    *DATA:* ${formatarData(t.data)} | *HORÁRIO:* ${t.horario}
-    *EMPRESA:* ${t.empresa} | *OPERAÇÃO:* ${t.operacao}
-    *VIAGEM:* ${t.motivo} | *CIDADE:* ${t.cidade}
-    *VEÍCULO:* ${t.veiculo} | *MOTORISTA:* ${t.motorista}
-    *COLABS:* ${t.quantidade}   
-    ${colaboradoresTexto}${faltasTexto}`;
+      return `            
+                🚗 *TRANSPORTE RH+* 🚐
+  ${i + 1}. 
+  *FORNECEDOR:* ${t.fornecedor}
+  *DATA:* ${formatarData(t.data)} | *HORÁRIO:* ${t.horario}
+  *EMPRESA:* ${t.empresa} | *OPERAÇÃO:* ${t.operacao}
+  *VIAGEM:* ${t.motivo} | *CIDADE:* ${t.cidade}
+  *VEÍCULO:* ${t.veiculo} | *MOTORISTA:* ${t.motorista}
+  *COLABS:* ${t.quantidade}   
+        ${colaboradoresTexto}${faltasTexto}`;
     }).join('\n------------------\n');
-    
-
+  
     if (navigator.share) {
       navigator.share({
         title: 'Diárias de Transporte',
@@ -143,6 +147,7 @@ export default function NovoTransporte() {
       alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
     }
   };
+  
   
 
   const fornecedores = [...new Set(dadosPlanilha.map(d => d.FORNECEDOR))];
@@ -195,14 +200,15 @@ export default function NovoTransporte() {
 
       {/* Checkbox usar mesmo valor */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.5rem', fontSize: '14px' }}>
-        <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
-        <input
-          type="checkbox"
-          checked={usarMesmoValor}
-          onChange={() => setUsarMesmoValor(!usarMesmoValor)}
-          style={{ width: '14px', height: '14px' }}
-        />
-      </div>
+  <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
+  <input
+    type="checkbox"
+    checked={usarMesmoValor}
+    onChange={handleCheckboxChange}
+    style={{ width: '14px', height: '14px' }}
+  />
+</div>
+
       
 
       {/* Lista de transportes */}
@@ -220,7 +226,7 @@ export default function NovoTransporte() {
     >
     
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '6px' }}>
-            <button onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</button>
+            <span onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</span>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
@@ -327,16 +333,20 @@ export default function NovoTransporte() {
         placeholder="Nome do colaborador"
         style={{ flex: 1 }}
       />
-      <button
-        onClick={() => {
-          const novaLista = [...transportes];
-          novaLista[index].colaboradores.splice(indexColab, 1);
-          setTransportes(novaLista);
-        }}
-        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-      >
-        🗑️
-      </button>
+     <div>
+  {/* O ícone agora é clicável diretamente */}
+  <span
+    onClick={() => {
+      const novaLista = [...transportes];
+      novaLista[index].colaboradores.splice(indexColab, 1);
+      setTransportes(novaLista);
+    }}
+    style={{ cursor: 'pointer', fontSize: '18px' }}
+  >
+    🗑️
+  </span>
+</div>
+
     </div>
   ))}
   <button
@@ -366,17 +376,17 @@ export default function NovoTransporte() {
           }}
           style={{ flex: 1 }}
         />
-        <button
+        <span
           type="button"
           onClick={() => {
             const novosTransportes = [...transportes];
             novosTransportes[index].falta.splice(indexFalta, 1);
             setTransportes(novosTransportes);
           }}
-          style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+          style={{ cursor: 'pointer', fontSize: '18px' }}
         >
         🗑️
-        </button>
+        </span>
       </div>
     ))}
     <button
@@ -401,9 +411,9 @@ export default function NovoTransporte() {
 
       {/* Botão adicionar */}
       <div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
-        <button onClick={adicionarLinha} style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>
-          ➕ Adicionar
-        </button>
+        <span onClick={adicionarLinha} style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>
+          ➕
+        </span>
       </div>
 
       {/* Botão compartilhar */}

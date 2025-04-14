@@ -1,62 +1,88 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
-const GerenciarColaboradores = () => {
-  const [colaboradores, setColaboradores] = useState([]);
-  const novoInputRef = useRef(null);
-
-  const atualizarColaborador = (index, novoValor) => {
-    const novosColaboradores = [...colaboradores];
-    novosColaboradores[index] = novoValor;
-    setColaboradores(novosColaboradores);
-  };
-
-  const adicionarColaborador = () => {
-    setColaboradores([...colaboradores, '']);
-    // Após adicionar, foca no novo input
-    setTimeout(() => {
-      if (novoInputRef.current) {
-        novoInputRef.current.focus();
-      }
-    }, 100);
-  };
-
-  const removerColaborador = (index) => {
-    const novosColaboradores = colaboradores.filter((_, i) => i !== index);
-    setColaboradores(novosColaboradores);
-  };
+const SeuComponente = () => {
+  const [usarMesmoValor, setUsarMesmoValor] = useState(false);
+  const [motorista, setMotorista] = useState('');
+  const [fornecedor, setFornecedor] = useState('');
+  const [veiculo, setVeiculo] = useState('');
 
   return (
     <div>
-      <label>Colaboradores:</label>
-      {colaboradores.map((colaborador, index) => (
-        <div key={index} style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
-          <input
-            type="text"
-            value={colaborador}
-            onChange={e => atualizarColaborador(index, e.target.value)}
-            placeholder={`Colaborador ${index + 1}`}
-            style={{ flex: 1 }}
-            ref={index === colaboradores.length - 1 ? novoInputRef : null}
-          />
-          <button
-            onClick={() => removerColaborador(index)}
-            style={{
-              width: '20px', height: '20px', background: 'none', border: 'none',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
-            }}
-          >
-            🗑️
-          </button>
+      {/* Checkbox para usar o mesmo valor */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.5rem', fontSize: '14px' }}>
+        <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
+        <input
+          type="checkbox"
+          checked={usarMesmoValor}
+          onChange={() => setUsarMesmoValor(!usarMesmoValor)}
+          style={{ width: '14px', height: '14px' }}
+        />
+      </div>
+
+      {/* Inputs para motorista, fornecedor e veículo */}
+      <div>
+        <label>Motorista:</label>
+        <input
+          type="text"
+          value={motorista}
+          onChange={(e) => setMotorista(e.target.value)}
+          disabled={usarMesmoValor} // Desabilita se o checkbox estiver marcado
+        />
+      </div>
+
+      <div>
+        <label>Fornecedor:</label>
+        <input
+          type="text"
+          value={fornecedor}
+          onChange={(e) => setFornecedor(e.target.value)}
+          disabled={usarMesmoValor} // Desabilita se o checkbox estiver marcado
+        />
+      </div>
+
+      <div>
+        <label>Veículo:</label>
+        <input
+          type="text"
+          value={veiculo}
+          onChange={(e) => setVeiculo(e.target.value)}
+          disabled={usarMesmoValor} // Desabilita se o checkbox estiver marcado
+        />
+      </div>
+
+      {/* Repetir os valores quando o checkbox estiver marcado */}
+      {usarMesmoValor && (
+        <div>
+          <div>
+            <label>Motorista (repetido):</label>
+            <input
+              type="text"
+              value={motorista}
+              disabled // Desabilitado para ser igual ao valor original
+            />
+          </div>
+
+          <div>
+            <label>Fornecedor (repetido):</label>
+            <input
+              type="text"
+              value={fornecedor}
+              disabled // Desabilitado para ser igual ao valor original
+            />
+          </div>
+
+          <div>
+            <label>Veículo (repetido):</label>
+            <input
+              type="text"
+              value={veiculo}
+              disabled // Desabilitado para ser igual ao valor original
+            />
+          </div>
         </div>
-      ))}
-      <button
-        onClick={adicionarColaborador}
-        style={{ marginTop: '8px', background: 'none', border: 'none', cursor: 'pointer' }}
-      >
-        ➕
-      </button>
+      )}
     </div>
   );
 };
 
-export default GerenciarColaboradores;
+export default SeuComponente;
