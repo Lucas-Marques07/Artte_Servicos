@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 export default function NovoTransporte() {
   const router = useRouter();
   const [transportes, setTransportes] = useState([
-    { fornecedor: '', motorista: '', empresa: '', operacao: '', data: '', motivo: '', horario: '', quantidade: '', valor: '', cidade: '', veiculo: '', colaboradores: [''], falta: [''] }
+    { fornecedor: '', motorista: '', empresa: '', operacao: '', data: '', motivo: '', horario: '', quantidade: '', valor: '', cidade: '', veiculo: '', colaboradores: [], falta: [] }
   ]);
   
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
@@ -89,8 +89,8 @@ export default function NovoTransporte() {
       valor: usarMesmoValor && transportes.length > 0 ? transportes[0].valor : '',
       cidade: '',
       veiculo: usarMesmoValor && transportes.length > 0 ? transportes[0].veiculo : '',
-      colaboradores: [''],
-      falta: [''],
+      colaboradores: [],
+      falta: [],
     };
   
     setTransportes([...transportes, novaLinha]);
@@ -127,7 +127,8 @@ export default function NovoTransporte() {
         : '';
     
       return `            
-                🚗 *TRANSPORTE RH+* 🚐
+  *TRANSPORTE*
+
   ${i + 1}. 
   *FORNECEDOR:* ${t.fornecedor}
   *DATA:* ${formatarData(t.data)} | *HORÁRIO:* ${t.horario}
