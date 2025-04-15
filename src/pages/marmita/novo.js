@@ -102,7 +102,8 @@ Valor: R$${m.valor}`
         minHeight: '100vh',
         background: '#f8f8f8',
         fontFamily: 'sans-serif',
-        padding: '2rem'
+        padding: '2rem',
+        width: '500px'
       }}
     >
   <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
