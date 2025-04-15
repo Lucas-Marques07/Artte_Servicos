@@ -119,7 +119,7 @@ export default function NovoTransporte() {
   
     const mensagem = transportes.map((t, i) => {
       const faltasTexto = t.falta && t.falta.length > 0
-      ? `\n❌ *Faltas:*\n${t.falta.map((f, idx) => `   ${idx + 1}. ${f}`).join('\n')}`
+      ? `\n\n❌ *Faltas:*\n${t.falta.map((f, idx) => `   ${idx + 1}. ${f}`).join('\n')}`
       : '';
 
     const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
@@ -425,7 +425,7 @@ ${colaboradoresTexto}${faltasTexto}
       {/* Botão compartilhar */}
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         <button onClick={handleEnviar} style={{ background: '#0c6a37', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '14px' }}>
-          📤 Compartilhar Transporte
+        📧 Informar Viagem
         </button>
       </div>
     </div>
