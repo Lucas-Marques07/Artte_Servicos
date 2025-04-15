@@ -267,6 +267,7 @@ ${colaboradoresTexto}${faltasTexto}
                 <option value="EXTREMA">EXTREMA</option>
                 <option value="ESTIVA">ESTIVA</option>
                 <option value="ITAPEVA">ITAPEVA</option>
+                <option value="SÃO PAULO">SÃO PAULO</option>
         </select>
               </div>
             <div>
