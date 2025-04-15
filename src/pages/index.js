@@ -12,6 +12,7 @@ export default function Login() {
     { usuario: 'lucas', senha: 'senha123' },
     { usuario: 'sergio', senha: '1010' },
     { usuario: 'Clayton', senha: '010767' },
+    { usuario: 'Kesia', senha: '129742' },
    
   ];
 

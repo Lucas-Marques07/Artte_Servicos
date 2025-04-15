@@ -104,12 +104,15 @@ export default function NovoColaborador() {
     window.open(linkWhatsApp, '_blank');
   };
 
+  
+
   const handleSubmit = async () => {
     const doc = new jsPDF();
     const formatarData = (dataString) => {
       const [ano, mes, dia] = dataString.split('-');
       return `${dia}/${mes}/${ano}`;
     };
+    
     
     const dataFormatada = formatarData(cabecalho.data);
     
@@ -351,12 +354,10 @@ y += 10;
     }}
   />
 </div>
-
-
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-     <div className="num-colaborador">{index + 1}</div>
+    
   <button
     onClick={() => removerColaborador(index)}
     className="botao-lixeira"
@@ -375,12 +376,9 @@ y += 10;
   >
     <Trash2 size={20} />
   </button>
-</div>
-
-
-
-         
-
+</div>      
+<div className="num-colaborador">{index + 1}</div>
+ 
           <div className="item">
             <label>CPF:</label>
             <input
@@ -456,9 +454,28 @@ y += 10;
         </button>
       </div>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+        
   <button
    onClick={() => {
     const { cliente, operacao, data, turno, entrada, saida } = cabecalho;
+
+    // Verificação de campos obrigatórios no cabeçalho
+    if (!cliente || !data || !entrada || !saida || !turno) {
+      alert('Preencha todos os campos obrigatórios do cabeçalho (Cliente, Operação, Data, Entrada, Saída e Turno).');
+      return;
+    }
+
+    // Validação dos colaboradores
+    const camposInvalidos = colaboradores.filter((colab) =>
+      !colab.cpf || !colab.nome || !colab.funcao || !colab.diaria
+    );
+
+    if (camposInvalidos.length > 0) {
+      alert('Preencha todos os campos obrigatórios (Nome, CPF, Função e Diária) dos colaboradores.');
+      return;
+    }
+
+    // Formatação de data
     const dataFormatada = new Date(data).toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit'
