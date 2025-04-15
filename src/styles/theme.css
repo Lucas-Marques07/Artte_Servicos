@@ -209,31 +209,13 @@
   }
   
   .send-whatsapp-button {
-    background-color: #26d466;
+    background-color: #25d366;
     color: white;
     font-weight: bold;
   }
   
   .send-whatsapp-button:hover {
     background-color: #128c7e;
-    .send-whatsapp-button {
-    background-color: #26d466;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .send-whatsapp-button:hover {
-    background-color: #128c7e;
-  }
-  .send-whatsapp-buttonartte {
-    background-color: #141e7d;
-    color: white;
-    font-weight: bold;
-  }
-  
-  .send-whatsapp-buttonartte:hover {
-    background-color: #6770ff;
-  }
   }
   @media (min-width: 768px) {
   .logo-container {

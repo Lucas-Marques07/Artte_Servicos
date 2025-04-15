@@ -177,7 +177,11 @@ Valor: R$${m.valor}`
                 <input type="number" value={m.quantidade} onChange={(e) => handleChange(index, 'quantidade', e.target.value)} />
               </div>
 
+              <div>
+                <label>Valor:</label>
+                <input type="number" value={m.valor} onChange={(e) => handleChange(index, 'valor', e.target.value)} />
               </div>
+            </div>
           </div>
         ))}
 
