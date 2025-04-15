@@ -10,6 +10,7 @@ export default function Login() {
   const usuariosCadastrados = [
     { usuario: 'lucas', senha: '123456' },
     { usuario: 'lucas', senha: 'senha123' },
+    { usuario: 'sergio', senha: '1010' },
    
   ];
 
