@@ -119,24 +119,24 @@ export default function NovoTransporte() {
   
     const mensagem = transportes.map((t, i) => {
       const faltasTexto = t.falta && t.falta.length > 0
-        ? `\n\n   *FALTAS:*\n${t.falta.map((f, idx) => `  ${idx + 1} - ${f}`).join('\n')}`
-        : '';
-      
-      const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
-        ? `\n   *COLABORADORES:*\n${t.colaboradores.map((f, idx) => `  ${idx + 1} - ${f}`).join('\n')}`
-        : '';
-    
-      return `            
-  *TRANSPORTE*
+      ? `\n❌ *Faltas:*\n${t.falta.map((f, idx) => `   ${idx + 1}. ${f}`).join('\n')}`
+      : '';
 
-  ${i + 1}. 
-  *FORNECEDOR:* ${t.fornecedor}
-  *DATA:* ${formatarData(t.data)} | *HORÁRIO:* ${t.horario}
-  *EMPRESA:* ${t.empresa} | *OPERAÇÃO:* ${t.operacao}
-  *VIAGEM:* ${t.motivo} | *CIDADE:* ${t.cidade}
-  *VEÍCULO:* ${t.veiculo} | *MOTORISTA:* ${t.motorista}
-  *COLABS:* ${t.quantidade}   
-        ${colaboradoresTexto}${faltasTexto}`;
+    const colaboradoresTexto = t.colaboradores && t.colaboradores.length > 0
+      ? `\n👤 *Colaboradores:*\n${t.colaboradores.map((f, idx) => `   ${idx + 1}. ${f}`).join('\n')}`
+      : '';
+
+    return `
+🚐 *Transporte - Viagem ${i + 1}*
+
+• *Fornecedor:* ${t.fornecedor}
+• *Data:* ${formatarData(t.data)} | *Horário:* ${t.horario}
+• *Empresa:* ${t.empresa} | *Operação:* ${t.operacao}
+• *Motivo:* ${t.motivo} | *Cidade:* ${t.cidade}
+• *Veículo:* ${t.veiculo} | *Motorista:* ${t.motorista}
+• *Qtd. Colaboradores:* ${t.quantidade}
+${colaboradoresTexto}${faltasTexto}
+`.trim();
     }).join('\n------------------\n');
   
     if (navigator.share) {
@@ -196,12 +196,12 @@ export default function NovoTransporte() {
 
       {/* Título */}
       <center>
-        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de transporte</h2>
+        <h2 style={{ marginBottom: '1rem' }}>Lançamentos de Transporte</h2>
       </center>
 
       {/* Checkbox usar mesmo valor */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.5rem', fontSize: '14px' }}>
-  <span style={{ marginRight: '6px' }}>Usar mesmo valor</span>
+  <span style={{ marginRight: '6px' }}>Padrão</span>
   <input
     type="checkbox"
     checked={usarMesmoValor}
@@ -226,9 +226,14 @@ export default function NovoTransporte() {
       }}
     >
     
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '6px' }}>
-            <span onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</span>
-          </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '8px' }}>
+  <span style={{ fontWeight: 'bold', fontSize: '15px', marginLeft: '10px' , marginBottom: '10px'}}>{index + 1}º Viagem</span>
+  <span onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', marginLeft: '16px' , marginBottom: '20px' }}>🗑️</span>
+</div>
+
+
+
+
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
             <div>
