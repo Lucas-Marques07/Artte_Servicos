@@ -7,11 +7,14 @@ export default function NovaMarmita() {
   const [marmitas, setMarmitas] = useState([
     { data: '', horario: '', empresa: '', operacao: '', solicitante: '', quantidade: '', valor: '' }
   ]);
-  const [usarMesmoValor, setUsarMesmoValor] = useState(false);
+  const handleCheckboxChange = () => {
+    setUsarMesmoValor(!usarMesmoValor);
+  };
   const [dadosPlanilha, setDadosPlanilha] = useState([]);
   const [operacoesFiltradas, setOperacoesFiltradas] = useState([]);
 
   const [nomeLogado, setNomeLogado] = useState('');
+  const [usarMesmoValor, setUsarMesmoValor] = useState(false);
 
 useEffect(() => {
   if (typeof window !== 'undefined') {
@@ -95,18 +98,18 @@ Valor: R$${m.valor}`
 
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: '#f8f8f8',
-        fontFamily: 'sans-serif',
-        padding: '2rem',
-        width: '500px'
-      }}
-    >
-  <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
+    }}
+  >
+    
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)' }}>
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -131,11 +134,30 @@ Valor: R$${m.valor}`
 
       {/* Título */}
       <center>
-        <h2 style={{ marginBottom: '3rem' }}>Solicitação de Marmita</h2>
+        <h2 style={{ marginBottom: '1rem' }}>Solicitação de Marmita</h2>
       </center>
-        
+       {/* Checkbox usar mesmo valor */}
+       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.5rem', fontSize: '14px' }}>
+  <span style={{ marginRight: '6px' }}>Padrão</span>
+  <input
+    type="checkbox"
+    checked={usarMesmoValor}
+    onChange={handleCheckboxChange}
+    style={{ width: '14px', height: '14px' }}
+  />
+</div>
+             
         {marmitas.map((m, index) => (
-          <div key={index} style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '6px', marginBottom: '1rem', background: '#f9f9f9' }}>
+         <div
+         key={index}
+         style={{
+           border: '1px solid #ccc',
+           padding: '10px',
+           borderRadius: '6px',
+           marginBottom: '10px',
+           background: '#f9f9f9',
+           width: '350px'  // Largura fixa de 500px
+         }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <button onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</button>
             </div>
@@ -148,7 +170,7 @@ Valor: R$${m.valor}`
               </div>
 
               <div>
-                <label>Horário:</label>
+                <label>Horário de Entrega:</label>
                 <input type="time" value={m.horario} onChange={(e) => handleChange(index, 'horario', e.target.value)} />
               </div>
 

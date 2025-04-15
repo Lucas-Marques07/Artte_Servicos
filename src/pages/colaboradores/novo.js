@@ -223,17 +223,17 @@ y += 10;
 
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: '#f8f8f8',
-        fontFamily: 'sans-serif',
-        padding: '2rem'
-      }}
-    >
-    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', width: '450px' }}>
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
+    }}
+  >
+    <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', minWidth: '85vw' }}>
       
     {/* Cabeçalho com logo e botão voltar */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -264,73 +264,93 @@ y += 10;
 
 
       {/* Cabeçalho da operação */}
-      <div className="cabecalho-operacao">
-        <div className="item">
-          <label>Nome do Cliente:</label>
-          <select
-            value={cabecalho.cliente}
-            onChange={(e) => setCabecalho({ ...cabecalho, cliente: e.target.value })}
-          >
-            <option value="">Selecione</option>
-            {clientesUnicos.map((cliente, i) => (
-              <option key={i} value={cliente}>{cliente}</option>
-            ))}
-          </select>
-        </div>
+      <div
+  style={{
+    border: '1px solid #ccc',
+    padding: '16px',
+    borderRadius: '8px',
+    marginBottom: '16px',
+    background: '#f9f9f9',
+    width: '90%',
+    marginRight: '40px',   
+  }}
+>
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+    gap: '12px'
+  }}>
+    <div>
+      <label>Nome do Cliente:</label>
+      <select
+        value={cabecalho.cliente}
+        onChange={(e) => setCabecalho({ ...cabecalho, cliente: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {clientesUnicos.map((cliente, i) => (
+          <option key={i} value={cliente}>{cliente}</option>
+        ))}
+      </select>
+    </div>
 
-        <div className="item">
-          <label>Operação:</label>
-          <select
-            value={cabecalho.operacao}
-            onChange={(e) => setCabecalho({ ...cabecalho, operacao: e.target.value })}
-          >
-            <option value="">Selecione</option>
-            {operacoesUnicas.map((op, i) => (
-              <option key={i} value={op}>{op}</option>
-            ))}
-          </select>
-        </div>
+    <div>
+      <label>Operação:</label>
+      <select
+        value={cabecalho.operacao}
+        onChange={(e) => setCabecalho({ ...cabecalho, operacao: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {operacoesUnicas.map((op, i) => (
+          <option key={i} value={op}>{op}</option>
+        ))}
+      </select>
+    </div>
 
-        <div className="item">
-          <label>Data:</label>
-          <input
-            type="date"
-            value={cabecalho.data}
-            onChange={(e) => setCabecalho({ ...cabecalho, data: e.target.value })}
-          />
-        </div>
+    <div>
+      <label>Data:</label>
+      <input
+        type="date"
+        value={cabecalho.data}
+        onChange={(e) => setCabecalho({ ...cabecalho, data: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
 
-        <div className="item">
-          <label>Turno:</label>
-          <select
-            value={cabecalho.turno}
-            onChange={(e) => setCabecalho({ ...cabecalho, turno: e.target.value })}
-          >
-            <option value="">Selecione</option>
-            {turnosUnicos.map((turno, i) => (
-              <option key={i} value={turno}>{turno}</option>
-            ))}
-          </select>
-        </div>
+    <div>
+      <label>Turno:</label>
+      <select
+        value={cabecalho.turno}
+        onChange={(e) => setCabecalho({ ...cabecalho, turno: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {turnosUnicos.map((turno, i) => (
+          <option key={i} value={turno}>{turno}</option>
+        ))}
+      </select>
+    </div>
 
-        <div className="item">
-          <label>Entrada:</label>
-          <input
-            type="time"
-            value={cabecalho.entrada}
-            onChange={(e) => setCabecalho({ ...cabecalho, entrada: e.target.value })}
-          />
-        </div>
+    <div>
+      <label>Entrada:</label>
+      <input
+        type="time"
+        value={cabecalho.entrada}
+        onChange={(e) => setCabecalho({ ...cabecalho, entrada: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
 
-        <div className="item">
-          <label>Saída:</label>
-          <input
-            type="time"
-            value={cabecalho.saida}
-            onChange={(e) => setCabecalho({ ...cabecalho, saida: e.target.value })}
-          />
-        </div>
-      </div>
+    <div>
+      <label>Saída:</label>
+      <input
+        type="time"
+        value={cabecalho.saida}
+        onChange={(e) => setCabecalho({ ...cabecalho, saida: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
+  </div>
+</div>
+
 
       <div
   style={{
