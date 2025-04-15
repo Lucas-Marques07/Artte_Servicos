@@ -75,7 +75,7 @@ export default function NovoColaborador() {
   };
 
   const adicionarLinha = () => {
-    const novaLinha = { cpf: '', nome: '', funcao: '', diaria: '', empresa: '', operacao: '', turno: '' };
+    const novaLinha = { cpf: '', nome: '', funcao: '', diaria: '', empresa: '', operacao: '', turno: '', Obs: '' };
 
     if (usarMesmoValor && colaboradores.length > 0) {
       const primeiro = colaboradores[0];
@@ -106,6 +106,13 @@ export default function NovoColaborador() {
 
   const handleSubmit = async () => {
     const doc = new jsPDF();
+    const formatarData = (dataString) => {
+      const [ano, mes, dia] = dataString.split('-');
+      return `${dia}/${mes}/${ano}`;
+    };
+    
+    const dataFormatada = formatarData(cabecalho.data);
+    
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     let y = 20;
@@ -145,7 +152,7 @@ export default function NovoColaborador() {
     const headerLines = [
       `Cliente: ${cabecalho.cliente}`,
       `Operação: ${cabecalho.operacao}`,
-      `Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`,
+      `Data: ${dataFormatada}   Turno: ${cabecalho.turno}`,
       `Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`
     ];
   
@@ -162,7 +169,7 @@ doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y);
 doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
 y += 7;
 
-doc.text(`Data: ${cabecalho.data}`, leftColumnX, y); 
+doc.text(`Data: ${dataFormatada}`, leftColumnX, y); 
 doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
 y += 7;
 
@@ -199,7 +206,7 @@ y += 10;
       // Dados adicionais em cinza
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | Diária: R$${colab.diaria}`, 25, y);
+      doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | Diária: R$${colab.diaria}${colab.Obs ? ` | *Obs: ${colab.Obs}*` : ''}`, 25, y);
       y += 10;
     });
   
@@ -424,6 +431,15 @@ y += 10;
               placeholder="R$"
             />
           </div>
+          <div className="item">
+            <label>Obs:</label>
+            <input
+              type="text"
+              value={colab.Obs}
+              onChange={(e) => handleChange(index, 'Obs', e.target.value)}
+              placeholder=""
+            />
+          </div>
         </div>
       ))}
 
@@ -443,12 +459,18 @@ y += 10;
   <button
    onClick={() => {
     const { cliente, operacao, data, turno, entrada, saida } = cabecalho;
-    const dataFormatada = new Date(data).toLocaleDateString('pt-BR');
+    const dataFormatada = new Date(data).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit'
+    });
+    
   
-    const cabecalhoStr = `*Cliente:* ${cliente} | *Operação:* ${operacao} | *Data:* ${dataFormatada} \n*Turno:* ${turno} | *Entrada:* ${entrada} | *Saída:* ${saida}`;
+    const cabecalhoStr = `📋 *CLIENTE:* ${cliente} | ${operacao} | 📆 ${dataFormatada} \n\n🕒 *${entrada}* | *${saida}* | *${turno}*
+    
+👥 *NOME | CPF | FUNÇÃO | VALOR | OBS*`;
     
     const colaboradoresStr = colaboradores.map((c, i) => (
-      `${i + 1}. ${c.nome} | CPF: ${c.cpf} | ${c.funcao} | ${c.diaria}`
+    `${i + 1}- *${c.nome}* | CPF: ${c.cpf} | ${c.funcao} | ${c.diaria}${c.Obs ? ` | ${c.Obs}` : ''}`
     )).join('\n');
   
     const mensagem = `${cabecalhoStr}\n\n${colaboradoresStr}`;
