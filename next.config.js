@@ -3,10 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     css: {
-      // Desabilita o lightningcss
-      lightningcss: false
-    }
-  }
+      lightningcss: false,
+    },
+  },
 };
 
 module.exports = nextConfig;
