@@ -349,6 +349,7 @@ y += 10;
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+     <div className="num-colaborador">{index + 1}</div>
   <button
     onClick={() => removerColaborador(index)}
     className="botao-lixeira"
@@ -371,7 +372,7 @@ y += 10;
 
 
 
-          <div className="num-colaborador">{index + 1}</div>
+         
 
           <div className="item">
             <label>CPF:</label>
@@ -435,7 +436,7 @@ y += 10;
 
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={handleSubmit} className="send-whatsapp-button">
-          Enviar para WhatsApp
+        📄 Visualizar Lista
         </button>
       </div>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
@@ -464,7 +465,7 @@ y += 10;
 
     className="send-whatsapp-button"
   >
-    📤 Compartilhar Mensagem
+    📧 Informar Lista
   </button>
 </div>
 </div>
