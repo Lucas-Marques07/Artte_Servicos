@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 
 
 
@@ -728,28 +730,28 @@ y += 10;
     📧 Informar Lista
   </button>
   <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-  <a
-    href="/Itinerariorecrutamento"
-    style={{
-      background: '#0c6a37',
-      color: 'white',
-      textDecoration: 'none',
-      padding: '10px 16px',
-      borderRadius: '6px',
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '8px',
-      fontSize: '16px',
-      width: '92%',
-      textAlign: 'center',
-      justifyContent: 'center', // centraliza o conteúdo interno
-      margin: '0 auto'          // centraliza o botão como bloco
-    }}
-  >
-    🗺️ Montar Rota
-  </a>
+  <Link href="/Itinerariorecrutamento" passHref legacyBehavior>
+    <a
+      style={{
+        background: '#0c6a37',
+        color: 'white',
+        textDecoration: 'none',
+        padding: '10px 16px',
+        borderRadius: '6px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        fontSize: '16px',
+        width: '90%',
+        textAlign: 'center',
+        justifyContent: 'center',
+        margin: '0 auto',
+      }}
+    >
+      🗺️ Montar Rota
+    </a>
+  </Link>
 </div>
-
 
 </div>
 </div>
