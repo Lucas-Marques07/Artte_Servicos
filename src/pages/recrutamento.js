@@ -565,7 +565,7 @@ y += 10;
 </div>
 
 
-      <div
+<div
   style={{
     display: 'flex',
     alignItems: 'center',
@@ -574,7 +574,19 @@ y += 10;
     whiteSpace: 'nowrap',
   }}
 >
-  
+  <span style={{ marginRight: '8px' }}>Padrão</span>
+  <input
+    type="checkbox"
+    checked={usarMesmoValor}
+    onChange={() => setUsarMesmoValor(!usarMesmoValor)}
+    style={{
+      width: '16px',
+      height: '16px',
+      cursor: 'pointer',
+      margin: 0,
+    }}
+  />
+ 
 </div>
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
