@@ -324,7 +324,8 @@ useEffect(() => {
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
     // 2. Adiciona a logo
-    doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
+    doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27
+    );
   
     // 3. Título centralizado
     doc.setFontSize(20);

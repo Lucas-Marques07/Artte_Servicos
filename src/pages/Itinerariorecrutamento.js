@@ -47,7 +47,7 @@ const handleEnviar = () => {
 
   const dataFormatada = new Date(cabecalho.data).toLocaleDateString('pt-BR');
   
-  const cabecalhoStr = `🗺️ *ITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataFormatada}\n🚩 *Entrada:* ${cabecalho.entrada}\n⏰ *Saída da Rota:* ${horaInicio}`;
+  const cabecalhoStr = `🗺️ *ITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataFormatada}\n⏰ *Entrada:* ${cabecalho.entrada} | *Saída:* ${cabecalho.saida}\n🚩 *Início Rota:* ${horaInicio}`;
 
   // Agrupa os colaboradores por parada
   const colaboradoresStr = paradas.map((ponto, idx) => {
@@ -448,7 +448,7 @@ const recalcularHorarios = () => {
       doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
     
       // PDF - Logo
-      doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
+      doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27);
     
       // Título
       doc.setFontSize(20);
@@ -874,7 +874,7 @@ colabsNoPonto.forEach((colab) => {
 
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
         <button onClick={handleSubmit} className="send-whatsapp-button">
-        📄 Visualizar Lista
+        📄 Visualizar Itinerário
         </button>
       </div>
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
@@ -883,7 +883,7 @@ colabsNoPonto.forEach((colab) => {
   onClick={handleEnviar}  
   className="send-whatsapp-button"
 >
-  📧 Informar Lista
+  📧 Informar Itinerário
 </button>
 
 </div>
