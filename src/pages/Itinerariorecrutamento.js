@@ -582,6 +582,7 @@ colabsNoPonto.forEach((colab) => {
       >
         ⬅ Voltar
       </button>
+      
     </div>
 
     {/* Título */}

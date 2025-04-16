@@ -437,11 +437,12 @@ y += 10;
       >
         ⬅ Voltar
       </button>
+      
     </div>
 
     {/* Título */}
     <center>
-      <h2 style={{ marginBottom: '3rem' }}>Lançamento de Listas</h2>
+      <h2 style={{ marginBottom: '1.5rem' }}>Lista Recrutamento</h2>
     </center>
 
     <textarea
@@ -449,7 +450,7 @@ y += 10;
   value={textoImportado}
   onChange={(e) => setTextoImportado(e.target.value)}
   rows={6}
-  style={{ width: '100%', marginTop: '20px', padding: '10px' }}
+  style={{ width: '93%', marginTop: '10px', padding: '10px', borderColor: '#0c6a37', display: 'center' }}
 />
 
 
@@ -462,7 +463,9 @@ y += 10;
     border: 'none',
     padding: '8px 12px',
     borderRadius: '5px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    width: '98%',
+    marginBottom: '1rem' 
   }}
 >
   Importar Dados
@@ -569,18 +572,7 @@ y += 10;
     whiteSpace: 'nowrap',
   }}
 >
-  <span style={{ marginRight: '8px' }}>Padrão</span>
-  <input
-    type="checkbox"
-    checked={usarMesmoValor}
-    onChange={() => setUsarMesmoValor(!usarMesmoValor)}
-    style={{
-      width: '16px',
-      height: '16px',
-      cursor: 'pointer',
-      margin: 0,
-    }}
-  />
+  
 </div>
       {colaboradores.map((colab, index) => (
         <div key={index} className="colaborador-container">
@@ -735,6 +727,30 @@ y += 10;
   >
     📧 Informar Lista
   </button>
+  <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+  <a
+    href="/Itinerariorecrutamento"
+    style={{
+      background: '#0c6a37',
+      color: 'white',
+      textDecoration: 'none',
+      padding: '10px 16px',
+      borderRadius: '6px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      fontSize: '16px',
+      width: '92%',
+      textAlign: 'center',
+      justifyContent: 'center', // centraliza o conteúdo interno
+      margin: '0 auto'          // centraliza o botão como bloco
+    }}
+  >
+    🗺️ Montar Rota
+  </a>
+</div>
+
+
 </div>
 </div>
 
