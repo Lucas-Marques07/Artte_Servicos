@@ -33,6 +33,7 @@ const formatarDataParaInput = (data) => {
 };
 
 const importarTexto = (texto) => {
+  texto = texto.replace(/\*/g, ''); // Remove todos os asteriscos
   const linhas = texto.split('\n').map((linha) => linha.trim());
 
   // CABEÇALHO
