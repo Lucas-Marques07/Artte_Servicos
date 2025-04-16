@@ -93,14 +93,14 @@ export default function RotaVan() {
     // Verificar se as paradas possuem colaborador, hora e dados válidos
     for (let ponto of paradas) {
       if (!ponto.nome || !ponto.hora || ponto.colaboradores.length === 0) {
-        alert('Por favor, preencha todas as paradas com nome, hora e colaboradores antes de enviar.');
+        alert('Por favor, preencha todas as paradas com nome, hora e colaboradores para seguir.');
         return false;
       }
     }
   
     // Verificar se a empresa e a data foram preenchidos corretamente
     if (!cabecalho.cliente || !cabecalho.data) {
-      alert('Por favor, preencha os campos de empresa e data antes de enviar.');
+      alert('Por favor, preencha os campos de empresa e data para seguir.');
       return false;
     }
   
@@ -120,6 +120,7 @@ export default function RotaVan() {
   };
   const handleSubmit = async () => {
     const doc = new jsPDF();
+    if (!validarCampos()) return;
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const formatarData = (dataString) => {

@@ -108,6 +108,23 @@ export default function NovoColaborador() {
 
   const handleSubmit = async () => {
     const doc = new jsPDF();
+    const { cliente, operacao, data, turno, entrada, saida } = cabecalho;
+
+    // Verificação de campos obrigatórios no cabeçalho
+    if (!cliente || !data || !entrada || !saida || !turno) {
+      alert('Preencha todos os campos obrigatórios do cabeçalho (Cliente, Operação, Data, Entrada, Saída e Turno).');
+      return;
+    }
+
+    // Validação dos colaboradores
+    const camposInvalidos = colaboradores.filter((colab) =>
+      !colab.cpf || !colab.nome || !colab.funcao || !colab.diaria
+    );
+
+    if (camposInvalidos.length > 0) {
+      alert('Preencha todos os campos obrigatórios (Nome, CPF, Função e Diária) dos colaboradores.');
+      return;
+    }
     const formatarData = (dataString) => {
       const [ano, mes, dia] = dataString.split('-');
       return `${dia}/${mes}/${ano}`;
