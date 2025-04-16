@@ -15,12 +15,12 @@ export default function App({ Component, pageProps }) {
     const logoutPorInatividade = () => {
       alert("Você foi desconectado por inatividade.");
       localStorage.removeItem("usuarioLogado");
-      router.push("/login");
+      router.push("/");
     };
 
     const resetTimer = () => {
       clearTimeout(timeout);
-      timeout = setTimeout(logoutPorInatividade, 30 * 60 * 1000); // 10 minutos
+      timeout = setTimeout(logoutPorInatividade, 1 * 60 * 1000); // 10 minutos
     };
 
     const eventos = ["mousemove", "keydown", "scroll", "click", "touchstart"];
