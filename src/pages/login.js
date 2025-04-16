@@ -83,55 +83,26 @@ export default function Home() {
            Bem-vindo(a)! Escolha uma das opções abaixo:
         </p>
 
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          <li style={{ marginBottom: '1rem' }}>
-            <Link href="/colaboradores">
-            <span style={botaoEstilo}>
-                👷 Cadastrar Colaboradores
-              </span>
-            </Link>
-          </li>
-          <li style={{ marginBottom: '1rem' }}>
-            <Link href="marmita/novo">
-            <span style={botaoEstilo}>
-                 🍽️ Solicitar Marmitas
-            </span>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+  {[
+    { href: '/colaboradores', emoji: '👷', texto: 'Cadastrar Colaboradores' },
+    { href: '/marmita/novo', emoji: '🍽️', texto: 'Solicitar Marmitas' },
+    { href: '/transporte/novo', emoji: '🚐', texto: 'Lançar Transporte' },
+    { href: '/rota', emoji: '🗺️', texto: 'Itinerário' },
+    { href: '/colaboradores/novo', emoji: '📋', texto: 'Lançar lista' },
+    { href: '/colaboradores/enviarlista', emoji: '📨', texto: 'Enviar lista' },
+    { href: '/recrutamento', emoji: '👥', texto: 'Recrutamento' },
+  ].map((item, i) => (
+    <li key={i} style={{ marginBottom: '16px' }}>
+      <Link href={item.href}>
+        <span style={botaoEstilo}>
+          {item.emoji} {item.texto}
+        </span>
+      </Link>
+    </li>
+  ))}
+</ul>
 
-            </Link>
-          </li>
-          
-        <li style={{ marginBottom: '1rem' }}>
-          <Link href="transporte/novo">
-          <span style={botaoEstilo}>
-                🚐 Lançar Transporte
-              </span>
-            </Link>
-            </li>
-
-            <li style={{ marginBottom: '1rem' }}>
-          <Link href="/rota">
-          <span style={botaoEstilo}>
-          🗺️ Itinerário
-              </span>
-            </Link>
-            </li>
-       
-            <li style={{ marginBottom: '1rem' }}>
-            <Link href="/colaboradores/novo">
-            <span style={botaoEstilo}>
-                📋 Lançar lista
-              </span>
-            </Link>
-          </li>
-          <li style={{ marginBottom: '1rem' }}>
-            <Link href="/colaboradores/enviarlista">
-            
-            <span style={botaoEstilo}>
-            📨 Enviar lista
-              </span>
-            </Link>
-          </li>
-        </ul>
       </div>
     </div>
   );
