@@ -480,8 +480,9 @@ y += 10;
 
       <div className="divider" />
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <button onClick={adicionarLinha} className="add-button">
-          ➕
+        <button onClick={adicionarLinha} className="add-button"
+        style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>
+        ➕
         </button>
       </div>
 
