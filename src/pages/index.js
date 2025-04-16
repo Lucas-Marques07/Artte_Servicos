@@ -19,7 +19,6 @@ export default function Login() {
     { usuario: 'Flávio', senha: '123778' },
     { usuario: 'Daniela', senha: '134084' },
     { usuario: 'Ana Carolina', senha: '022199' },
-   
   ];
 
   const handleLogin = (e) => {
@@ -49,64 +48,104 @@ export default function Login() {
     >
       <div
         style={{
+          position: 'relative',
           background: '#fff',
           padding: '2rem 3rem',
           borderRadius: '8px',
           boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-          width: '100%',
+          width: '270px',
           maxWidth: '400px',
+          overflow: 'hidden',
+          height:'300px'
+
         }}
       >
-        <h2 style={{ marginBottom: '1.5rem', color: '#0c6a37', textAlign: 'center' }}>
-          Login RH+
-        </h2>
-        <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.3rem' }}>Usuário</label>
-            <input
-              type="text"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
-              required
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-              }}
-            />
-          </div>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.3rem' }}>Senha</label>
-            <input
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                borderRadius: '6px',
-                border: '1px solid #ccc',
-              }}
-            />
-          </div>
-          <button
-            type="submit"
+        {/* Fundo com logo transparente */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: 'url("/icon.png")',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            opacity: 0.05,
+            zIndex: 0,
+          }}
+        ></div>
+
+        {/* Conteúdo por cima do fundo */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div
             style={{
-              width: '100%',
-              backgroundColor: '#0070f3',
-              color: 'white',
-              padding: '0.6rem 1rem',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '1rem',
             }}
           >
-            Entrar
-          </button>
-        </form>
+           <h2
+              style={{
+                color: '#0c6a37',
+                fontSize: '1.8rem',
+                marginBottom: '1rem',
+              }}
+            >
+              Login RH+
+            </h2>
+          </div>
+
+          <form onSubmit={handleLogin}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.3rem' }}>Usuário</label>
+              <input
+                type="text"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+                required
+                style={{
+                  width: '93%',
+                  padding: '0.5rem',
+                  borderRadius: '6px',
+                  border: '1px solid #ccc',
+                }}
+              />
+            </div>
+            <div style={{ marginBottom: '1.5rem' }}>
+              <label style={{ display: 'block', marginBottom: '0.3rem' }}>Senha</label>
+              <input
+                type="password"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                required
+                style={{
+                  width: '93%',
+                  padding: '0.5rem',
+                  borderRadius: '6px',
+                  border: '1px solid #ccc',
+                }}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                width: '100%',
+                backgroundColor: '#0c6a37',
+                color: 'white',
+                padding: '0.6rem 1rem',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+              }}
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
