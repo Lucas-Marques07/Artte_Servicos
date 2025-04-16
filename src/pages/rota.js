@@ -205,7 +205,7 @@ export default function RotaVan() {
       }
   
       // Nome do ponto com hora
-      doc.setFontSize(14);
+      doc.setFontSize(12);
       doc.setTextColor(0);
       doc.text(`${index + 1}. ${ponto.nome} - ${ponto.hora}`, x, y);
       y += 7;
@@ -228,7 +228,7 @@ export default function RotaVan() {
           }
         }
   
-        doc.setFontSize(12);
+        doc.setFontSize(10);
         doc.setTextColor(80);
         doc.text(`- ${colab}`, x + 5, y);
         y += 7;
@@ -307,7 +307,7 @@ export default function RotaVan() {
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     
     // Defina o cabeçalho da mensagem
-    const cabecalhoStr = `🗺️ *IITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataAtual}\n🚩 *Ponto Inicial:* ${inicio}\n⏰ *Saída:* ${horaInicio}`;
+    const cabecalhoStr = `🗺️ *ITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataAtual}\n🚩 *Ponto Inicial:* ${inicio}\n⏰ *Saída:* ${horaInicio}`;
     
     // Gerando a lista de colaboradores
     const colaboradoresStr = paradas.map((ponto, idx) => {
@@ -338,15 +338,18 @@ export default function RotaVan() {
   
 
   return (
-    <div style={{
-      display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh',
-      background: '#f8f8f8', fontFamily: 'sans-serif', padding: '2rem'
+    <div
+    style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+      background: '#f8f8f8',
+      fontFamily: 'sans-serif',
+      padding: '2rem'
     }}>
-      <div style={{
-        background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-      }}>
-
-        {/* Cabeçalho com logo e botão voltar */}
+     <div style={{ background: '#fff', padding: '2rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)', minWidth: '85vw' }}>
+          {/* Cabeçalho com logo e botão voltar */}
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'
         }}>
@@ -598,35 +601,58 @@ export default function RotaVan() {
               </div>
             </div>
           ))}
-          <button
-            onClick={adicionarParada}
-            disabled={!inicio || !horaInicio}
-            style={{
-              marginTop: '1rem', backgroundColor: !inicio || !horaInicio ? '#ccc' : '#007bff',
-              color: '#fff', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px',
-              cursor: !inicio || !horaInicio ? 'not-allowed' : 'pointer'
-            }}
-          >
-            ➕ Adicionar Ponto
-          </button>
-        </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+  <span
+    onClick={adicionarParada}
+    disabled={!inicio || !horaInicio}
+    style={{
+      textAlign: 'center',
+      marginTop: '1rem',
+      backgroundColor: !inicio || !horaInicio ? '#ccc' : '#007bff',
+      color: '#fff',
+      padding: '0.5rem 1rem',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: !inicio || !horaInicio ? 'not-allowed' : 'pointer'
+    }}
+  >
+    ➕
+  </span>
+</div>
 
-        <div style={{ marginTop: '2rem' }}>
-          <button
-            onClick={handleEnviar}
-            style={{
-              padding: '10px 20px', background: '#25D366', color: '#fff', borderRadius: '6px',
-              border: 'none', fontWeight: 'bold', fontSize: '1rem'
-            }}
-          >
-            📤 Compartilhar Mensagem
-          </button>
-          
         </div>
-      
-        <button onClick={handleSubmit} className="send-whatsapp-button">
-          Enviar para WhatsApp
-        </button>
+        
+        <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  <button
+    onClick={handleSubmit}
+    className="send-whatsapp-button"
+    style={{
+      padding: '10px 20px',
+      marginBottom: '1rem', // Espaço entre os botões
+      fontSize: '1rem'
+    }}
+  >
+    📄 Visualizar Itinerário
+  </button>
+
+  <button
+    onClick={handleEnviar}
+    style={{
+      padding: '10px 20px',
+      background: '#25D366',
+      color: '#fff',
+      borderRadius: '6px',
+      border: 'none',
+      fontWeight: 'bold',
+      fontSize: '1rem'
+    }}
+  >
+    📧 Informar Itinerário
+  </button>
+</div>
+
+     
+       
       </div>
     </div>
   );

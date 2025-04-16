@@ -1,3 +1,4 @@
+// src/pages/login.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -65,7 +66,7 @@ export default function Home() {
       cursor: 'pointer',
     }}
   >
-    sair
+    Sair
   </button>
 </div>
         <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#0c6a37' }}>
@@ -79,7 +80,7 @@ export default function Home() {
         )}
 
         <p style={{ marginBottom: '2rem' }}>
-          Bem-vindo! Escolha uma das opções abaixo:
+           Bem-vindo(a)! Escolha uma das opções abaixo:
         </p>
 
         <ul style={{ listStyle: 'none', padding: 0 }}>

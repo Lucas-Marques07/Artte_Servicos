@@ -266,7 +266,7 @@ a.click();
 
       {/* Título */}
       <center>
-        <h2 style={{ marginBottom: '3rem' }}>Lançamentos de Lista cliente</h2>
+        <h2 style={{ marginBottom: '3rem' }}>Lista Cliente</h2>
       </center>
 
 
