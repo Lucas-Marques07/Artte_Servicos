@@ -281,7 +281,7 @@ y += 10;
     gap: '12px'
   }}>
     <div>
-      <label>Nome do Cliente:</label>
+      <label>Cliente:</label>
       <select
         value={cabecalho.cliente}
         onChange={(e) => setCabecalho({ ...cabecalho, cliente: e.target.value })}

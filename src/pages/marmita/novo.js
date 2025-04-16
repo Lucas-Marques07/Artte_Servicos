@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 export default function NovaMarmita() {
   const router = useRouter();
   const [marmitas, setMarmitas] = useState([
-    { data: '', horario: '', empresa: '', operacao: '', solicitante: '', quantidade: '', valor: '' }
+    { data: '', horario: '', empresa: '', operacao: '', solicitante: '', quantidade: '', valor: '' , endereço: ''}
   ]);
   const handleCheckboxChange = () => {
     setUsarMesmoValor(!usarMesmoValor);
@@ -21,7 +21,7 @@ useEffect(() => {
     const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
     if (usuario?.usuario) {
       setNomeLogado(usuario.usuario);
-      setMarmitas([{ data: '', horario: '', empresa: '', operacao: '', solicitante: usuario.usuario, quantidade: '', valor: '' }]);
+      setMarmitas([{ data: '', horario: '', empresa: '', operacao: '', solicitante: usuario.usuario, quantidade: '', valor: '', endereço: '' }]);
     }
   }
 }, []);
@@ -40,7 +40,7 @@ useEffect(() => {
     novaLista[index][campo] = valor;
 
     if (campo === 'empresa') {
-      const operacoes = [...new Set(dadosPlanilha.filter(d => d.EMPRESA === valor).map(d => d.OPERAÇÃO))];
+      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
       setOperacoesFiltradas(operacoes);
       novaLista[index]['operacao'] = '';
     }
@@ -49,7 +49,7 @@ useEffect(() => {
   };
 
   const adicionarLinha = () => {
-    const novaLinha = { data: '', horario: '', empresa: '', operacao: '', solicitante: nomeLogado, quantidade: '', valor: '' };
+    const novaLinha = { data: '', horario: '', empresa: '', operacao: '', solicitante: nomeLogado, quantidade: '', valor: '', endereço: '' };
     if (usarMesmoValor && marmitas.length > 0) {
       novaLinha.valor = marmitas[0].valor;
     }
@@ -64,7 +64,7 @@ useEffect(() => {
 
   const validarCampos = () => {
     for (let m of marmitas) {
-      if (!m.data || !m.horario || !m.empresa || !m.operacao || !m.solicitante || !m.quantidade || !m.valor) {
+      if (!m.data || !m.horario || !m.empresa || !m.solicitante || !m.quantidade || !m.endereço) {
         alert('Por favor, preencha todos os campos antes de enviar.');
         return false;
       }
@@ -74,18 +74,22 @@ useEffect(() => {
 
   const handleEnviar = () => {
     if (!validarCampos()) return;
-
-    const mensagem = marmitas.map((m, i) => (
-      `${i + 1}.
-Solicitante: ${m.solicitante}
-Empresa: ${m.empresa}
-Operação: ${m.operacao}
-Data: ${m.data}
-Horário: ${m.horario}
-Quantidade: ${m.quantidade}
-Valor: R$${m.valor}`
-    )).join('\n------------------\n');
-
+  
+    const mensagem = marmitas.map((m, i) => {
+      const dataFormatada = new Date(m.data).toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit'
+      });
+  
+      return `🍽️ Solicitação de Marmita *${i + 1}º*
+  
+  🏢 *Empresa:* ${m.empresa} | 🛠️ *Operação:* ${m.operacao}
+  📅 *Data:* ${dataFormatada} | ⏰ *Entrega:* ${m.horario}
+  👤 *Quantidade:* ${m.quantidade} | 📌 *Solicitante:* ${m.solicitante}
+  
+  📍 *Endereço:* ${m.endereço}`;
+    }).join('\n-------------------------\n');
+  
     if (navigator.share) {
       navigator.share({ title: 'Solicitação de Marmitas', text: mensagem })
         .catch((error) => console.error('Erro ao compartilhar:', error));
@@ -93,6 +97,7 @@ Valor: R$${m.valor}`
       alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
     }
   };
+  
 
   const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
 
@@ -147,76 +152,97 @@ Valor: R$${m.valor}`
   />
 </div>
              
-        {marmitas.map((m, index) => (
-         <div
-         key={index}
-         style={{
-           border: '1px solid #ccc',
-           padding: '10px',
-           borderRadius: '6px',
-           marginBottom: '10px',
-           background: '#f9f9f9',
-           width: '350px'  // Largura fixa de 500px
-         }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</button>
-            </div>
+{marmitas.map((m, index) => (
+  
+  <div
+    key={index}
+    style={{
+      border: '1px solid #ccc',
+      padding: '10px',
+      borderRadius: '6px',
+      marginBottom: '10px',
+      background: '#f9f9f9',
+      width: '350px'
+    }}
+    
+  >
+    <div style={{ display: 'flex', justifyContent: 'flex-end',  marginBottom: '10px', }}>
+      <span
+        onClick={() => removerLinha(index)}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '18px'
+        }}
+      >
+        🗑️
+      </span>
+    </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+      <div>
+        <label>Data:</label>
+        <input type="date" value={m.data} onChange={(e) => handleChange(index, 'data', e.target.value)} />
+      </div>
 
-              <div>
-                <label>Data:</label>
-                <input type="date" value={m.data} onChange={(e) => handleChange(index, 'data', e.target.value)} />
-              </div>
+      <div>
+        <label>Horário de Entrega:</label>
+        <input type="time" value={m.horario} onChange={(e) => handleChange(index, 'horario', e.target.value)} />
+      </div>
 
-              <div>
-                <label>Horário de Entrega:</label>
-                <input type="time" value={m.horario} onChange={(e) => handleChange(index, 'horario', e.target.value)} />
-              </div>
+      <div>
+        <label>Empresa:</label>
+        <select value={m.empresa} onChange={(e) => handleChange(index, 'empresa', e.target.value)}>
+          <option value="">Selecione</option>
+          {empresas.map((e, i) => <option key={i} value={e}>{e}</option>)}
+        </select>
+      </div>
 
-              <div>
-                <label>Empresa:</label>
-                <select value={m.empresa} onChange={(e) => handleChange(index, 'empresa', e.target.value)}>
-                  <option value="">Selecione</option>
-                  {empresas.map((e, i) => <option key={i} value={e}>{e}</option>)}
-                </select>
-              </div>
+      <div>
+        <label>Operação:</label>
+        <select value={m.operacao} onChange={(e) => handleChange(index, 'operacao', e.target.value)}>
+          <option value="">Selecione</option>
+          {operacoesFiltradas.map((op, i) => <option key={i} value={op}>{op}</option>)}
+        </select>
+      </div>
 
-              <div>
-                <label>Operação:</label>
-                <select value={m.operacao} onChange={(e) => handleChange(index, 'operacao', e.target.value)}>
-                  <option value="">Selecione</option>
-                  {operacoesFiltradas.map((op, i) => <option key={i} value={op}>{op}</option>)}
-                </select>
-              </div>
+      <div>
+        <label>Solicitante:</label>
+        <input type="text" value={m.solicitante} disabled />
+      </div>
 
-              <div>
-                <label>Solicitante:</label>
-                <input type="text" value={m.solicitante} disabled />
-              </div>
+      <div>
+        <label>Quantidade:</label>
+        <input type="number" value={m.quantidade} onChange={(e) => handleChange(index, 'quantidade', e.target.value)} />
+      </div>
+    </div>
 
-              <div>
-                <label>Quantidade:</label>
-                <input type="number" value={m.quantidade} onChange={(e) => handleChange(index, 'quantidade', e.target.value)} />
-              </div>
+    {/* Bloco separado para Valor e Endereço */}
+    <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+           <div>
+        <label>Endereço Entrega:</label>
+        <input
+          type="text"
+          value={m.endereço}
+          onChange={(e) => handleChange(index, 'endereço', e.target.value)}
+          style={{ width: '90%', fontSize: '16px' }}
+        />
+      </div>
+    </div>
+  </div>
+))}
 
-              <div>
-                <label>Valor:</label>
-                <input type="number" value={m.valor} onChange={(e) => handleChange(index, 'valor', e.target.value)} />
-              </div>
-            </div>
-          </div>
-        ))}
 
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <button onClick={adicionarLinha} style={{ fontSize: '16px', background: '#e0e0e0', padding: '6px 12px', borderRadius: '6px' }}>
-            ➕ Adicionar
-          </button>
-        </div>
+<div style={{ textAlign: 'center', marginTop: '0.5rem' }}>
+        <span onClick={adicionarLinha} style={{ fontSize: '20px', background: '#e0e0e0', padding: '4px 10px', borderRadius: '4px' }}>
+          ➕
+        </span>
+      </div>
 
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
           <button onClick={handleEnviar} style={{ background: '#0c6a37', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px' }}>
-            📤 Compartilhar Solicitação
+          📩 Enviar Solicitação
           </button>
         </div>
       </div>
