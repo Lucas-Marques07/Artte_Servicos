@@ -7,13 +7,31 @@ const Mapa = dynamic(() => import('@/components/MapaRota'), { ssr: false });
 
 export default function RotaVan() {
   const [inicio, setInicio] = useState('');
+  const [colaboradores, setColaboradores] = useState([
+    { cpf: '', nome: '', funcao: '', diaria: '', empresa: '', operacao: '', turno: '' }
+  ]);
   const [horaInicio, setHoraInicio] = useState('');
   const [paradas, setParadas] = useState([]);
   const [erro, setErro] = useState('');
   const [minutosPadrao, setMinutosPadrao] = useState(5);
   const [pontosUnicos, setPontosUnicos] = useState([]);
+  const [cpfsDisponiveis, setCpfsDisponiveis] = useState([]);
   const router = useRouter();
   const novoInputRef = useRef(null);
+   const [funcoesUnicas, setFuncoesUnicas] = useState([]);
+   const [data, setData] = useState([]);
+  const [clientesUnicos, setClientesUnicos] = useState([]);
+  const [operacoesUnicas, setOperacoesUnicas] = useState([]);
+  const [turnosUnicos, setTurnosUnicos] = useState([]);
+  const [usarMesmoValor, setUsarMesmoValor] = useState(false);
+  const [cabecalho, setCabecalho] = useState({
+    cliente: '',
+    operacao: '',
+    data: '',
+    turno: '',
+    entrada: '',
+    saida: ''
+  });
   
   // Função para buscar os pontos de fretamento da planilha (ou API)
   const buscarPontosDeFretamento = async () => {
@@ -23,6 +41,20 @@ export default function RotaVan() {
     
       const pontos = [...new Set(data.map(item => item['pontofretamento']).filter(Boolean))];
       setPontosUnicos(pontos);
+      setCpfsDisponiveis(data);
+
+        const funcoes = [...new Set(data.map(item => item['FUNÇÃO']).filter(Boolean))];
+        setFuncoesUnicas(funcoes);
+
+        const clientes = [...new Set(data.map(item => item['EMPRESA']).filter(Boolean))];
+        setClientesUnicos(clientes);
+
+        const operacoes = [...new Set(data.map(item => item['OPERAÇÃO']).filter(Boolean))];
+        setOperacoesUnicas(operacoes);
+
+        const turnos = [...new Set(data.map(item => item['TURNO']).filter(Boolean))];
+        setTurnosUnicos(turnos);
+    
    
   } catch (err) {
     console.error('Erro ao buscar pontos de fretamento:', err);
@@ -56,6 +88,24 @@ export default function RotaVan() {
     novaLista.splice(index, 1);
     setParadas(novaLista);
   };
+  const validarCampos = () => {
+      
+    // Verificar se as paradas possuem colaborador, hora e dados válidos
+    for (let ponto of paradas) {
+      if (!ponto.nome || !ponto.hora || ponto.colaboradores.length === 0) {
+        alert('Por favor, preencha todas as paradas com nome, hora e colaboradores antes de enviar.');
+        return false;
+      }
+    }
+  
+    // Verificar se a empresa e a data foram preenchidos corretamente
+    if (!cabecalho.cliente || !cabecalho.data) {
+      alert('Por favor, preencha os campos de empresa e data antes de enviar.');
+      return false;
+    }
+  
+    return true;
+  };
 
   const atualizarParada = (index, campo, valor) => {
     const novaLista = [...paradas];
@@ -68,109 +118,131 @@ export default function RotaVan() {
     }
     setParadas(novaLista);
   };
-   const handleSubmit = async () => {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const pageHeight = doc.internal.pageSize.getHeight();
-      let y = 20;
-    
-      // Carrega a imagem da logo
-      const loadImageAsBase64 = async (url) => {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(blob);
-        });
-      };
-    
-      const logoBase64 = await loadImageAsBase64('/logo.jpeg');
-    
-      // 1. Adiciona a borda externa
-      doc.setDrawColor(12, 106, 55); // verde escuro para linhas
-      doc.setLineWidth(0.8);
-      doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
-    
-      // 2. Adiciona a logo
-      doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
-    
-      // 3. Título centralizado
-      doc.setFontSize(20);
-      doc.setTextColor(12, 106, 55); // equivalente a #022c15 em RGB 
-      doc.text('Itinerário', pageWidth / 2, 25, { align: 'center' });
-    
-      y = 45;
-    
-      // 4. Cabeçalho centralizado
-      doc.setFontSize(11);
-      doc.setTextColor(33, 33, 33);
-    
-      const headerLines = [
-        `Cliente: ${cabecalho.cliente}`,
-        `Operação: ${cabecalho.operacao}`,
-        `Data: ${cabecalho.data}   Turno: ${cabecalho.turno}`,
-        `Entrada: ${cabecalho.entrada}   Saída: ${cabecalho.saida}`
-      ];
-    
-      // Definir a fonte e a cor
-  doc.setFontSize(10);
-  doc.setTextColor(33, 33, 33);
+  const handleSubmit = async () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const formatarData = (dataString) => {
+      const [ano, mes, dia] = dataString.split('-');
+      return `${dia}/${mes}/${ano}`;
+    };
   
-  // Espaçamento inicial
-  const leftColumnX = pageWidth / 3.8; // Posição para a coluna da esquerda
-  const rightColumnX = pageWidth / 2 + 10; // Posição para a coluna da direita
+    const dataAtual = formatarData(cabecalho.data);
   
-  // Adiciona as informações em colunas
-  doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y); 
-  doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
-  y += 7;
+    // Carrega logo
+    const loadImageAsBase64 = async (url) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    };
   
-  doc.text(`Data: ${cabecalho.data}`, leftColumnX, y); 
-  doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
-  y += 7;
+    const logoBase64 = await loadImageAsBase64('/logo.jpeg');
   
-  doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, y); 
-  doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, y);
-  y += 10;
+    // PDF - Borda
+    doc.setDrawColor(12, 106, 55);
+    doc.setLineWidth(0.8);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
-    
-      y += 0;
-    
-      // 5. Linha separadora
-      doc.setDrawColor(12, 106, 55);
-      doc.setLineWidth(0.5);
-      doc.line(20, y, pageWidth - 20, y);
-      y += 10;
-    
-      // 6. Lista de colaboradores
-      colaboradores.forEach((colab, index) => {
-        if (y > 270) {
+    // PDF - Logo
+    doc.addImage(logoBase64, 'JPEG', 17, 17, 35, 35);
+  
+    // Título
+    doc.setFontSize(20);
+    doc.setTextColor(12, 106, 55);
+    doc.text('ITINERÁRIO EMPRESAS', pageWidth / 2, 25, { align: 'center' });
+  
+    // Cabeçalho
+    let y = 45;
+    const leftColumnX = pageWidth / 3.8;
+    const rightColumnX = pageWidth / 2 + 10;
+  
+    doc.setFontSize(12);
+    doc.setTextColor(33, 33, 33);
+  
+    doc.text(`Cliente: ${cabecalho.cliente}`, leftColumnX, y);
+    doc.text(`Operação: ${cabecalho.operacao}`, rightColumnX, y);
+    y += 7;
+  
+    doc.text(`Data: ${dataAtual}`, leftColumnX, y);
+    doc.text(`Turno: ${cabecalho.turno}`, rightColumnX, y);
+    y += 7;
+  
+    doc.text(`Entrada: ${cabecalho.entrada}`, leftColumnX, y);
+    doc.text(`Saída: ${cabecalho.saida}`, rightColumnX, y);
+    y += 10;
+  
+    // Linha separadora
+    doc.setDrawColor(12, 106, 55);
+    doc.setLineWidth(0.5);
+    doc.line(20, y, pageWidth - 20, y);
+    y += 14;
+  
+    // Paradas com colaboradores em duas colunas
+    let x = 20;
+    const coluna2X = pageWidth / 2 + 5;
+    let usandoSegundaColuna = false;
+    const yInicial = y;
+  
+    paradas.forEach((ponto, index) => {
+      if (y > 260) {
+        if (!usandoSegundaColuna) {
+          x = coluna2X;
+          y = yInicial;
+          usandoSegundaColuna = true;
+        } else {
           doc.addPage();
-          // Reaplica a borda em nova página
           doc.setDrawColor(12, 106, 55);
           doc.setLineWidth(0.8);
           doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+          x = 20;
           y = 20;
+          usandoSegundaColuna = false;
         }
-    
-        // Nome em negrito
+      }
+  
+      // Nome do ponto com hora
+      doc.setFontSize(14);
+      doc.setTextColor(0);
+      doc.text(`${index + 1}. ${ponto.nome} - ${ponto.hora}`, x, y);
+      y += 7;
+  
+      // Colaboradores
+      ponto.colaboradores.forEach((colab) => {
+        if (y > 260) {
+          if (!usandoSegundaColuna) {
+            x = coluna2X;
+            y = yInicial;
+            usandoSegundaColuna = true;
+          } else {
+            doc.addPage();
+            doc.setDrawColor(12, 106, 55);
+            doc.setLineWidth(0.8);
+            doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+            x = 20;
+            y = 20;
+            usandoSegundaColuna = false;
+          }
+        }
+  
         doc.setFontSize(12);
-        doc.setTextColor(0);
-        doc.text(`${index + 1}. ${colab.nome}`, 20, y);
-        y += 6;
-    
-        // Dados adicionais em cinza
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text(`CPF: ${colab.cpf} | Função: ${colab.funcao} | Diária: R$${colab.diaria}`, 25, y);
-        y += 10;
+        doc.setTextColor(80);
+        doc.text(`- ${colab}`, x + 5, y);
+        y += 7;
       });
-    
-      // 7. Abre visualização do PDF em nova aba
-      const pdfUrl = doc.output('bloburl');
-      window.open(pdfUrl, '_blank');
-    };
+  
+      y += 5; // Espaço entre os pontos
+    });
+  
+    // Abrir PDF
+    const pdfUrl = doc.output('bloburl');
+    window.open(pdfUrl, '_blank');
+  };
+  
+  
 
   const adicionarColaborador = (index) => {
     const novaLista = [...paradas];
@@ -229,21 +301,41 @@ export default function RotaVan() {
     setParadas(novaLista);
   };
 
-  const compartilharRota = () => {
+  const handleEnviar = () => {
+    if (!validarCampos()) return;
+    
     const dataAtual = new Date().toLocaleDateString('pt-BR');
-    const cabecalho = `🗺️ *Rota da Van* \n*Empresa:* ACME | *Data:* ${dataAtual} \n*Saída:* ${inicio} às ${horaInicio}`;
+    
+    // Defina o cabeçalho da mensagem
+    const cabecalhoStr = `🗺️ *IITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataAtual}\n🚩 *Ponto Inicial:* ${inicio}\n⏰ *Saída:* ${horaInicio}`;
+    
+    // Gerando a lista de colaboradores
     const colaboradoresStr = paradas.map((ponto, idx) => {
-      const nomes = ponto.colaboradores.map(c => `  - ${c}`).join('\n');
-      return `*${idx + 1}. ${ponto.nome}* (${ponto.hora})\n${nomes}`;
+      const nomes = (ponto.colaboradores || [])
+        .filter(c => c && c.trim() !== '')
+        .map(c => `  - ${c}`)
+        .join('\n');
+    
+      return `*${idx + 1}. ${ponto.nome}* (${ponto.hora})\n${nomes || '  - Sem colaboradores'}`;
     }).join('\n\n');
-    const mensagem = `${cabecalho}\n\n${colaboradoresStr}`;
-
+    
+    
+    
+    
+    // Mensagem final
+    const mensagem = `${cabecalhoStr}\n\n${colaboradoresStr}`;
+    
+    // Verifica se o navegador suporta o compartilhamento
     if (navigator.share) {
-      navigator.share({ title: 'Rota da Van', text: mensagem }).catch(err => console.error(err));
+      navigator
+        .share({ title: 'Rota da Van', text: mensagem })
+        .catch(err => console.error(err));
     } else {
       alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
     }
   };
+  
+  
 
   return (
     <div style={{
@@ -273,55 +365,155 @@ export default function RotaVan() {
         {/* Título */}
         <center><h2 style={{ marginBottom: '1rem' }}>ITINERÁRIO DAS EMPRESAS</h2></center>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label>Ponto de Partida:</label>
-          <input
-            type="text"
-            value={inicio}
-            onChange={e => setInicio(e.target.value)}
-            style={{ width: '90%' }}
-          />
-        </div>
+        <div
+  style={{
+    border: '1px solid #ccc',
+    padding: '16px',
+    borderRadius: '8px',
+    marginBottom: '16px',
+    background: '#f9f9f9',
+    width: '90%',
+    marginRight: '40px',   
+  }}
+>
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+    gap: '12px'
+  }}>
+    <div>
+      <label>Cliente:</label>
+      <select
+        value={cabecalho.cliente}
+        onChange={(e) => setCabecalho({ ...cabecalho, cliente: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {clientesUnicos.map((cliente, i) => (
+          <option key={i} value={cliente}>{cliente}</option>
+        ))}
+      </select>
+    </div>
 
-        <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0px' }}>
-          <div style={{ marginRight: '1px', width: '100%' }}>
-            <label>Início:</label>
-            <input
-              type="time"
-              value={horaInicio}
-              onChange={e => setHoraInicio(e.target.value)}
-            />
-          </div>
-          <div style={{ marginLeft: '30px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <div>
-              <label>Minutos:</label>
-              <input
-                type="number"
-                value={minutosPadrao}
-                onChange={e => setMinutosPadrao(Number(e.target.value))}
-                min="1"
-                style={{ width: '30px' }}
-              />
-            </div>
-            <button
-              onClick={recalcularHorarios}
-              style={{
-                width: '32px', height: '32px', fontSize: '25px', padding: 0, display: 'flex',
-                alignItems: 'center', justifyContent: 'center', background: 'none', border: 'none',
-                cursor: 'pointer', marginTop: '18px'
-              }}
-              title="Recalcular horários"
-            >
-              🔄
-            </button>
-          </div>
-        </div>
+    <div>
+      <label>Operação:</label>
+      <select
+        value={cabecalho.operacao}
+        onChange={(e) => setCabecalho({ ...cabecalho, operacao: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {operacoesUnicas.map((op, i) => (
+          <option key={i} value={op}>{op}</option>
+        ))}
+      </select>
+    </div>
 
+    <div>
+      <label>Data:</label>
+      <input
+        type="date"
+        value={cabecalho.data}
+        onChange={(e) => setCabecalho({ ...cabecalho, data: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
+
+    <div>
+      <label>Turno:</label>
+      <select
+        value={cabecalho.turno}
+        onChange={(e) => setCabecalho({ ...cabecalho, turno: e.target.value })}
+      >
+        <option value="">Selecione</option>
+        {turnosUnicos.map((turno, i) => (
+          <option key={i} value={turno}>{turno}</option>
+        ))}
+      </select>
+    </div>
+
+    <div>
+      <label>Entrada:</label>
+      <input
+        type="time"
+        value={cabecalho.entrada}
+        onChange={(e) => setCabecalho({ ...cabecalho, entrada: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
+
+    <div>
+      <label>Saída:</label>
+      <input
+        type="time"
+        value={cabecalho.saida}
+        onChange={(e) => setCabecalho({ ...cabecalho, saida: e.target.value })}
+        style={{ width: '140px' }}
+      />
+    </div>
+    <div style={{ marginBottom: '0rem' }}>
+  <label>Ponto de Partida:</label>
+  <input
+    type="text"
+    value={inicio}
+    onChange={e => setInicio(e.target.value)}
+    style={{ width: '300px', marginBottom: '10px' }}
+  />
+  <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'flex-end', gap: '20px' }}>
+  <div>
+    <label>Início:</label>
+    <input
+      type="time"
+      value={horaInicio}
+      onChange={e => setHoraInicio(e.target.value)}
+      style={{ width: '180px' }}
+    />
+  </div>
+
+  <div>
+    <label>Minutos:</label>
+    <input
+      type="number"
+      value={minutosPadrao}
+      onChange={e => setMinutosPadrao(Number(e.target.value))}
+      min="1"
+      style={{ width: '30px', marginLeft: '0px' }}
+    />
+  </div>
+
+  <button
+    onClick={recalcularHorarios}
+    style={{
+      width: '40px',
+      height: '40px',
+      fontSize: '22px',
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      marginBottom: '2px', 
+      marginLeft: '0px'
+    }}
+    title="Recalcular horários"
+  >
+    🔄
+  </button>
+</div>
+</div>
+
+{/* Linha com Início, Minutos e botão de recalcular */}
+
+ 
         {erro && (
           <div style={{ color: 'red', marginBottom: '1rem' }}>
             <strong>{erro}</strong>
           </div>
         )}
+  </div>
+</div>
+
+       
 
         <div>
           <label>Pontos de Parada:</label>
@@ -421,7 +613,7 @@ export default function RotaVan() {
 
         <div style={{ marginTop: '2rem' }}>
           <button
-            onClick={compartilharRota}
+            onClick={handleEnviar}
             style={{
               padding: '10px 20px', background: '#25D366', color: '#fff', borderRadius: '6px',
               border: 'none', fontWeight: 'bold', fontSize: '1rem'
