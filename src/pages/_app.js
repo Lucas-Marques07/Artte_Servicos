@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }) {
 
     const resetTimer = () => {
       clearTimeout(timeout);
-      timeout = setTimeout(logoutPorInatividade, 1 * 6 * 1000); // 10 minutos
+      timeout = setTimeout(logoutPorInatividade, 59 * 60 * 1000); // 10 minutos
     };
 
     const eventos = ["mousemove", "keydown", "scroll", "click", "touchstart"];
