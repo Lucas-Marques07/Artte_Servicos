@@ -316,20 +316,19 @@ useEffect(() => {
       });
     };
   
-    const logoBase64 = await loadImageAsBase64('/logo.jpeg');
+    const logoBase64 = await loadImageAsBase64('/artte1.png');
   
     // 1. Adiciona a borda externa
-    doc.setDrawColor(12, 106, 55); // verde escuro para linhas
+    doc.setDrawColor(20, 30, 125); // verde escuro para linhas
     doc.setLineWidth(0.8);
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
     // 2. Adiciona a logo
-    doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27
-    );
+    doc.addImage(logoBase64, 'JPEG', 17, 20, 35, 35);
   
     // 3. Título centralizado
     doc.setFontSize(20);
-    doc.setTextColor(12, 106, 55); // equivalente a #022c15 em RGB 
+    doc.setTextColor(20, 30, 125); // equivalente a #022c15 em RGB 
     doc.text('Lista de Presença', pageWidth / 2, 25, { align: 'center' });
   
     y = 45;
@@ -370,7 +369,7 @@ y += 10;
     y += 0;
   
     // 5. Linha separadora
-    doc.setDrawColor(12, 106, 55);
+    doc.setDrawColor(20, 30, 125);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
     y += 10;
@@ -380,7 +379,7 @@ y += 10;
       if (y > 270) {
         doc.addPage();
         // Reaplica a borda em nova página
-        doc.setDrawColor(12, 106, 55);
+        doc.setDrawColor(20, 30, 125);
         doc.setLineWidth(0.8);
         doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
         y = 20;
@@ -423,11 +422,11 @@ y += 10;
       
     {/* Cabeçalho com logo e botão voltar */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-      <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+      <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
       <button
         onClick={() => router.push('/login')}
         style={{
-          background: '#0c6a37',
+          background: '#141e7d',
           color: '#fff',
           border: 'none',
           padding: '8px 10px',
@@ -453,7 +452,7 @@ y += 10;
   value={textoImportado}
   onChange={(e) => setTextoImportado(e.target.value)}
   rows={6}
-  style={{ width: '93%', marginTop: '10px', padding: '10px', borderColor: '#0c6a37', display: 'center' }}
+  style={{ width: '93%', marginTop: '10px', padding: '10px', borderColor: '#141e7d', display: 'center' }}
 />
 
 
@@ -461,7 +460,7 @@ y += 10;
   onClick={() => importarTexto(textoImportado)}
   style={{
     marginTop: '10px',
-    background: '#0c6a37',
+    background: '#141e7d',
     color: 'white',
     border: 'none',
     padding: '8px 12px',
@@ -746,7 +745,7 @@ y += 10;
   <Link href="/Itinerariorecrutamento" passHref legacyBehavior>
     <a
       style={{
-        background: '#0c6a37',
+        background: '#141e7d',
         color: 'white',
         textDecoration: 'none',
         padding: '10px 16px',

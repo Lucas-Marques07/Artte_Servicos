@@ -2,8 +2,8 @@
 
 /* Cores principais */
 :root {
-    --verde-claro: #0c6a37;
-    --verde-escuro: #022c15;
+    --azul-claro: #1e36ed;
+    --azul-escuro: #141e7d;
     --laranja-amarelado: #febf58;
     --branco: #f1f1f1;
     --cinza-fundo: #d4d4d4;
@@ -13,13 +13,13 @@
   body {
     font-family: 'Arial', sans-serif;
     background-color: var(--cinza-fundo);
-    color: var(--verde-escuro);
+    color: var(--azul-escuro);
     margin: 0;
     padding: 0;
   }
   
   h1, h2, h3, h4 {
-    color: var(--verde-escuro);
+    color: var(--azul-escuro);
   }
   
   h1 {
@@ -40,7 +40,7 @@
   }
   
   button:hover {
-    background-color: var(--verde-claro);
+    background-color: var(--azul-claro);
   }
   
   /* Inputs e selects */
@@ -61,7 +61,7 @@
   
   input:focus, select:focus {
     outline: none;
-    border-color: var(--verde-claro);
+    border-color: var(--azul-claro);
   }
   
   label {
@@ -140,7 +140,7 @@
     font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
-    color: var(--verde-claro);
+    color: var(--azul-claro);
     width: 100%;
   }
   
@@ -157,7 +157,7 @@
   }
   
   a:hover {
-    color: var(--verde-claro);
+    color: var(--azul-claro);
   }
   
   /* 🔥 NOVO: Botão de lixeira no canto superior direito */
@@ -197,7 +197,7 @@
   /* 🔥 NOVO: Botões especiais */
   .add-button {
     font-size: 2rem;
-    background-color: var(--verde-claro);
+    background-color: var(--azul-claro);
     color: white;
     border-radius: 50%;
     width: 3rem;

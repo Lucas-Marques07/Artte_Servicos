@@ -130,7 +130,7 @@ export default function NovoColaborador() {
       });
     };
   
-    const logoBase64 = await loadImageAsBase64("/artte.png");
+    const logoBase64 = await loadImageAsBase64("/artte1.png");
   
     // Função para cabeçalho da página (reutilizável)
     const desenharCabecalho = () => {
@@ -245,7 +245,7 @@ a.click();
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src="/artte.png" alt="Logo" style={{ height: '80px' }} />
+        <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
         <button
           onClick={() => router.push('/login')}
           style={{

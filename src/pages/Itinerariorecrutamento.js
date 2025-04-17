@@ -440,19 +440,19 @@ const recalcularHorarios = () => {
         });
       };
     
-      const logoBase64 = await loadImageAsBase64('/logo.jpeg');
+      const logoBase64 = await loadImageAsBase64('/artte1.png');
     
       // PDF - Borda
-      doc.setDrawColor(12, 106, 55);
+      doc.setDrawColor(20, 30, 125);
       doc.setLineWidth(0.8);
       doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
     
       // PDF - Logo
-      doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27);
+      doc.addImage(logoBase64, 'JPEG', 17, 20, 35, 35);
     
       // Título
       doc.setFontSize(20);
-      doc.setTextColor(12, 106, 55);
+      doc.setTextColor(20, 30, 125);
       doc.text('ITINERÁRIO EMPRESAS', pageWidth / 2, 25, { align: 'center' });
     
       // Cabeçalho
@@ -476,7 +476,7 @@ const recalcularHorarios = () => {
       y += 10;
     
       // Linha separadora
-      doc.setDrawColor(12, 106, 55);
+      doc.setDrawColor(20, 30, 125);
       doc.setLineWidth(0.5);
       doc.line(20, y, pageWidth - 20, y);
       y += 14;
@@ -495,7 +495,7 @@ const recalcularHorarios = () => {
             usandoSegundaColuna = true;
           } else {
             doc.addPage();
-            doc.setDrawColor(12, 106, 55);
+            doc.setDrawColor(20, 30, 125);
             doc.setLineWidth(0.8);
             doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
             x = 20;
@@ -522,7 +522,7 @@ colabsNoPonto.forEach((colab) => {
       usandoSegundaColuna = true;
     } else {
       doc.addPage();
-      doc.setDrawColor(12, 106, 55);
+      doc.setDrawColor(20, 30, 125);
       doc.setLineWidth(0.8);
       doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
       x = 20;
@@ -565,11 +565,11 @@ colabsNoPonto.forEach((colab) => {
       
     {/* Cabeçalho com logo e botão voltar */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-      <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+      <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
       <button
         onClick={() => router.push('/login')}
         style={{
-          background: '#0c6a37',
+          background: '#141e7d',
           color: '#fff',
           border: 'none',
           padding: '8px 10px',
@@ -597,13 +597,13 @@ colabsNoPonto.forEach((colab) => {
     value={textoImportado}
     onChange={(e) => setTextoImportado(e.target.value)}
     rows={6}
-    style={{ width: '93%', marginTop: '10px', padding: '10px', borderColor: '#0c6a37', display: 'center' }}
+    style={{ width: '93%', marginTop: '10px', padding: '10px', borderColor: '#141e7d', display: 'center' }}
   />
   <button
     onClick={() => importarTexto(textoImportado)}
     style={{
       marginTop: '10px',
-      background: '#0c6a37',
+      background: '#141e7d',
       color: 'white',
       border: 'none',
       padding: '8px 12px',

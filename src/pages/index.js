@@ -93,7 +93,7 @@ export default function Login() {
                 marginBottom: '1rem',
               }}
             >
-              Login Artte
+              Artte Serviços
             </h2>
           </div>
 

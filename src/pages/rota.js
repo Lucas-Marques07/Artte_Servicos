@@ -141,19 +141,19 @@ export default function RotaVan() {
       });
     };
   
-    const logoBase64 = await loadImageAsBase64('/artte.ico');
+    const logoBase64 = await loadImageAsBase64('/artte1.png');
   
     // PDF - Borda
-    doc.setDrawColor(12, 106, 55);
+    doc.setDrawColor(20, 30, 125);
     doc.setLineWidth(0.8);
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
     // PDF - Logo
-    doc.addImage(logoBase64, 'ico', 20, 20, 27, 27);
+    doc.addImage(logoBase64, 'JPEG', 17, 20, 35, 35);
   
     // Título
     doc.setFontSize(20);
-    doc.setTextColor(12, 106, 55);
+    doc.setTextColor(20, 30, 125);
     doc.text('ITINERÁRIO EMPRESAS', pageWidth / 2, 25, { align: 'center' });
   
     // Cabeçalho
@@ -177,7 +177,7 @@ export default function RotaVan() {
     y += 10;
   
     // Linha separadora
-    doc.setDrawColor(12, 106, 55);
+    doc.setDrawColor(20, 30, 125);
     doc.setLineWidth(0.5);
     doc.line(20, y, pageWidth - 20, y);
     y += 14;
@@ -196,7 +196,7 @@ export default function RotaVan() {
           usandoSegundaColuna = true;
         } else {
           doc.addPage();
-          doc.setDrawColor(12, 106, 55);
+          doc.setDrawColor(20, 30, 125);
           doc.setLineWidth(0.8);
           doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
           x = 20;
@@ -220,7 +220,7 @@ export default function RotaVan() {
             usandoSegundaColuna = true;
           } else {
             doc.addPage();
-            doc.setDrawColor(12, 106, 55);
+            doc.setDrawColor(20, 30, 125);
             doc.setLineWidth(0.8);
             doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
             x = 20;
