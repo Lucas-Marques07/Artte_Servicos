@@ -43,11 +43,18 @@ const atualizarParada = (index, campo, valor) => {
 };
 
 const handleEnviar = () => {
+  const doc = new jsPDF();
   if (!validarCampos()) return;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const formatarData = (dataString) => {
+    const [ano, mes, dia] = dataString.split('-');
+    return `${dia}/${mes}/${ano}`;
+  };
 
-  const dataFormatada = new Date(cabecalho.data).toLocaleDateString('pt-BR');
+  const dataAtual = formatarData(cabecalho.data);
   
-  const cabecalhoStr = `🗺️ *ITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataFormatada}\n⏰ *Entrada:* ${cabecalho.entrada} | *Saída:* ${cabecalho.saida}\n🚩 *Início Rota:* ${horaInicio}`;
+  const cabecalhoStr = `🗺️ *ITINERÁRIO - ${cabecalho.cliente}*\n📅 *Data:* ${dataAtual}\n⏰ *Entrada:* ${cabecalho.entrada} | *Saída:* ${cabecalho.saida}\n🚩 *Início Rota:* ${horaInicio}`;
 
   // Agrupa os colaboradores por parada
   const colaboradoresStr = paradas.map((ponto, idx) => {
