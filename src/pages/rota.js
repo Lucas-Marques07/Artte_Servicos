@@ -141,7 +141,7 @@ export default function RotaVan() {
       });
     };
   
-    const logoBase64 = await loadImageAsBase64('/logo.jpeg');
+    const logoBase64 = await loadImageAsBase64('/artte.ico');
   
     // PDF - Borda
     doc.setDrawColor(12, 106, 55);
@@ -149,7 +149,7 @@ export default function RotaVan() {
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
     // PDF - Logo
-    doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27);
+    doc.addImage(logoBase64, 'ico', 20, 20, 27, 27);
   
     // Título
     doc.setFontSize(20);
@@ -354,11 +354,11 @@ export default function RotaVan() {
         <div style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem'
         }}>
-          <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+          <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
           <button
             onClick={() => router.push('/login')}
             style={{
-              background: '#0c6a37', color: '#fff', border: 'none', padding: '8px 10px',
+              background: '#141e7d', color: '#fff', border: 'none', padding: '8px 10px',
               borderRadius: '6px', cursor: 'pointer', fontSize: '14px', width: '80px', textAlign: 'center',
             }}
           >
@@ -638,13 +638,10 @@ export default function RotaVan() {
 
   <button
     onClick={handleEnviar}
+    className="send-whatsapp-button"
     style={{
       padding: '10px 20px',
-      background: '#25D366',
-      color: '#fff',
-      borderRadius: '6px',
-      border: 'none',
-      fontWeight: 'bold',
+      marginBottom: '1rem', // Espaço entre os botões
       fontSize: '1rem'
     }}
   >

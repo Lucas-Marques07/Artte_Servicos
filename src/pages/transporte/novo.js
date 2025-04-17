@@ -175,11 +175,11 @@ ${colaboradoresTexto}${faltasTexto}
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+        <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
         <button
           onClick={() => router.push('/login')}
           style={{
-            background: '#0c6a37',
+            background: '#141e7d',
             color: '#fff',
             border: 'none',
             padding: '8px 10px',
@@ -425,7 +425,7 @@ ${colaboradoresTexto}${faltasTexto}
 
       {/* Botão compartilhar */}
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-        <button onClick={handleEnviar} style={{ background: '#0c6a37', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '14px' }}>
+        <button onClick={handleEnviar} style={{ background: '#141e7d', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '14px' }}>
         📧 Informar Viagem
         </button>
       </div>

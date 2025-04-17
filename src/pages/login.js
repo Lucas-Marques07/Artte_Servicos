@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter();
   const [usuario, setUsuario] = useState(null);
   const botaoEstilo = {
-    backgroundColor: '#0c6a37',
+    backgroundColor: '#141e7d',
     color: 'white',
     padding: '0.5rem 1.2rem',
     borderRadius: '6px',
@@ -69,8 +69,8 @@ export default function Home() {
     Sair
   </button>
 </div>
-        <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#0c6a37' }}>
-          Gestão RH+
+        <h1 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#141e7d' }}>
+          Artte Serviços
         </h1>
 
         {usuario && (

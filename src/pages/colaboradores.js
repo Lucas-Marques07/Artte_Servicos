@@ -111,11 +111,11 @@ export default function Colaboradores() {
       
       {/* Cabeçalho com logo e botão voltar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <img src="/icon.png" alt="Logo" style={{ height: '80px' }} />
+        <img src="/artte.ico" alt="Logo" style={{ height: '110px' }} />
         <button
           onClick={() => router.push('/login')}
           style={{
-            background: '#0c6a37',
+            background: '#141e7d',
             color: '#fff',
             border: 'none',
             padding: '8px 10px',
@@ -158,7 +158,7 @@ export default function Colaboradores() {
             type="submit"
             style={{
               marginTop: '1rem',
-              backgroundColor: '#0c6a37',
+              backgroundColor: '#141e7d',
               color: '#fff',
               border: 'none',
               padding: '0.5rem 1rem',

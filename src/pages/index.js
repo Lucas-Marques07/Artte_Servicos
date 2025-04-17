@@ -66,12 +66,12 @@ export default function Login() {
             top: 0,
             left: 0,
             width: '100%',
-            height: '100%',
-            backgroundImage: 'url("/icon.png")',
+            height: '95%',
+            backgroundImage: 'url("/artte.png")',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            opacity: 0.05,
+            opacity: 0.25,
             zIndex: 0,
           }}
         ></div>
@@ -88,12 +88,12 @@ export default function Login() {
           >
            <h2
               style={{
-                color: '#0c6a37',
+                color: '#141e7d',
                 fontSize: '1.8rem',
                 marginBottom: '1rem',
               }}
             >
-              Login RH+
+              Login Artte
             </h2>
           </div>
 
@@ -132,7 +132,7 @@ export default function Login() {
               type="submit"
               style={{
                 width: '100%',
-                backgroundColor: '#0c6a37',
+                backgroundColor: '#141e7d',
                 color: 'white',
                 padding: '0.6rem 1rem',
                 border: 'none',
