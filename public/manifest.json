@@ -5,11 +5,11 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#006633",
+  "theme_color": "#141e7d",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/artte.png",
+      "src": "/artte1.png",
       "type": "image/png",
       "sizes": "192x192"
     },
