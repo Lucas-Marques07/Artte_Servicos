@@ -1,6 +1,6 @@
 {
-  "name": "RH+",
-  "short_name": "RH+",
+  "name": "Artte Serviços",
+  "short_name": "Artte",
   "description": "Sistema de controle de colaboradores",
   "start_url": "/",
   "display": "standalone",
@@ -9,12 +9,12 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/artte.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/artte.png",
       "type": "image/png",
       "sizes": "512x512"
     }
