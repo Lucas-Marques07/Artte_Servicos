@@ -11,8 +11,8 @@ export default function Document() {
   <meta name="apple-mobile-web-app-title" content="Artte" />
   <meta name="description" content="Sistema de Terceirização Artte" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
-  <link rel="icon" sizes="192x192" href="/artte1.png" />
-  <link rel="icon" sizes="512x512" href="/artte1.png" />
+  <link rel="icon" sizes="192x192" href="/artte_192.png" />
+  <link rel="icon" sizes="512x512" href="/artte_512.png" />
 </Head>
 
 
