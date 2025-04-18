@@ -672,7 +672,9 @@ colabsNoPonto.forEach((colab) => {
         style={{ flex: 1 }}
       >
         <option value="">Selecione</option>
-        {pontosUnicos.map((ponto, index) => (
+        {pontosUnicos
+         .sort((a, b) => a.localeCompare(b))
+         .map((ponto, index) => (
           <option key={index} value={ponto}>{ponto}</option>
         ))}
       </select>

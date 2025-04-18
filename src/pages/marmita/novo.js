@@ -16,6 +16,12 @@ export default function NovaMarmita() {
   const [nomeLogado, setNomeLogado] = useState('');
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
 
+  useEffect(() => {
+    const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
+    setOperacoesFiltradas(operacoes);
+  }, [dadosPlanilha]);
+  
+
 useEffect(() => {
   if (typeof window !== 'undefined') {
     const usuario = JSON.parse(localStorage.getItem('usuarioLogado') || '{}');
@@ -39,11 +45,10 @@ useEffect(() => {
     const novaLista = [...marmitas];
     novaLista[index][campo] = valor;
 
-    if (campo === 'empresa') {
+    
       const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
       setOperacoesFiltradas(operacoes);
-      novaLista[index]['operacao'] = '';
-    }
+    
 
     setMarmitas(novaLista);
   };
@@ -198,7 +203,10 @@ useEffect(() => {
         <label>Empresa:</label>
         <select value={m.empresa} onChange={(e) => handleChange(index, 'empresa', e.target.value)}>
           <option value="">Selecione</option>
-          {empresas.map((e, i) => <option key={i} value={e}>{e}</option>)}
+          {empresas
+          .filter((e) => e && e.trim() !== "") 
+          .sort((a, b) => a.localeCompare(b))
+          .map((e, i) => <option key={i} value={e}>{e}</option>)}
         </select>
       </div>
 
@@ -206,7 +214,10 @@ useEffect(() => {
         <label>Operação:</label>
         <select value={m.operacao} onChange={(e) => handleChange(index, 'operacao', e.target.value)}>
           <option value="">Selecione</option>
-          {operacoesFiltradas.map((op, i) => <option key={i} value={op}>{op}</option>)}
+          {operacoesFiltradas
+          .filter((e) => e && e.trim() !== "") 
+          .sort((a, b) => a.localeCompare(b))
+          .map((op, i) => <option key={i} value={op}>{op}</option>)}
         </select>
       </div>
 

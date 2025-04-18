@@ -94,7 +94,7 @@ export default function Home() {
     { href: '/colaboradores/novo', emoji: '📋', texto: 'Lançar lista' },
     { href: '/colaboradores/enviarlista', emoji: '📨', texto: 'Lista Cliente' },
     { href: '/recrutamento', emoji: '👥', texto: 'Recrutamento' },
-    { href: '/reembolso', emoji: '🧾', texto: 'Solicitar Reembolso' },
+    { href: '/reembolso1', emoji: '🧾', texto: 'Solicitar Reembolso' },
   ].map((item, i) => (
     <li key={i} style={{ marginBottom: '16px' }}>
       <Link href={item.href}>

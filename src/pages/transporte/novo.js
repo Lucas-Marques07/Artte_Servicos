@@ -248,23 +248,14 @@ ${colaboradoresTexto}${faltasTexto}
             </div>
 
             <div>
-  <label>Empresa:</label>
-  <input
-    list={`empresas-${index}`}
-    value={t.empresa}
-    onChange={(e) => handleChange(index, 'empresa', e.target.value)}
-    placeholder="Selecione ou digite"
-    style={{ width: '80%' }}
-  />
-  <datalist id={`empresas-${index}`}>
-    {empresas
-      .filter((e) => e && e.trim() !== "")
-      .map((e, i) => (
-        <option key={i} value={e} />
-      ))}
-  </datalist>
-</div>
-
+              <label>Empresa:</label>
+              <select value={t.empresa} onChange={(e) => handleChange(index, 'empresa', e.target.value)}>
+                <option value="">Selecione</option>
+                {empresas    .filter((e) => e && e.trim() !== "") 
+                 .sort((a, b) => a.localeCompare(b))
+                  .map((e, i) => <option key={i} value={e}>{e}</option>)}
+              </select>
+            </div>
     
             <div>
             <label>Veiculo:</label>
@@ -311,23 +302,15 @@ ${colaboradoresTexto}${faltasTexto}
             </div>
 
             <div>
-  <label>Motivo:</label>
-  <input
-    list={`motivos-${index}`}
-    value={t.motivo}
-    onChange={(e) => handleChange(index, 'motivo', e.target.value)}
-    placeholder="Selecione ou digite"
-    style={{ width: '80%' }}
-  />
-  <datalist id={`motivos-${index}`}>
-    {motivos
-      .filter((m) => m && m.trim() !== "")
-      .map((m, i) => (
-        <option key={i} value={m} />
-      ))}
-  </datalist>
-</div>
-
+              <label>Motivo:</label>
+              <select value={t.motivo} onChange={(e) => handleChange(index, 'motivo', e.target.value)}>
+                <option value="">Selecione</option>
+                {motivos
+                .filter((e) => e && e.trim() !== "") 
+                
+                  .map((m, i) => <option key={i} value={m}>{m}</option>)}
+              </select>
+            </div>
 
             <div>
               <label>Horário:</label>

@@ -1,6 +1,8 @@
 // src/pages/marmita/novo.js
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import jsPDF from 'jspdf';
+
 
 export default function NovaMarmita() {
   const router = useRouter();
@@ -14,34 +16,49 @@ export default function NovaMarmita() {
   const [categoriaUnicos, setcategoriaUnicos] = useState([]);
   const [file, setFile] = useState(null);
 
-  const compartilharTexto = () => {
+  const compartilharTudo = async () => {
+    if (!file) {
+      alert("Nenhum comprovante selecionado.");
+      return;
+    }
+  
     if (!validarCampos()) return;
-
-    const mensagem = marmitas.map((m, i) => {
+  
+    // Gera o texto com os dados da marmita
+    const texto = marmitas.map((m, index) => {
       const dataFormatada = new Date(m.data).toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: '2-digit'
       });
-
-      return `🧾 *Solicitação de Reembolso*
-
-🗂️ Categoria: ${m.categoria} | 📅 Data: ${dataFormatada}
-🏢 Empresa: ${m.empresa} | ⚙️ Operação: ${m.operacao}
-💰 Valor: R$ ${m.valor} | 👤 Solicitante: ${m.solicitante}
-
-📝 OBS: ${m.endereço}`;
-
-    }).join('\n-------------------------\n');
-
-    if (navigator.share) {
-      navigator.share({
-        title: 'Solicitação de Reembolso',
-        text: mensagem,
-      }).catch((err) => console.error("Erro ao compartilhar texto:", err));
-    } else {
-      alert("Compartilhamento de texto não suportado.");
+  
+      return `🧾 Solicitação de Reembolso
+  
+  🗂️ Categoria: ${m.categoria}
+  📅 Data: ${dataFormatada}
+  🏢 Empresa: ${m.empresa}
+  ⚙️ Operação: ${m.operacao}
+  💰 Valor: R$ ${m.valor}
+  👤 Solicitante: ${m.solicitante}
+  📝 OBS: ${m.endereço}`;
+    }).join('\n\n----------------------------\n\n');
+  
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file], text: texto })) {
+        await navigator.share({
+          title: 'Solicitação de Reembolso',
+          text: texto,
+          files: [file], // só a imagem como arquivo
+        });
+      } else {
+        alert("Este navegador não suporta o compartilhamento com texto + imagem.");
+      }
+    } catch (error) {
+      console.error("Erro ao compartilhar:", error);
     }
   };
+  
+  
+  
 
   const compartilharComprovante = () => {
     if (!file) {
@@ -194,12 +211,11 @@ export default function NovaMarmita() {
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
           <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: '1rem' }} />
           <br />
-          <button onClick={compartilharTexto} style={{ background: '#141e7d', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', marginRight: '1rem',marginBottom: '1rem' }}>
-            📄 Enviar Solicitação
-          </button>
-          <button onClick={compartilharComprovante} style={{ background: '#2e7d32', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px' }}>
-            📎 Enviar Comprovante
-          </button>
+          <button onClick={compartilharTudo} style={{ background: '#141e7d', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', marginBottom: '1rem' }}>
+  📤 Enviar PDF + Comprovante
+</button>
+
+
         </div>
       </div>
     </div>
