@@ -122,24 +122,34 @@ const removerLinha = (index) => {
   📍 *Endereço:* ${m.endereço}`;
     }).join('\n-------------------------\n');
   
-    const textoFinal = `${mensagem}\n\n📎 *Comprovante anexado, se disponível.*`;
-  
+    // Primeiro passo: compartilhar o texto
     if (navigator.share) {
-      const shareData = {
+      navigator.share({
         title: 'Solicitação de Reembolso',
-        text: textoFinal,
-      };
-  
-      if (file) {
-        shareData.files = [file];
-      }
-  
-      navigator.share(shareData)
-        .catch((error) => console.error('Erro ao compartilhar:', error));
+        text: mensagem,
+      })
+      .then(() => {
+        // Segundo passo: compartilhar o arquivo, se existir
+        if (file) {
+          navigator.share({
+            title: 'Comprovante de Reembolso',
+            files: [file],
+          })
+          .catch((err) => {
+            console.warn("Erro ao compartilhar imagem:", err);
+          });
+        } else {
+          alert("Texto enviado. Nenhum comprovante anexado.");
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao compartilhar o texto:', error);
+      });
     } else {
-      alert('Compartilhamento não suportado neste navegador. Tente pelo celular.');
+      alert('Compartilhamento não suportado neste navegador.');
     }
   };
+  
   
   
 
@@ -309,7 +319,7 @@ const removerLinha = (index) => {
       fontSize: '14px'
     }}
   >
-    📩 Informar Solicitação + Anexo
+    📩 Enviar Solicitação + Anexo
   </button>
 </div>
 
