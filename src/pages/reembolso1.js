@@ -15,6 +15,17 @@ export default function NovaMarmita() {
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
   const [categoriaUnicos, setcategoriaUnicos] = useState([]);
   const [file, setFile] = useState(null);
+  
+  const [cabecalho, setCabecalho] = useState({
+    cliente: '',
+    operacao: '',
+    data: '',
+    turno: '',
+    entrada: '',
+    saida: ''
+  });
+  
+  
 
   const compartilharTudo = async () => {
     if (!file) {
@@ -24,38 +35,144 @@ export default function NovaMarmita() {
   
     if (!validarCampos()) return;
   
-    // Gera o texto com os dados da marmita
-    const texto = marmitas.map((m, index) => {
-      const dataFormatada = new Date(m.data).toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit'
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+  
+    const loadImageAsBase64 = (file) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(file);
       });
+    };
   
-      return `🧾 Solicitação de Reembolso
+    const logoBase64 = await loadImageAsBase64(await (await fetch('/artte1.png')).blob());
+    const comprovanteBase64 = await loadImageAsBase64(file);
   
-  🗂️ Categoria: ${m.categoria}
-  📅 Data: ${dataFormatada}
-  🏢 Empresa: ${m.empresa}
-  ⚙️ Operação: ${m.operacao}
-  💰 Valor: R$ ${m.valor}
-  👤 Solicitante: ${m.solicitante}
-  📝 OBS: ${m.endereço}`;
-    }).join('\n\n----------------------------\n\n');
+    // Borda externa
+    doc.setDrawColor(20, 30, 125);
+    doc.setLineWidth(0.8);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+  
+    // Logo
+    doc.addImage(logoBase64, 'JPEG', 17, 20, 35, 35);
+  
+    // Título
+    doc.setFontSize(20);
+    doc.setTextColor(20, 30, 125);
+    doc.text('Solicitação de Reembolso', pageWidth / 2, 30, { align: 'center' });
+  
+    // Dados da marmita
+    const m = marmitas[0];
+    const dataFormatada = new Date(m.data).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit'
+    });
+  
+    // Colunas centralizadas (sem borda)
+    doc.setFontSize(11);
+    doc.setTextColor(33, 33, 33);
+    const colSpacing = 75;
+    const colPadding = 50;
+    const totalWidth = colSpacing + colPadding;
+    const col1X = (pageWidth - totalWidth) / 2;
+    const col2X = col1X + colSpacing;
+    let linhaY = 60;
+    const linhaEspaco = 7;
+  
+    const escreveColuna = (label, valor, x, y) => {
+      doc.setFont(undefined, 'bold');
+      doc.text(label, x, y);
+      const labelWidth = doc.getTextWidth(label) + 2;
+      doc.setFont(undefined, 'normal');
+      doc.text(valor || '-', x + labelWidth, y);
+    };
+  
+    // Linhas das colunas
+    escreveColuna('Categoria:', m.categoria, col1X, linhaY);
+    escreveColuna('Data:', dataFormatada, col2X, linhaY);
+    linhaY += linhaEspaco;
+  
+    escreveColuna('Empresa:', m.empresa, col1X, linhaY);
+    escreveColuna('Operação:', m.operacao, col2X, linhaY);
+    linhaY += linhaEspaco;
+  
+    escreveColuna('Solicitante:', m.solicitante, col1X, linhaY);
+    escreveColuna('Valor:', `R$ ${m.valor}`, col2X, linhaY);
+    linhaY += linhaEspaco +5;
+  
+    escreveColuna('Observação:', m.endereço, col1X, linhaY);
+    linhaY += linhaEspaco;
+  
+    // Linha separadora após o texto
+    doc.setDrawColor(20, 30, 125);
+    doc.setLineWidth(0.5);
+    doc.line(20, linhaY, pageWidth - 20, linhaY);
+    let y = linhaY + 12;
+  
+    // Título da imagem
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text('Comprovante em anexo:', col1X, y);
+    y += 12;
+  
+    // Imagem do comprovante
+    const imgWidth = pageWidth - 60;
+    const imgHeight = 80;
+    const imgX = (pageWidth - imgWidth) / 2;
+    doc.addImage(comprovanteBase64, 'JPEG', imgX, y, imgWidth, imgHeight);
+  
+    // Assinatura
+    const assinaturaY = y + imgHeight + 20;
+    doc.setDrawColor(0);
+    doc.line(pageWidth / 4, assinaturaY, pageWidth * 3 / 4, assinaturaY);
+    doc.setFontSize(10);
+    doc.setTextColor(0);
+    doc.setFont(undefined, 'normal');
+    doc.text('Assinatura do Aprovador', pageWidth / 2, assinaturaY + 5, { align: 'center' });
+  
+    // 🧾 Finalização com nome personalizado
+    const pdfBlob = doc.output('blob');
+  
+    const formatarDataBR = (dataString) => {
+      const [ano, mes, dia] = dataString.split("-");
+      return `${dia}-${mes}-${ano}`;
+    };
+  
+    const data = formatarDataBR(m.data);
+    const nome = m.solicitante?.trim().replace(/\s+/g, '_') || 'usuario';
+    const categoria = m.categoria?.trim().replace(/\s+/g, '_') || 'categoria';
+    const nomeArquivo = `Reembolso ${nome} - ${categoria} - ${data}.pdf`;
+  
+    const pdfFile = new File([pdfBlob], nomeArquivo, { type: 'application/pdf' });
   
     try {
-      if (navigator.canShare && navigator.canShare({ files: [file], text: texto })) {
+      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
         await navigator.share({
           title: 'Solicitação de Reembolso',
-          text: texto,
-          files: [file], // só a imagem como arquivo
+          files: [pdfFile],
         });
       } else {
-        alert("Este navegador não suporta o compartilhamento com texto + imagem.");
+        throw new Error('Compartilhamento não suportado');
       }
     } catch (error) {
-      console.error("Erro ao compartilhar:", error);
+      console.warn('Download automático ativado como fallback');
+      const url = URL.createObjectURL(pdfFile);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = nomeArquivo;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     }
   };
+  
+  
+  
+  
+  
+  
   
   
   
