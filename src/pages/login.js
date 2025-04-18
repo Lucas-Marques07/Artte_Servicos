@@ -92,8 +92,9 @@ export default function Home() {
     { href: '/transporte/novo', emoji: '🚐', texto: 'Lançar Transporte' },
     { href: '/rota', emoji: '🗺️', texto: 'Itinerário' },
     { href: '/colaboradores/novo', emoji: '📋', texto: 'Lançar lista' },
-    { href: '/colaboradores/enviarlista', emoji: '📨', texto: 'Enviar lista' },
+    { href: '/colaboradores/enviarlista', emoji: '📨', texto: 'Lista Cliente' },
     { href: '/recrutamento', emoji: '👥', texto: 'Recrutamento' },
+    { href: '/reembolso', emoji: '🧾', texto: 'Solicitar Reembolso' },
   ].map((item, i) => (
     <li key={i} style={{ marginBottom: '16px' }}>
       <Link href={item.href}>

@@ -9,15 +9,10 @@ export default function Login() {
   const usuariosCadastrados = [
     { usuario: 'Lucas', senha: '582746' },
     { usuario: 'Patrícia', senha: '316474' },
-    { usuario: 'Sergio', senha: '1010' },
-    { usuario: 'Clayton', senha: '010767' },
-    { usuario: 'Kesia', senha: '129742' },
-    { usuario: 'Juliana', senha: '096234' },
-    { usuario: 'Simone', senha: '1418' },
-    { usuario: 'Julio', senha: '140058' },
-    { usuario: 'Flávio', senha: '123778' },
-    { usuario: 'Daniela', senha: '134084' },
-    { usuario: 'Ana Carolina', senha: '022199' },
+    { usuario: 'Sergio', senha: '1010' },   
+    { usuario: 'Simone', senha: '1418' },   
+    { usuario: 'Marcos', senha: '7393' },
+    { usuario: 'Fabiana', senha: 'Tiffa' },
   ];
 
   const handleLogin = (e) => {
