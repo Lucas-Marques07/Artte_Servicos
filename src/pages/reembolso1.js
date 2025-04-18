@@ -203,7 +203,7 @@ export default function NovaMarmita() {
 
   useEffect(() => {
     if (dadosPlanilha.length > 0) {
-      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO).filter(Boolean))];
+      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃOartte).filter(Boolean))];
       setOperacoesFiltradas(operacoes);
     }
   }, [dadosPlanilha]);
@@ -261,7 +261,7 @@ export default function NovaMarmita() {
     return true;
   };
 
-  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
+  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESAartte))];
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#f8f8f8', fontFamily: 'sans-serif', padding: '2rem' }}>

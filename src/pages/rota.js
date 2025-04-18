@@ -46,10 +46,10 @@ export default function RotaVan() {
         const funcoes = [...new Set(data.map(item => item['FUNÇÃO']).filter(Boolean))];
         setFuncoesUnicas(funcoes);
 
-        const clientes = [...new Set(data.map(item => item['EMPRESA']).filter(Boolean))];
+        const clientes = [...new Set(data.map(item => item['EMPRESAartte']).filter(Boolean))];
         setClientesUnicos(clientes);
 
-        const operacoes = [...new Set(data.map(item => item['OPERAÇÃO']).filter(Boolean))];
+        const operacoes = [...new Set(data.map(item => item['OPERAÇÃOartte']).filter(Boolean))];
         setOperacoesUnicas(operacoes);
 
         const turnos = [...new Set(data.map(item => item['TURNO']).filter(Boolean))];

@@ -43,7 +43,7 @@ export default function NovoColaborador() {
         const clientes = [...new Set(data.map(item => item['EMPRESAartte']).filter(Boolean))];
         setClientesUnicos(clientes);
 
-        const operacoes = [...new Set(data.map(item => item['OPERAÇÃO']).filter(Boolean))];
+        const operacoes = [...new Set(data.map(item => item['OPERAÇÃOartte']).filter(Boolean))];
         setOperacoesUnicas(operacoes);
 
         const turnos = [...new Set(data.map(item => item['TURNO']).filter(Boolean))];

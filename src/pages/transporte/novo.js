@@ -59,21 +59,18 @@ export default function NovoTransporte() {
   const handleChange = (index, campo, valor) => {
     const novaLista = [...transportes];
     novaLista[index][campo] = valor;
-  
-    if (campo === 'empresa') {
-      // Aqui você pode atualizar as opções de operações e motoristas
-      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
-      const motoristas = [...new Set(dadosPlanilha.map(d => d.MOTORISTA))];
-  
-      setOperacoesFiltradas(operacoes);
-      setMotoristasFiltrados(motoristas);
-  
-      novaLista[index]['operacao'] = '';
-      novaLista[index]['motorista'] = '';
-    }
-  
     setTransportes(novaLista);
   };
+  useEffect(() => {
+    if (dadosPlanilha.length > 0) {
+      const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃOartte))];
+      const motoristas = [...new Set(dadosPlanilha.map(d => d.MOTORISTAartte))];
+      
+      setOperacoesFiltradas(operacoes);
+      setMotoristasFiltrados(motoristas);
+    }
+  }, [dadosPlanilha]);
+    
   
 
   const adicionarLinha = () => {
@@ -151,11 +148,11 @@ ${colaboradoresTexto}${faltasTexto}
   
   
 
-  const fornecedores = [...new Set(dadosPlanilha.map(d => d.FORNECEDOR))];
-  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
+  const fornecedores = [...new Set(dadosPlanilha.map(d => d.FORNECEDORartte))];
+  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESAartte))];
   const motivos = [...new Set(dadosPlanilha.map(d => d.VIAGEM))];
-  const Operação = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
-  const Motorista = [...new Set(dadosPlanilha.map(d => d.MOTORISTA))];
+  const Operação = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃOartte))];
+  const Motorista = [...new Set(dadosPlanilha.map(d => d.MOTORISTAartte))];
   
 
   return (
