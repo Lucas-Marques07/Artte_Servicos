@@ -27,7 +27,7 @@ export default function NovaMarmita() {
   
   
 
-  const compartilharTudo = async () => {
+  const baixarPDF = async () => {
     if (!file) {
       alert("Nenhum comprovante selecionado.");
       return;
@@ -56,21 +56,19 @@ export default function NovaMarmita() {
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
   
     // Logo
-    doc.addImage(logoBase64, 'JPEG', 17, 20, 35, 35);
+    doc.addImage(logoBase64, 'JPEG', 20, 20, 27, 27);
   
     // Título
     doc.setFontSize(20);
     doc.setTextColor(20, 30, 125);
     doc.text('Solicitação de Reembolso', pageWidth / 2, 30, { align: 'center' });
   
-    // Dados da marmita
     const m = marmitas[0];
     const dataFormatada = new Date(m.data).toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit'
     });
   
-    // Colunas centralizadas (sem borda)
     doc.setFontSize(11);
     doc.setTextColor(33, 33, 33);
     const colSpacing = 75;
@@ -89,7 +87,6 @@ export default function NovaMarmita() {
       doc.text(valor || '-', x + labelWidth, y);
     };
   
-    // Linhas das colunas
     escreveColuna('Categoria:', m.categoria, col1X, linhaY);
     escreveColuna('Data:', dataFormatada, col2X, linhaY);
     linhaY += linhaEspaco;
@@ -100,81 +97,80 @@ export default function NovaMarmita() {
   
     escreveColuna('Solicitante:', m.solicitante, col1X, linhaY);
     escreveColuna('Valor:', `R$ ${m.valor}`, col2X, linhaY);
-    linhaY += linhaEspaco +5;
+    linhaY += linhaEspaco + 5;
   
     escreveColuna('Observação:', m.endereço, col1X, linhaY);
     linhaY += linhaEspaco;
   
-    // Linha separadora após o texto
     doc.setDrawColor(20, 30, 125);
     doc.setLineWidth(0.5);
     doc.line(20, linhaY, pageWidth - 20, linhaY);
     let y = linhaY + 12;
   
-    // Título da imagem
     doc.setFontSize(12);
     doc.setFont(undefined, 'bold');
     doc.text('Comprovante em anexo:', col1X, y);
     y += 12;
   
-    // Imagem do comprovante
-    const imgWidth = pageWidth - 80;
-    const imgHeight = 100;
+    const getImageSize = (base64) => {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ width: img.width, height: img.height });
+        img.src = base64;
+      });
+    };
+    
+    const { width: naturalWidth, height: naturalHeight } = await getImageSize(comprovanteBase64);
+    
+    // 🔒 Área disponível abaixo do título "Comprovante em anexo"
+    const margemInferior = 30;
+    const alturaDisponivel = pageHeight - y - 35 - margemInferior; // 35 = espaço para assinatura + margem
+    
+    // 🔄 Calcula dimensões proporcionalmente, sem ultrapassar
+    let imgWidth = pageWidth - 80;
+    let imgHeight = imgWidth * (naturalHeight / naturalWidth);
+    
+    // Se a altura calculada ultrapassar o espaço disponível, reduz proporcionalmente
+    if (imgHeight > alturaDisponivel) {
+      imgHeight = alturaDisponivel;
+      imgWidth = imgHeight * (naturalWidth / naturalHeight);
+    }
+    
     const imgX = (pageWidth - imgWidth) / 2;
     doc.addImage(comprovanteBase64, 'JPEG', imgX, y, imgWidth, imgHeight);
-  
-    // Assinatura
+    
+    // ✍️ Assinatura abaixo da imagem
     const assinaturaY = y + imgHeight + 20;
-
-// Cor azul escuro e largura perceptível
-doc.setDrawColor(20, 30, 125);  // #141e7d
-doc.setLineWidth(0.5);            // mais visível
-doc.line(pageWidth / 4, assinaturaY, pageWidth * 3 / 4, assinaturaY);
-
-// Texto abaixo da linha
-doc.setFontSize(10);
-doc.setTextColor(0);
-doc.setFont(undefined, 'normal');
-doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinaturaY + 5, { align: 'center' });
-
-
-  
-    // 🧾 Finalização com nome personalizado
+    doc.setDrawColor(20, 30, 125);
+    doc.setLineWidth(0.5);
+    doc.line(pageWidth / 4, assinaturaY, pageWidth * 3 / 4, assinaturaY);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(0);
+    doc.setFont(undefined, 'normal');
+    doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinaturaY + 5, { align: 'center' });
+    
     const pdfBlob = doc.output('blob');
-  
     const formatarDataBR = (dataString) => {
-        const [ano, mes, dia] = dataString.split("-");
-        return `${dia}_${mes}_${ano}`; // <-- separador alterado
-      };
-      
+      const [ano, mes, dia] = dataString.split("-");
+      return `${dia}_${mes}_${ano}`;
+    };
   
     const data = formatarDataBR(m.data);
     const nome = m.solicitante?.trim().replace(/\s+/g, '_') || 'usuario';
     const categoria = m.categoria?.trim().replace(/\s+/g, '_') || 'categoria';
     const nomeArquivo = `Reembolso ${nome} - ${categoria} - ${data}.pdf`;
   
-    const pdfFile = new File([pdfBlob], nomeArquivo, { type: 'application/pdf' });
-  
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
-        await navigator.share({
-          title: 'Solicitação de Reembolso',
-          files: [pdfFile],
-        });
-      } else {
-        throw new Error('Compartilhamento não suportado');
-      }
-    } catch (error) {
-      console.warn('Download automático ativado como fallback');
-      const url = URL.createObjectURL(pdfFile);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = nomeArquivo;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    }
+    // 🔽 Força o download
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = nomeArquivo;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
+  
   
   
   
@@ -334,7 +330,7 @@ doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinatur
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
           <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: '1rem' }} />
           <br />
-          <button onClick={compartilharTudo} style={{ background: '#141e7d', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', marginBottom: '1rem' }}>
+          <button onClick={baixarPDF} style={{ background: '#141e7d', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', marginBottom: '1rem' }}>
           📎📄 Enviar PDF
 </button>
 
