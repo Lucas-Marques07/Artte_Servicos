@@ -240,17 +240,31 @@ ${colaboradoresTexto}${faltasTexto}
               <label>Fornecedor:</label>
               <select value={t.fornecedor} onChange={(e) => handleChange(index, 'fornecedor', e.target.value)}>
                 <option value="">Selecione</option>
-                {fornecedores.map((f, i) => <option key={i} value={f}>{f}</option>)}
+                {fornecedores
+                 .filter((e) => e && e.trim() !== "") 
+                
+                 .map((f, i) => <option key={i} value={f}>{f}</option>)}
               </select>
             </div>
 
             <div>
-              <label>Empresa:</label>
-              <select value={t.empresa} onChange={(e) => handleChange(index, 'empresa', e.target.value)}>
-                <option value="">Selecione</option>
-                {empresas.map((e, i) => <option key={i} value={e}>{e}</option>)}
-              </select>
-            </div>
+  <label>Empresa:</label>
+  <input
+    list={`empresas-${index}`}
+    value={t.empresa}
+    onChange={(e) => handleChange(index, 'empresa', e.target.value)}
+    placeholder="Selecione ou digite"
+    style={{ width: '80%' }}
+  />
+  <datalist id={`empresas-${index}`}>
+    {empresas
+      .filter((e) => e && e.trim() !== "")
+      .map((e, i) => (
+        <option key={i} value={e} />
+      ))}
+  </datalist>
+</div>
+
     
             <div>
             <label>Veiculo:</label>
@@ -274,7 +288,9 @@ ${colaboradoresTexto}${faltasTexto}
               <label>Operação:</label>
               <select value={t.operacao} onChange={(e) => handleChange(index, 'operacao', e.target.value)}>
                 <option value="">Selecione</option>
-                {operacoesFiltradas.map((op, i) => <option key={i} value={op}>{op}</option>)}
+                {operacoesFiltradas .filter((e) => e && e.trim() !== "") 
+                
+                .map((op, i) => <option key={i} value={op}>{op}</option>)}
               </select>
             </div>
 
@@ -282,7 +298,9 @@ ${colaboradoresTexto}${faltasTexto}
               <label>Motorista:</label>
               <select value={t.motorista} onChange={(e) => handleChange(index, 'motorista', e.target.value)}>
                 <option value="">Selecione</option>
-                {motoristasFiltrados.map((m, i) => <option key={i} value={m}>{m}</option>)}
+                {motoristasFiltrados      .filter((e) => e && e.trim() !== "") 
+                
+                  .map((m, i) => <option key={i} value={m}>{m}</option>)}
               </select>
             </div>
 
@@ -293,12 +311,23 @@ ${colaboradoresTexto}${faltasTexto}
             </div>
 
             <div>
-              <label>Motivo:</label>
-              <select value={t.motivo} onChange={(e) => handleChange(index, 'motivo', e.target.value)}>
-                <option value="">Selecione</option>
-                {motivos.map((m, i) => <option key={i} value={m}>{m}</option>)}
-              </select>
-            </div>
+  <label>Motivo:</label>
+  <input
+    list={`motivos-${index}`}
+    value={t.motivo}
+    onChange={(e) => handleChange(index, 'motivo', e.target.value)}
+    placeholder="Selecione ou digite"
+    style={{ width: '80%' }}
+  />
+  <datalist id={`motivos-${index}`}>
+    {motivos
+      .filter((m) => m && m.trim() !== "")
+      .map((m, i) => (
+        <option key={i} value={m} />
+      ))}
+  </datalist>
+</div>
+
 
             <div>
               <label>Horário:</label>

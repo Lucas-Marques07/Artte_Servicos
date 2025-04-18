@@ -82,12 +82,15 @@ useEffect(() => {
       });
   
       return `🍽️ Solicitação de Marmita *${i + 1}º*
+
+🏢 *Empresa:* ${m.empresa} 
+🛠️ *Operação:* ${m.operacao}
+📅 *Data:* ${dataFormatada}
+⏰ *Entrega:* ${m.horario}
+👤 *Quantidade:* ${m.quantidade}
+📌 *Solicitante:* ${m.solicitante}
   
-  🏢 *Empresa:* ${m.empresa} | 🛠️ *Operação:* ${m.operacao}
-  📅 *Data:* ${dataFormatada} | ⏰ *Entrega:* ${m.horario}
-  👤 *Quantidade:* ${m.quantidade} | 📌 *Solicitante:* ${m.solicitante}
-  
-  📍 *Endereço:* ${m.endereço}`;
+📍 *Endereço:* ${m.endereço}`;
     }).join('\n-------------------------\n');
   
     if (navigator.share) {
