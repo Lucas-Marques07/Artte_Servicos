@@ -282,9 +282,7 @@ doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinatur
         
         {marmitas.map((m, index) => (
           <div key={index} style={{ border: '1px solid #ccc', padding: '10px', borderRadius: '6px', marginBottom: '10px', background: '#f9f9f9', width: '350px' }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-              <span onClick={() => removerLinha(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}>🗑️</span>
-            </div>
+            
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
                 <label>Categoria:</label>
@@ -337,7 +335,7 @@ doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinatur
           <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: '1rem' }} />
           <br />
           <button onClick={compartilharTudo} style={{ background: '#141e7d', color: '#fff', padding: '10px 20px', borderRadius: '6px', fontSize: '14px', marginBottom: '1rem' }}>
-  📤 Enviar PDF + Comprovante
+          📎📄 Enviar PDF
 </button>
 
 
