@@ -17,7 +17,7 @@ export default function NovaMarmita() {
   const [usarMesmoValor, setUsarMesmoValor] = useState(false);
 
   useEffect(() => {
-    const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃO))];
+    const operacoes = [...new Set(dadosPlanilha.map(d => d.OPERAÇÃOartte))];
     setOperacoesFiltradas(operacoes);
   }, [dadosPlanilha]);
   
@@ -107,7 +107,7 @@ useEffect(() => {
   };
   
 
-  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESA))];
+  const empresas = [...new Set(dadosPlanilha.map(d => d.EMPRESAartte))];
 
   return (
     <div
