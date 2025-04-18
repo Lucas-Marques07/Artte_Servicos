@@ -118,27 +118,35 @@ export default function NovaMarmita() {
     y += 12;
   
     // Imagem do comprovante
-    const imgWidth = pageWidth - 60;
-    const imgHeight = 80;
+    const imgWidth = pageWidth - 80;
+    const imgHeight = 100;
     const imgX = (pageWidth - imgWidth) / 2;
     doc.addImage(comprovanteBase64, 'JPEG', imgX, y, imgWidth, imgHeight);
   
     // Assinatura
     const assinaturaY = y + imgHeight + 20;
-    doc.setDrawColor(0);
-    doc.line(pageWidth / 4, assinaturaY, pageWidth * 3 / 4, assinaturaY);
-    doc.setFontSize(10);
-    doc.setTextColor(0);
-    doc.setFont(undefined, 'normal');
-    doc.text('Assinatura do Aprovador', pageWidth / 2, assinaturaY + 5, { align: 'center' });
+
+// Cor azul escuro e largura perceptível
+doc.setDrawColor(20, 30, 125);  // #141e7d
+doc.setLineWidth(0.5);            // mais visível
+doc.line(pageWidth / 4, assinaturaY, pageWidth * 3 / 4, assinaturaY);
+
+// Texto abaixo da linha
+doc.setFontSize(10);
+doc.setTextColor(0);
+doc.setFont(undefined, 'normal');
+doc.text('Assinatura do Responsável para Validação', pageWidth / 2, assinaturaY + 5, { align: 'center' });
+
+
   
     // 🧾 Finalização com nome personalizado
     const pdfBlob = doc.output('blob');
   
     const formatarDataBR = (dataString) => {
-      const [ano, mes, dia] = dataString.split("-");
-      return `${dia}-${mes}-${ano}`;
-    };
+        const [ano, mes, dia] = dataString.split("-");
+        return `${dia}_${mes}_${ano}`; // <-- separador alterado
+      };
+      
   
     const data = formatarDataBR(m.data);
     const nome = m.solicitante?.trim().replace(/\s+/g, '_') || 'usuario';
