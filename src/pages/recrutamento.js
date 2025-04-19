@@ -148,32 +148,7 @@ useEffect(() => {
     entrada: '',
     saida: ''
   });
-
-  useEffect(() => {
-    async function fetchCPFs() {
-      try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzL6NoS3730uOtG1T3SsqpgXVp4r_s9rRDd-c9B85cip9mByzaYEzFwepWxawH1VHni/exec');
-        const data = await response.json();
-        setCpfsDisponiveis(data);
-  
-        const funcoes = [...new Set(data.map(item => item['FUNÇÃO']).filter(Boolean))];
-        setFuncoesUnicas(funcoes);
-  
-        const clientes = [...new Set(data.map(item => item['EMPRESA']).filter(Boolean))];
-        setClientesUnicos(clientes);
-  
-        const operacoes = [...new Set(data.map(item => item['OPERAÇÃO']).filter(Boolean))];
-        setOperacoesUnicas(operacoes);
-  
-        const turnos = [...new Set(data.map(item => item['TURNO']).filter(Boolean))];
-        setTurnosUnicos(turnos);
-      } catch (error) {
-        console.error('Erro ao buscar CPFs:', error);
-      }
-    }
-  
-    fetchCPFs();
-  }, []);
+ 
 
   useEffect(() => {
     if (!texto) return;
